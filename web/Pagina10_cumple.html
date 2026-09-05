@@ -90,7 +90,7 @@
     </div>
 
     <!-- ─── Encabezado ─── -->
-    <svg class="ornamento rev" style="animation-delay:.15s" viewBox="0 0 300 34">
+    <svg class="ornamento" data-rev="0.15" viewBox="0 0 300 34">
       <path d="M10 17 C50 17 60 6 82 6 C96 6 100 17 114 17"/>
       <path d="M290 17 C250 17 240 6 218 6 C204 6 200 17 186 17"/>
       <path d="M114 17 C128 17 132 28 146 28 C154 28 150 17 150 17"/>
@@ -102,11 +102,11 @@
       <circle class="punto-orn" cx="290" cy="17" r="1.6"/>
     </svg>
 
-    <p class="eyebrow rev" style="animation-delay:.3s">Una última cosa</p>
+    <p class="eyebrow" data-rev="0.3">Una última cosa</p>
 
-    <h1 class="titulo rev" style="animation-delay:.45s">Para Josy</h1>
+    <h1 class="titulo" data-rev="0.45">Para Josy</h1>
 
-    <div class="divisor rev" style="animation-delay:.65s">
+    <div class="divisor" data-rev="0.65">
       <span class="linea"></span>
       <span class="joya"></span>
       <span class="linea"></span>
@@ -114,44 +114,46 @@
 
     <!-- ─── Cuerpo de la carta ─── -->
     <div class="texto">
-      <p class="saludo rev" style="animation-delay:.75s">Bueno, Josy...</p>
+      <p class="saludo" data-rev="0.75">Bueno, Josy...</p>
 
-      <p class="capital rev" style="animation-delay:.9s">
-        Solo quería decirte que espero que te haya gustado este pequeño detalle.
-        Lo hice con <span class="destacar">mucho cariño</span> e invité a varias
-        personas para que aportaran sus ideas y entre todos saliera algo aún más especial.
+      <p class="capital" data-rev="0.9">
+        La idea era hacer algo sencillo, pero se fue alargando solo. Le fui metiendo
+        cosas de a poquitos, entre clases y ratos libres, hasta que terminó siendo
+        <span class="destacar">más de lo que tenía planeado</span>. Molesté a varios
+        para que me ayudaran con partes, pero bueno, ahí quedó.
       </p>
 
-      <div class="corazon-div rev" style="animation-delay:1s">
+      <div class="corazon-div" data-rev="1">
         <span class="linea"></span>
         <svg viewBox="0 0 24 22"><path d="M12 21S1 14 1 7.2C1 3.5 3.8 1 7 1c2.2 0 4 1.3 5 3 1-1.7 2.8-3 5-3 3.2 0 6 2.5 6 6.2C23 14 12 21 12 21z"/></svg>
         <span class="linea"></span>
       </div>
 
-      <p class="rev" style="animation-delay:1.1s">
-        También quería pedirte perdón porque el año pasado no te felicité en tu cumpleaños.
-        La verdad, entre la universidad se me olvidó y, cuando me di cuenta, sentí que ya
-        era tarde para hacerlo. Además, ni siquiera tenía un regalo para ti.
+      <p data-rev="1.1">
+        También te debía una disculpa: el año pasado no te felicité en tu cumpleaños.
+        Entre la universidad se me pasó, y cuando me acordé ya sentía que era tarde
+        para decir algo. Ni siquiera tenía un regalo listo para vos.
       </p>
 
-      <p class="frase rev" style="animation-delay:1.25s">
-        Espero que este pequeño detalle pueda compensar un poco eso y, sobre todo,
-        sacarte una <span class="destacar">buena pregunta</span>.
+      <p class="frase" data-rev="1.25">
+        Espero que esto compense un poco eso — y que, en medio de tanta broma,
+        te quede dando vueltas una <span class="destacar">buena pregunta</span>
+        que todavía no sé si te vas a animar a hacer.
       </p>
     </div>
 
     <!-- ─── Cierre ─── -->
-    <p class="feliz-cumple rev" style="animation-delay:1.4s">
+    <p class="feliz-cumple" data-rev="1.4">
       Feliz cumpleaños
     </p>
 
-    <div class="divisor rev" style="animation-delay:1.5s; width:60%; margin:18px auto 0">
+    <div class="divisor" data-rev="1.5" style="width:60%; margin:18px auto 0">
       <span class="linea"></span>
       <span class="joya"></span>
       <span class="linea"></span>
     </div>
 
-    <div class="pie rev" style="animation-delay:1.65s">
+    <div class="pie" data-rev="1.65">
       <p class="firma">
         Te quiero mucho,<br>
         mi camionero favorito. :3
@@ -159,11 +161,11 @@
       <div class="lacre">♥</div>
     </div>
 
-    <div class="puntos rev" style="animation-delay:1.8s">
+    <div class="puntos" data-rev="1.8">
       <span class="punto"></span><span class="punto"></span><span class="punto"></span>
     </div>
 
-    <svg class="ornamento abajo rev" style="animation-delay:1.9s" viewBox="0 0 300 34">
+    <svg class="ornamento abajo" data-rev="1.9" viewBox="0 0 300 34">
       <path d="M10 17 C50 17 60 6 82 6 C96 6 100 17 114 17"/>
       <path d="M290 17 C250 17 240 6 218 6 C204 6 200 17 186 17"/>
       <path d="M114 17 C128 17 132 28 146 28 C154 28 150 17 150 17"/>
@@ -175,7 +177,7 @@
       <circle class="punto-orn" cx="290" cy="17" r="1.6"/>
     </svg>
 
-    <div class="hilera-corazones rev" style="animation-delay:1.95s">
+    <div class="hilera-corazones" data-rev="1.95">
       <span>♥</span><span>♥</span><span>♥</span><span>♥</span><span>♥</span>
     </div>
   </div>
@@ -195,20 +197,20 @@ var MUNECOS = [
   '/fotos de vrchat/muda.png',
   '/fotos de vrchat/nilou.png'
 ];
-var CANT_MUNECOS  = 10;
+var CANT_MUNECOS  = 6;
 var ANCHO_MIN     = 55;    // px
 var ANCHO_MAX     = 110;
 var CENTRO_LIBRE  = 0.46;  // 46% del centro despejado para no tapar la carta
 
 /* corazones que caen */
 var COLORES_CORAZON = ['#FF2E9A','#FF7AC4','#FFB3E0','#FF4FAC','#FFD1EE'];
-var CANT_CORAZONES  = 18;
+var CANT_CORAZONES  = 11;
 
 /* destellos y motas */
 var SIMBOLOS       = ['✦','✧','⋆','✵','·'];
-var CANT_DESTELLOS = 24;
+var CANT_DESTELLOS = 13;
 var COLORES        = ['#FF2E9A','#FF7AC4','#FFB3E0','#FFF0F8','#E85AC8'];
-var CANT_MOTAS     = 18;
+var CANT_MOTAS     = 9;
 
 /* emojis del estallido al hacer click */
 var EMOJIS_CLICK = ['♥','✦','♡','✧'];
@@ -252,6 +254,8 @@ function crearMunecos(){
     var ancho = Math.round(azar(ANCHO_MIN, ANCHO_MAX));
     wrap.style.width = ancho + 'px';
     wrap.style.left  = Math.round(posicionLateral(i) * (window.innerWidth - ancho)) + 'px';
+    wrap.style.willChange = 'transform';
+    wrap.style.pointerEvents = 'none';
 
     wrap.style.setProperty('--r0', azar(-25, 25).toFixed(0) + 'deg');
     wrap.style.setProperty('--rf', azar(-60, 60).toFixed(0) + 'deg');
@@ -266,12 +270,17 @@ function crearMunecos(){
     capa.appendChild(wrap);
   }
 
-  // recolocar al cambiar el tamaño de la ventana
+  // recolocar al cambiar el tamaño de la ventana (con espera para no
+  // recalcular en cada pixel mientras se arrastra el borde)
+  var esperaResize = null;
   window.addEventListener('resize', function(){
-    Array.prototype.forEach.call(capa.children, function(w, k){
-      var ancho = parseInt(w.style.width, 10) || 0;
-      w.style.left = Math.round(posicionLateral(k) * (window.innerWidth - ancho)) + 'px';
-    });
+    clearTimeout(esperaResize);
+    esperaResize = setTimeout(function(){
+      Array.prototype.forEach.call(capa.children, function(w, k){
+        var ancho = parseInt(w.style.width, 10) || 0;
+        w.style.left = Math.round(posicionLateral(k) * (window.innerWidth - ancho)) + 'px';
+      });
+    }, 200);
   });
 }
 
@@ -291,6 +300,7 @@ function crearCorazones(){
     c.style.cssText =
       'left:' + azar(-2, 100).toFixed(1) + '%;'
       + 'width:' + azar(12, 30).toFixed(0) + 'px;'
+      + 'pointer-events:none;will-change:transform;'
       + '--c:' + COLORES_CORAZON[i % COLORES_CORAZON.length] + ';'
       + '--r0:' + azar(-25, 25).toFixed(0) + 'deg;'
       + '--rf:' + azar(-70, 70).toFixed(0) + 'deg;'
@@ -320,6 +330,7 @@ function crearDestellos(){
     el.style.cssText =
       'left:' + azar(-2, 102).toFixed(1) + '%;'
       + 'font-size:' + azar(10, 24).toFixed(0) + 'px;'
+      + 'pointer-events:none;will-change:transform;'
       + '--r0:' + azar(-30, 30).toFixed(0) + 'deg;'
       + '--rf:' + azar(-80, 80).toFixed(0) + 'deg;'
       + '--sc:' + azar(0.8, 1.3).toFixed(2) + ';'
@@ -361,13 +372,42 @@ function crearMotas(){
    7. ABRIR EL SOBRE
    Primero se levanta la solapa y sale el papelito,
    después se desvanece la pantalla y queda la carta.
+
+   OJO: antes, los elementos de la carta ya traían la
+   clase "rev" con animation-delay desde que cargaba la
+   página. Como la carta estaba oculta (opacity/display),
+   esas animaciones corrían "en silencio" mientras el
+   sobre seguía cerrado, y para cuando el sobre se abría
+   ya habían terminado — la carta aparecía de golpe, sin
+   animarse. Ahora cada elemento espera con data-rev y
+   solo se le agrega la clase "rev" (con setTimeout, no con
+   CSS delay) en el momento exacto en que la carta se
+   revela, así el efecto de aparición sí se ve.
 ═══════════════════════════════════════════ */
+function revelarCarta(){
+  var elementos = document.querySelectorAll('[data-rev]');
+  elementos.forEach(function(el){
+    var espera = parseFloat(el.getAttribute('data-rev')) || 0;
+    setTimeout(function(){
+      el.classList.add('rev');
+    }, espera * 1000);
+  });
+}
+
 function activarSobre(){
   var pantalla = document.getElementById('sobre-pantalla');
   var sobre    = document.getElementById('sobre');
   if (!pantalla || !sobre) return;
 
   var abriendo = false;
+  var yaRevelada = false;
+
+  function revelarUnaVez(){
+    if (yaRevelada) return;
+    yaRevelada = true;
+    document.body.classList.remove('esperando');
+    revelarCarta();
+  }
 
   // la carta queda oculta hasta que se abra el sobre
   document.body.classList.add('esperando');
@@ -384,7 +424,7 @@ function activarSobre(){
     setTimeout(function(){ pantalla.classList.add('abierto'); }, 1200);
 
     // 3. justo ahí aparece la carta y arrancan sus animaciones
-    setTimeout(function(){ document.body.classList.remove('esperando'); }, 1400);
+    setTimeout(revelarUnaVez, 1400);
 
     // 4. se quita la pantalla del medio
     setTimeout(function(){ pantalla.style.display = 'none'; }, 2400);
@@ -393,7 +433,7 @@ function activarSobre(){
   pantalla.addEventListener('click', abrir);
 
   // red de seguridad: si algo falla, a los 12 s la carta se muestra igual
-  setTimeout(function(){ document.body.classList.remove('esperando'); }, 12000);
+  setTimeout(revelarUnaVez, 12000);
 }
 
 
