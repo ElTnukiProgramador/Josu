@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mensaje Especial - Josuyelin</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+  <link rel="stylesheet" href="/Styles/style4.css">
+</head>
+
+<body>
+
+  <!-- ══════════════ CAPAS DE FONDO ══════════════ -->
+  <div class="bg-layer"></div>
+  <div class="scanlines"></div>
+  <div class="particles" id="particles"></div>
+  <div class="grapes" id="grapes"></div>
+
+  <!-- ══════════════ TARJETA ══════════════ -->
+  <div class="gate-wrap">
+    <div class="gate-card">
+
+      <!-- esquinas decorativas -->
+      <div class="nbw-tl"></div>
+      <div class="nbw-tr"></div>
+      <div class="nbw-bl"></div>
+      <div class="nbw-br"></div>
+
+      <span class="gate-label">
+        <span class="emo">🦝</span>Acceso Restringido<span class="emo">🦝</span>
+      </span>
+
+      <span class="gate-title">Mensaje<br>Especial</span>
+
+      <p class="gate-msg">
+        Para encontrar la <strong>contraseña</strong> es necesario ver este video tuyo.
+        En algún momento del video aparece la pista que necesitas para continuar,
+        ¡presta mucha atención calajo!
+      </p>
+
+      <!-- botón: ver el video (misma pinta que el de Entrar) -->
+      <div class="video-btn-wrap">
+        <a class="video-btn" href="/web/Pagina11_cumple.html">
+          <span class="emo">🦝</span>Ver Video<span class="emo">🦝</span>
+        </a>
+      </div>
+
+      <div class="gate-divider"></div>
+
+      <!-- formulario: contraseña -->
+      <form class="pass-form" id="passForm">
+        <label class="pass-label" for="passInput">Ingresa la contraseña</label>
+
+        <input type="password" id="passInput" class="pass-input"
+               placeholder="••••••••" autocomplete="off" required>
+
+        <button type="submit" class="pass-submit">
+          <span class="emo">🦝</span>Entrar<span class="emo">🦝</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <audio id="sonido" preload="auto" loop>
+    <source src="/Musica/celos.mp3" type="audio/mpeg">
+  </audio>
+
+
+  <script>
+  /* ═══════════════════════════════════════════
+     1. CONFIGURACIÓN
+     (lo único que tocas normalmente)
+  ═══════════════════════════════════════════ */
+
+  /* contraseña → vista a la que lleva */
+  var CLAVES = {
+    'tanuki': '/web/tanuki.html',
+    '123':    '/web/Pagina6_cumple.html',
+    'live':   '/web/Pagina12_cumple.html'   // vista estilo Twitch
+  };
+  var PAGINA_ERROR = '/web/Pagina5_cumple.html';   // si no acierta ninguna
+
+  /* imágenes que caen de fondo */
+  var IMAGENES = [
+    '/fotos de vrchat/Vivian.png',
+    '/fotos de vrchat/burnicee.png',
+    '/fotos de vrchat/lucy.png'
+  ];
+
+  var COLORES_PARTICULA = ['#FF2EC4', '#ff6fe0', '#ff9ce8', '#d600a3', '#c084fc'];
+  var EMOJIS_CLICK      = ['⚡', '🦝'];
+
+  var CANT_PARTICULAS = 45;
+  var CANT_IMAGENES   = 12;
+  var VOLUMEN_MUSICA  = 0.3;
+
+
+  /* ═══════════════════════════════════════════
+     2. UTILIDADES
+  ═══════════════════════════════════════════ */
+  function azar(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
+  function alAzar(lista) {
+    return lista[Math.floor(Math.random() * lista.length)];
+  }
+
+  /* quita espacios, tildes y mayúsculas */
+  function normalizar(texto) {
+    return texto.trim().toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+
+  /* ═══════════════════════════════════════════
+     3. PARTÍCULAS QUE SUBEN
+  ═══════════════════════════════════════════ */
+  function crearParticulas() {
+    var capa = document.getElementById('particles');
+    if (!capa) return;
+
+    for (var i = 0; i < CANT_PARTICULAS; i++) {
+      var p       = document.createElement('div');
+      var color   = alAzar(COLORES_PARTICULA);
+      var tam     = azar(2, 6);
+      var cuadrada = Math.random() > 0.6;
+
+      p.className = 'particle';
+      p.style.cssText =
+        'left:' + azar(0, 100) + '%;' +
+        'width:' + tam + 'px;height:' + tam + 'px;' +
+        'background:' + color + ';box-shadow:0 0 5px ' + color + ';' +
+        (cuadrada ? 'border-radius:0;transform:rotate(45deg);' : '') +
+        'animation-duration:' + azar(7, 16) + 's;' +
+        'animation-delay:' + azar(0, 7) + 's;';
+
+      capa.appendChild(p);
+    }
+  }
+
+
+  /* ═══════════════════════════════════════════
+     4. IMÁGENES CAYENDO
+  ═══════════════════════════════════════════ */
+  function crearImagenesCayendo() {
+    var capa = document.getElementById('grapes');
+    if (!capa) return;
+
+    for (var i = 0; i < CANT_IMAGENES; i++) {
+      var wrap = document.createElement('div');
+      wrap.className = 'grape grape-img';
+
+      var img = document.createElement('img');
+      img.src     = IMAGENES[i % IMAGENES.length];   // alterna entre las imágenes
+      img.alt     = '';
+      img.loading = 'lazy';
+
+      // se reparten a los costados, dejando libre el centro
+      var lado = Math.random() < 0.5 ? azar(0, 20) : azar(80, 100);
+
+      wrap.style.left              = lado + '%';
+      wrap.style.width             = azar(45, 100) + 'px';
+      wrap.style.animationDuration = azar(11, 21) + 's';
+      wrap.style.animationDelay    = azar(-22, 0) + 's';
+
+      wrap.appendChild(img);
+      capa.appendChild(wrap);
+    }
+  }
+
+
+  /* ═══════════════════════════════════════════
+     5. ESTALLIDO AL HACER CLICK
+  ═══════════════════════════════════════════ */
+  function estallido(x, y) {
+    for (var i = 0; i < 8; i++) {
+      var p     = document.createElement('div');
+      var ang   = (i / 8) * 360 + azar(-15, 15);
+      var dist  = azar(45, 110);
+      var rad   = ang * Math.PI / 180;
+
+      p.className   = 'click-fx';
+      p.textContent = alAzar(EMOJIS_CLICK);
+      p.style.left  = x + 'px';
+      p.style.top   = y + 'px';
+      p.style.fontSize = azar(15, 30) + 'px';
+      p.style.setProperty('--dx', Math.cos(rad) * dist + 'px');
+      p.style.setProperty('--dy', Math.sin(rad) * dist + 'px');
+
+      document.body.appendChild(p);
+
+      (function (el) {
+        setTimeout(function () { el.remove(); }, 800);
+      })(p);
+    }
+  }
+
+  function activarClicks() {
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('a, button')) return;   // no estallar sobre botones
+      estallido(e.clientX, e.clientY);
+    });
+  }
+
+
+  /* ═══════════════════════════════════════════
+     6. CONTRASEÑA
+  ═══════════════════════════════════════════ */
+  function activarFormulario() {
+    var form  = document.getElementById('passForm');
+    var campo = document.getElementById('passInput');
+    if (!form || !campo) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var clave = normalizar(campo.value);
+
+      // si está en la lista va a su vista; si no, a la página de error
+      window.location.href = CLAVES[clave] || PAGINA_ERROR;
+    });
+  }
+
+
+  /* ═══════════════════════════════════════════
+     7. MÚSICA DE FONDO
+  ═══════════════════════════════════════════ */
+  function activarMusica() {
+    var sonido = document.getElementById('sonido');
+    if (!sonido) return;
+
+    sonido.volume = VOLUMEN_MUSICA;
+    var yaSonado = false;
+
+    function reproducir() {
+      if (yaSonado) return;
+      sonido.play().then(function () { yaSonado = true; }).catch(function () {});
+    }
+
+    // intento inmediato al cargar
+    window.addEventListener('load', reproducir);
+
+    // respaldo: el primer gesto del usuario lo dispara
+    ['click', 'keydown', 'scroll', 'touchstart', 'mousemove'].forEach(function (evt) {
+      document.addEventListener(evt, reproducir, { once: true });
+    });
+  }
+
+
+  /* ═══════════════════════════════════════════
+     8. ARRANQUE
+  ═══════════════════════════════════════════ */
+  crearParticulas();
+  crearImagenesCayendo();
+  activarClicks();
+  activarFormulario();
+  activarMusica();
+  </script>
+
+</body>
+
+</html>

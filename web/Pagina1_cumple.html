@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feliz Cumpleanos Josuyelin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{min-height:100vh;font-family:'Crimson Text',serif;overflow-x:hidden;cursor:crosshair;background:#060b1a}
+.bg{position:fixed;inset:0;z-index:0;background-size:cover;background-position:center;filter:brightness(.5) saturate(1.2)}
+.ov{position:fixed;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(6,11,26,.1) 0%,rgba(6,11,26,.02) 45%,rgba(6,11,26,.35) 100%)}
+#personajes{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+#sparks{position:fixed;inset:0;z-index:3;pointer-events:none}
+.wrap{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── IMÁGENES CAYENDO ── */
+.personaje{position:absolute;top:-200px;pointer-events:none;
+  animation-name:caerPersonaje,mecerPersonaje;
+  animation-timing-function:linear,ease-in-out;
+  animation-iteration-count:infinite,infinite;
+  will-change:top,transform}
+.personaje img{
+  width:100%;
+  aspect-ratio:1;                /* siempre círculo perfecto, sin deformarse */
+  object-fit:cover;
+  object-position:center 22%;    /* encuadra la cara, no los pies */
+  display:block;
+  border-radius:50%;
+  border:3px solid rgba(255,224,102,.85);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.45),                /* separa el borde del fondo */
+    0 0 22px rgba(249,115,22,.65),
+    0 0 45px rgba(232,64,42,.35),
+    inset 0 0 20px rgba(0,0,0,.35);
+  filter:saturate(1.15) contrast(1.05);
+  background:rgba(6,11,26,.6);   /* por si el PNG tiene transparencia */
+}
+@keyframes caerPersonaje{
+  0%  {top:-200px;opacity:0;transform:rotate(var(--r0)) scale(var(--sc))}
+  10% {opacity:var(--op)}
+  90% {opacity:var(--op)}
+  100%{top:120vh;opacity:0;transform:rotate(var(--rf)) scale(var(--sc))}
+}
+@keyframes mecerPersonaje{
+  0%,100%{margin-left:0}
+  50%    {margin-left:var(--sw)}
+}
+
+/* ── EMOJIS: para que no se vean chiquitos junto a la letra ── */
+.emo{
+  display:inline-block;
+  font-size:1.9em;
+  line-height:1;
+  vertical-align:-0.3em;
+  margin:0 .12em;
+  font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
+  filter:drop-shadow(0 0 6px rgba(249,115,22,.5));
+}
+
+.card{text-align:center;position:relative;padding:50px 60px 46px;
+  background:linear-gradient(145deg,rgba(110,15,10,.18) 0%,rgba(6,11,26,.22) 50%,rgba(110,15,10,.18) 100%);
+  border:1px solid rgba(245,200,66,.38);border-radius:6px;max-width:700px;width:100%;
+  backdrop-filter:blur(4px);
+  box-shadow:0 0 80px rgba(232,64,42,.22),inset 0 0 50px rgba(0,0,0,.35);
+  animation:fadeUp 1s .2s both}
+.card::before,.card::after,.c-br,.c-tr{content:'';position:absolute;width:45px;height:45px;border-color:#f5c842;border-style:solid;opacity:.75}
+.card::before{top:12px;left:12px;border-width:2px 0 0 2px}
+.card::after{bottom:12px;right:12px;border-width:0 2px 2px 0}
+.c-br{bottom:12px;left:12px;border-width:0 0 2px 2px}
+.c-tr{top:12px;right:12px;border-width:2px 2px 0 0}
+.deco{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 auto 14px}
+.deco.bot{margin:14px auto 0}
+.dline{height:1px;flex:1;max-width:110px;background:linear-gradient(90deg,transparent,#f5c842,transparent)}
+.ddiam{width:7px;height:7px;background:#f5c842;transform:rotate(45deg);box-shadow:0 0 8px #f5c842}
+.ddot{width:4px;height:4px;background:#f97316;border-radius:50%;box-shadow:0 0 6px #f97316}
+.feliz{font-family:'Cinzel Decorative',cursive;font-size:clamp(.7rem,1.8vw,.95rem);letter-spacing:.55em;color:rgba(245,200,66,.85);text-transform:uppercase;display:block;margin-bottom:8px;text-shadow:0 0 14px rgba(245,200,66,.5)}
+.flame-row{display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0}
+.fl{animation:flD 1.8s ease-in-out infinite alternate;transform-origin:bottom center}
+.fr{animation:flD 1.8s .4s ease-in-out infinite alternate;transform-origin:bottom center}
+@keyframes flD{from{transform:scaleX(1) rotate(-4deg)}to{transform:scaleX(.9) scaleY(1.1) rotate(4deg)}}
+.cumple{font-family:'Cinzel Decorative',cursive;font-size:clamp(1.9rem,6vw,3.4rem);font-weight:900;color:transparent;
+  background:linear-gradient(160deg,#ffe066 0%,#f97316 38%,#ff4b6e 65%,#fff5cc 100%);
+  -webkit-background-clip:text;background-clip:text;line-height:1.1;letter-spacing:.04em;display:block;
+  animation:tG 3s ease-in-out infinite alternate}
+@keyframes tG{from{filter:drop-shadow(0 0 12px rgba(249,115,22,.6))}to{filter:drop-shadow(0 0 28px rgba(245,200,66,1)) drop-shadow(0 0 50px rgba(232,64,42,.5))}}
+.nombre{font-family:'Cinzel Decorative',cursive;font-size:clamp(2.5rem,7.5vw,4.5rem);font-weight:900;color:transparent;
+  background:linear-gradient(160deg,#fff5cc 0%,#f5c842 38%,#f97316 68%,#e8402a 100%);
+  -webkit-background-clip:text;background-clip:text;display:block;line-height:1.05;margin-top:4px;letter-spacing:.06em;
+  animation:nG 2.5s ease-in-out infinite alternate}
+@keyframes nG{from{filter:drop-shadow(0 0 15px rgba(245,200,66,.7))}to{filter:drop-shadow(0 0 35px rgba(249,115,22,1)) drop-shadow(0 0 60px rgba(245,200,66,.6))}}
+.divl{width:85%;height:1px;background:linear-gradient(90deg,transparent,rgba(245,200,66,.7),transparent);margin:22px auto;position:relative}
+.divl::before{content:'\2736';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#f5c842;font-size:1rem;padding:0 12px;animation:sp 4s linear infinite}
+@keyframes sp{0%{transform:translate(-50%,-50%) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg)}}
+.msg{font-size:clamp(1rem,2.4vw,1.2rem);color:rgba(255,245,210,.93);line-height:1.8;font-style:italic;letter-spacing:.03em}
+.dots{display:flex;gap:14px;justify-content:center;margin-top:26px}
+.dot{width:10px;height:10px;border-radius:50%;background:#f97316;box-shadow:0 0 8px #e8402a,0 0 18px #f97316;animation:dP 1.5s ease-in-out infinite}
+.dot:nth-child(2){animation-delay:.3s;background:#f5c842}
+.dot:nth-child(3){animation-delay:.6s}
+@keyframes dP{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.7);opacity:1}}
+.btn-wrap{margin-top:50px;animation:fadeUp 1s .5s both}
+.btn-outer{position:relative;display:inline-block;padding:2px;border-radius:4px;
+  background:linear-gradient(90deg,#f5c842,#f97316,#e8402a,#f97316,#f5c842);
+  background-size:300% 100%;animation:bSpin 3s linear infinite;
+  box-shadow:0 0 25px rgba(249,115,22,.45),0 0 55px rgba(232,64,42,.2)}
+@keyframes bSpin{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:17px 50px;
+  font-family:'Cinzel Decorative',cursive;font-size:.8rem;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:#1a0505;
+  background:linear-gradient(135deg,#ffe066 0%,#f97316 50%,#e8402a 100%);
+  border:none;border-radius:3px;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .25s,filter .25s}
+.btn:hover{transform:translateY(-3px) scale(1.03);filter:brightness(1.1)}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-100%);animation:shim 2.5s 1s infinite}
+@keyframes shim{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
+.bico{display:inline-block;font-size:1.9em;line-height:1;vertical-align:-0.3em;
+  font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
+  animation:bb 1.5s ease-in-out infinite}
+@keyframes bb{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.bside{position:absolute;top:50%;transform:translateY(-50%);color:#f5c842;font-size:.7rem;letter-spacing:3px;opacity:.7;animation:bsP 2s ease-in-out infinite alternate;white-space:nowrap}
+.bside.l{right:calc(100% + 14px)}
+.bside.r{left:calc(100% + 14px)}
+@keyframes bsP{from{opacity:.3}to{opacity:.8}}
+.burst{position:fixed;pointer-events:none;z-index:999}
+.bp{position:absolute;width:6px;height:6px;border-radius:50%;animation:bFly .8s ease-out forwards}
+@keyframes bFly{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+@keyframes floatUp{0%{opacity:0;transform:translateY(0)}20%{opacity:1}80%{opacity:.5}100%{opacity:0;transform:translateY(-85vh)}}
+
+@media (max-width:600px){
+  .emo,.bico{font-size:1.6em}
+  .btn{padding:15px 28px}
+  .personaje{--sw:0px}
+  .personaje img{border-width:2px}
+}
+</style>
+</head>
+<body>
+<div class="bg" style="background-image:url('/fondo.jpg')"></div>
+<div class="ov"></div>
+<div id="personajes"></div>
+<div id="sparks"></div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="c-br"></div><div class="c-tr"></div>
+    <div class="deco">
+      <div class="dline"></div>
+      <div class="ddot"></div><div class="ddiam"></div><div class="ddot"></div>
+      <svg width="20" height="20" viewBox="0 0 22 22"><polygon points="11,1 13.5,8 21,8 15,13 17.5,20 11,16 4.5,20 7,13 1,8 8.5,8" fill="url(#sg1)"/><defs><linearGradient id="sg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff5cc"/><stop offset="100%" stop-color="#f97316"/></linearGradient></defs></svg>
+      <div class="ddot"></div><div class="ddiam"></div><div class="ddot"></div>
+      <div class="dline"></div>
+    </div>
+    <span class="feliz">&#10022; &nbsp; Feliz &nbsp; &#10022;</span>
+    <div class="flame-row">
+      <span class="fl"><svg width="26" height="36" viewBox="0 0 28 38" fill="none"><path d="M14 37C2 28 2 18 2 18C2 10 8 4 14 1C10 10 14 14 14 14C16 8 20 6 20 6C26 12 26 20 26 20C26 28 14 37 14 37Z" fill="url(#fa)"/><defs><linearGradient id="fa" x1="14" y1="0" x2="14" y2="38" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffe066"/><stop offset="50%" stop-color="#f97316"/><stop offset="100%" stop-color="#e8402a"/></linearGradient></defs></svg></span>
+      <span class="cumple">Cumplea&ntilde;os</span>
+      <span class="fr"><svg width="26" height="36" viewBox="0 0 28 38" fill="none"><path d="M14 37C2 28 2 18 2 18C2 10 8 4 14 1C10 10 14 14 14 14C16 8 20 6 20 6C26 12 26 20 26 20C26 28 14 37 14 37Z" fill="url(#fb)"/><defs><linearGradient id="fb" x1="14" y1="0" x2="14" y2="38" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#ffe066"/><stop offset="50%" stop-color="#f97316"/><stop offset="100%" stop-color="#e8402a"/></linearGradient></defs></svg></span>
+    </div>
+    <span class="nombre">Josuyelin</span>
+    <div class="deco bot">
+      <div class="dline"></div>
+      <div class="ddot"></div><div class="ddiam"></div>
+      <svg width="20" height="20" viewBox="0 0 22 22"><polygon points="11,1 13.5,8 21,8 15,13 17.5,20 11,16 4.5,20 7,13 1,8 8.5,8" fill="url(#sg2)"/><defs><linearGradient id="sg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff5cc"/><stop offset="100%" stop-color="#f97316"/></linearGradient></defs></svg>
+      <div class="ddiam"></div><div class="ddot"></div>
+      <div class="dline"></div>
+    </div>
+    <div class="divl"></div>
+    <p class="msg">
+      Este pequeño detalle esta hecho con mucho cariño.
+    </p>
+    <span class="emo">🦝</span>
+    <div class="dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>
+  </div>
+
+  <div class="btn-wrap">
+    <div style="position:relative;display:inline-block">
+      <span class="bside l">&#10022; &#10022;</span>
+      <div class="btn-outer">
+        <a href="/web/Pagina2_cumple.html" style="text-decoration:none">
+          <button class="btn">
+            <span class="emo">🦝</span>
+            Ver Mensaje Especial
+            <span class="emo">🦝</span>
+          </button>
+        </a>
+      </div>
+      <span class="bside r">&#10022; &#10022;</span>
+    </div>
+  </div>
+</div>
+
+<audio id="sonido" preload="auto" loop>
+  <source src="/Musica/sad lofi songs for slow days (sad music mix).mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* ═══════════════════════════════════════════
+   0. CONFIGURACIÓN
+═══════════════════════════════════════════ */
+var IMAGENES = [
+  '/fotos de vrchat/yoimiya1.png',
+  '/fotos de vrchat/yoimiya2.png',
+  '/fotos de vrchat/furina.png',
+  '/fotos de vrchat/mapaches1.png',
+];
+var CANTIDAD  = 12;    // menos cantidad, pero más grandes y nítidas
+var TAM_MIN   = 70;    // tamaño mínimo en píxeles
+var TAM_MAX   = 130;   // tamaño máximo en píxeles
+
+
+/* ═══════════════════════════════════════════
+   1. IMÁGENES CAYENDO
+═══════════════════════════════════════════ */
+(function(){
+  var capa = document.getElementById('personajes');
+
+  for (var i = 0; i < CANTIDAD; i++) {
+    var wrap = document.createElement('div');
+    wrap.className = 'personaje';
+
+    var img = document.createElement('img');
+    img.src = IMAGENES[i % IMAGENES.length];   // alterna entre las imágenes
+    img.alt = '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    // si una ruta está mal, oculta ese elemento en vez de mostrar el ícono roto
+    img.onerror = (function(w){ return function(){ w.style.display = 'none'; }; })(wrap);
+
+    var w   = (TAM_MIN + Math.random() * (TAM_MAX - TAM_MIN)).toFixed(0);
+    var lx  = (Math.random()*104 - 2).toFixed(1);
+    var dur = (13 + Math.random()*12).toFixed(1);   // más lento = se aprecian mejor
+    var swy = (4 + Math.random()*4).toFixed(1);
+    var del = (Math.random() * -25).toFixed(1);
+    var r0  = ((Math.random()-0.5)*40).toFixed(0)+'deg';   // giro suave, no vuelta completa
+    var rf  = ((Math.random()-0.5)*90).toFixed(0)+'deg';
+    var sc  = (0.9 + Math.random()*0.25).toFixed(2);
+    var op  = (0.85 + Math.random()*0.15).toFixed(2);      // más opacas, se ven mejor
+    var sw  = ((Math.random()-0.5)*70).toFixed(0)+'px';
+
+    wrap.style.cssText =
+      'left:'+lx+'%;width:'+w+'px;'
+      +'--r0:'+r0+';--rf:'+rf+';--sc:'+sc+';--op:'+op+';--sw:'+sw+';'
+      +'animation-duration:'+dur+'s,'+swy+'s;'
+      +'animation-delay:'+del+'s,'+del+'s;';
+
+    wrap.appendChild(img);
+    capa.appendChild(wrap);
+  }
+})();
+
+
+/* ═══════════════════════════════════════════
+   2. CHISPAS SUBIENDO
+═══════════════════════════════════════════ */
+var COLORES = ['#f5c842','#f97316','#e8402a','#fff8dc','#ff7043'];
+
+(function(){
+  var sp = document.getElementById('sparks');
+
+  for (var j = 0; j < 16; j++) {
+    var s = document.createElement('div');
+    var c = COLORES[j % COLORES.length];
+    var d = (3 + Math.random()*4).toFixed(2);
+    var dl = (Math.random()*8).toFixed(2);
+
+    s.style.cssText =
+      'position:absolute;width:3px;height:3px;border-radius:50%;opacity:0;'
+      +'left:'+(Math.random()*100).toFixed(1)+'%;'
+      +'bottom:'+(Math.random()*18).toFixed(1)+'%;'
+      +'background:'+c+';box-shadow:0 0 5px 2px '+c+';'
+      +'animation:floatUp '+d+'s '+dl+'s ease-in infinite;';
+    sp.appendChild(s);
+  }
+})();
+
+
+/* ═══════════════════════════════════════════
+   3. ESTALLIDO AL HACER CLICK
+═══════════════════════════════════════════ */
+document.addEventListener('click', function(e){
+  var b = document.createElement('div');
+  b.className = 'burst';
+  b.style.left = e.clientX + 'px';
+  b.style.top  = e.clientY + 'px';
+
+  for (var k = 0; k < 16; k++) {
+    var p = document.createElement('div');
+    p.className = 'bp';
+    var a = (k/16)*360;
+    var d = 55 + Math.random()*55;
+    var r = a * Math.PI / 180;
+    var col = COLORES[k % COLORES.length];
+
+    p.style.cssText =
+      'background:'+col+';box-shadow:0 0 4px '+col+';'
+      +'--tx:'+(Math.cos(r)*d).toFixed(1)+'px;'
+      +'--ty:'+(Math.sin(r)*d).toFixed(1)+'px;'
+      +'animation-duration:'+(0.5 + Math.random()*.4).toFixed(2)+'s;';
+    b.appendChild(p);
+  }
+
+  document.body.appendChild(b);
+  setTimeout(function(){ b.remove(); }, 1000);
+});
+
+
+/* ═══════════════════════════════════════════
+   4. MÚSICA DE FONDO
+═══════════════════════════════════════════ */
+(function(){
+  var sonido = document.getElementById('sonido');
+  sonido.volume = 0.3;
+  var yaSonado = false;
+
+  function reproducirSonido() {
+    if (yaSonado) return;
+    sonido.play().then(function(){ yaSonado = true; }).catch(function(){});
+  }
+
+  window.addEventListener('load', reproducirSonido);
+
+  ['click','keydown','scroll','touchstart','mousemove'].forEach(function(evt){
+    document.addEventListener(evt, reproducirSonido, { once: true });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,667 @@
+/* ==========================================================================
+   style12.css — Vista estilo Twitch
+
+   1. Variables y base
+   2. Barra superior
+   3. Layout (rail + contenido + chat)
+   4. Rail lateral izquierdo
+   5. Reproductor
+   6. Info del VOD
+   7. Tarjeta del canal
+   8. Emisiones recientes
+   9. Chat
+   10. Botón de volver
+   11. Responsive
+   ========================================================================== */
+
+
+/* ── 1. Variables y base ────────────────────────────────── */
+:root{
+  --morado:      #9147ff;
+  --morado-hov:  #a970ff;
+  --bg:          #0e0e10;
+  --panel:       #18181b;
+  --panel-2:     #1f1f23;
+  --hover:       #26262c;
+  --borde:       #2f2f35;
+  --txt:         #efeff1;
+  --txt-2:       #adadb8;
+  --rojo:        #eb0400;
+  --header-h:    50px;
+  --rail-w:      50px;
+  --chat-w:      340px;
+}
+
+*{ margin: 0; padding: 0; box-sizing: border-box; }
+
+body{
+  background: var(--bg);
+  color: var(--txt);
+  font-family: "Inter", "Roobert", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+img{ display: block; }
+button{ font-family: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+a{ color: inherit; text-decoration: none; }
+
+.ico{ width: 20px; height: 20px; fill: currentColor; flex: none; }
+
+
+/* ── 2. Barra superior ──────────────────────────────────── */
+.tw-header{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 60;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  background: var(--panel);
+}
+
+.tw-header .izq,
+.tw-header .der{ display: flex; align-items: center; gap: 6px; flex: none; }
+.tw-header .der{ margin-left: auto; }
+
+.logo-tw{
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: 4px;
+  flex: none;
+}
+.logo-tw:hover{ background: var(--hover); }
+/* el png es cuadrado y con transparencia: contain para que no se recorte
+   y background transparent para que no quede el cuadro blanco */
+.logo-tw img{
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.nav-link{
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.nav-link:hover{ background: var(--hover); color: var(--morado-hov); }
+
+.btn-redondo{
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  border-radius: 4px;
+  color: var(--txt);
+  position: relative;
+}
+.btn-redondo:hover{ background: var(--hover); }
+.globo{
+  position: absolute;
+  top: -2px; right: -2px;
+  min-width: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--rojo);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+}
+
+/* buscador */
+.buscador{
+  flex: 1;
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  height: 30px;
+}
+.buscador input{
+  flex: 1;
+  padding: 0 10px;
+  border: 2px solid var(--borde);
+  border-right: 0;
+  border-radius: 4px 0 0 4px;
+  background: var(--panel-2);
+  color: var(--txt);
+  font-size: 14px;
+  outline: 0;
+}
+.buscador input:focus{ border-color: var(--morado); }
+.buscador input::placeholder{ color: var(--txt-2); }
+.buscador .lupa{
+  width: 40px;
+  display: grid; place-items: center;
+  border-radius: 0 4px 4px 0;
+  background: var(--panel-2);
+  border: 2px solid var(--borde);
+  border-left: 0;
+}
+.buscador .lupa:hover{ background: var(--hover); }
+
+.btn-prime{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 4px;
+  background: var(--panel-2);
+  font-size: 13px;
+  font-weight: 600;
+}
+.btn-prime:hover{ background: var(--hover); }
+
+.avatar-header{
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-left: 4px;
+}
+
+
+/* ── 3. Layout ──────────────────────────────────────────── */
+.cuerpo{
+  display: flex;
+  padding-top: var(--header-h);
+  min-height: 100vh;
+}
+
+
+/* ── 4. Rail lateral ────────────────────────────────────── */
+.rail{
+  width: var(--rail-w);
+  flex: none;
+  background: var(--panel);
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar{ display: none; }
+
+.rail .abrir{
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  border-radius: 4px;
+  color: var(--txt-2);
+}
+.rail .abrir:hover{ background: var(--hover); color: var(--txt); }
+
+.rail .canalito{
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: saturate(.9);
+  transition: transform .15s;
+}
+.rail .canalito:hover{ transform: scale(1.12); }
+
+
+/* ── 5. Reproductor ─────────────────────────────────────── */
+.central{
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.reproductor{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+}
+.reproductor video{
+  width: 100%; height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+.reproductor .capa-click{ position: absolute; inset: 0; }
+
+/* botón grande de play */
+.play-grande{
+  position: absolute; inset: 0; margin: auto;
+  width: 68px; height: 68px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: rgba(0,0,0,.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.reproductor.pausado .play-grande{ opacity: 1; }
+.play-grande::after{
+  content: "";
+  width: 0; height: 0;
+  border-left: 20px solid #fff;
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid transparent;
+  margin-left: 6px;
+}
+
+/* aviso de contenido silenciado (como el de la captura) */
+.aviso-mute{
+  position: absolute;
+  left: 50%; top: 62%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 14px;
+  max-width: 330px;
+  padding: 14px 16px;
+  background: rgba(24,24,27,.92);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--txt);
+}
+.aviso-mute button{ color: var(--txt-2); font-size: 16px; line-height: 1; }
+.aviso-mute.oculto{ display: none; }
+
+/* controles */
+.controles{
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 0 10px 6px;
+  background: linear-gradient(0deg, rgba(0,0,0,.8), transparent);
+  opacity: 0;
+  transition: opacity .2s;
+}
+.reproductor:hover .controles,
+.reproductor.pausado .controles{ opacity: 1; }
+
+.barra{
+  height: 14px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.barra .riel{
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: rgba(255,255,255,.25);
+  border-radius: 2px;
+}
+.barra .avance{
+  position: absolute; inset: 0 auto 0 0;
+  width: 0;
+  background: var(--morado);
+  border-radius: 2px;
+}
+.barra .bolita{
+  position: absolute;
+  top: 50%; left: 0;
+  width: 12px; height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: #fff;
+  transform: scale(0);
+  transition: transform .1s;
+}
+.barra:hover .bolita{ transform: scale(1); }
+
+.fila-ctrl{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  color: #fff;
+}
+.fila-ctrl .der{ margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.ctrl{
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  border-radius: 4px;
+  color: #fff;
+}
+.ctrl:hover{ background: rgba(255,255,255,.16); }
+.tiempo{ font-size: 13px; padding: 0 6px; white-space: nowrap; }
+.grupo-vol{ display: flex; align-items: center; gap: 4px; }
+.volumen{
+  width: 0; opacity: 0;
+  accent-color: #fff;
+  transition: width .2s, opacity .2s;
+}
+.grupo-vol:hover .volumen, .volumen:focus{ width: 70px; opacity: 1; }
+
+
+/* ── 6. Info del VOD ────────────────────────────────────── */
+.info-vod{
+  padding: 14px 20px 0;
+}
+.fila-fecha{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.fecha{
+  padding-left: 8px;
+  border-left: 3px solid var(--morado);
+  font-size: 13px;
+  font-weight: 600;
+}
+.acciones-vod{ margin-left: auto; display: flex; align-items: center; gap: 6px; }
+
+.btn-gris{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 4px;
+  background: var(--panel-2);
+  font-size: 13px;
+  font-weight: 600;
+}
+.btn-gris:hover{ background: var(--hover); }
+
+.titulo-vod{
+  margin: 10px 0 4px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.meta-vod{ font-size: 13px; color: var(--txt-2); }
+.meta-vod .juego{ color: var(--morado-hov); font-weight: 600; }
+.meta-vod .juego:hover{ text-decoration: underline; }
+
+
+/* ── 7. Tarjeta del canal ───────────────────────────────── */
+.tarjeta-canal{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 16px 20px 0;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--panel);
+}
+.tarjeta-canal .foto{
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--panel-2);
+}
+.tarjeta-canal .nombre{
+  font-size: 18px;
+  font-weight: 700;
+}
+.tarjeta-canal .estado,
+.tarjeta-canal .seguidores{
+  font-size: 13px;
+  color: var(--txt-2);
+  margin-top: 2px;
+}
+
+.botones-canal{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.btn-corazon,
+.btn-campana{
+  height: 30px;
+  min-width: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 10px;
+  border-radius: 4px;
+  background: var(--panel-2);
+}
+.btn-corazon:hover, .btn-campana:hover{ background: var(--hover); }
+.btn-corazon.activo{ color: var(--rojo); }
+
+.btn-sub{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 4px;
+  background: var(--morado);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+.btn-sub:hover{ background: var(--morado-hov); }
+.btn-sub.regalo{ background: var(--panel-2); color: var(--txt); }
+.btn-sub.regalo:hover{ background: var(--hover); }
+
+
+/* ── 8. Emisiones recientes ─────────────────────────────── */
+.seccion{ padding: 22px 20px 40px; }
+
+.fila-filtro{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--txt-2);
+  margin-bottom: 20px;
+}
+.select-falso{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 4px;
+  background: var(--panel-2);
+  color: var(--txt);
+  font-weight: 600;
+}
+
+.titulo-seccion{
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.titulo-seccion h2{ font-size: 16px; font-weight: 700; }
+.titulo-seccion a{ font-size: 13px; color: var(--morado-hov); font-weight: 600; }
+
+.grid-vods{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+.vod .miniatura{
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--panel-2);
+}
+.vod .miniatura img{ width: 100%; height: 100%; object-fit: cover; }
+.vod:hover .miniatura{ outline: 2px solid var(--morado); }
+
+.tag{
+  position: absolute;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(0,0,0,.8);
+  font-size: 12px;
+  font-weight: 600;
+}
+.tag.dur{ top: 5px; left: 5px; }
+.tag.vistas{ bottom: 5px; left: 5px; }
+.tag.hace{ bottom: 5px; right: 5px; }
+
+.vod .datos{
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+.vod .caratula{
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+}
+.vod .tit{
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.vod .canal, .vod .juego{ font-size: 13px; color: var(--txt-2); margin-top: 3px; }
+
+
+/* ── 9. Chat ────────────────────────────────────────────── */
+.chat{
+  width: var(--chat-w);
+  flex: none;
+  background: var(--panel);
+  border-left: 1px solid var(--borde);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+}
+
+.chat-cabecera{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--borde);
+  flex: none;
+}
+.chat-cabecera .titulo{
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.chat-mensajes{
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--hover) transparent;
+}
+.chat-mensajes::-webkit-scrollbar{ width: 8px; }
+.chat-mensajes::-webkit-scrollbar-thumb{ background: var(--hover); border-radius: 4px; }
+
+.msj{
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 3px 4px;
+  border-radius: 3px;
+  word-wrap: break-word;
+}
+.msj:hover{ background: var(--panel-2); }
+.msj .hora{ color: #6b6b76; margin-right: 4px; font-size: 12px; }
+.msj .insignia{
+  display: inline-block;
+  width: 16px; height: 16px;
+  border-radius: 3px;
+  vertical-align: -3px;
+  margin-right: 3px;
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+  color: #fff;
+}
+.msj .insignia.mod{ background: #00ad03; }
+.msj .insignia.sub{ background: var(--morado); }
+.msj .insignia.vip{ background: #e005b9; }
+.msj .autor{ font-weight: 700; }
+.msj .autor::after{ content: ":"; color: var(--txt); font-weight: 400; }
+
+.chat-abajo{
+  flex: none;
+  padding: 10px;
+  border-top: 1px solid var(--borde);
+}
+.chat-input{
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  border: 2px solid var(--borde);
+  border-radius: 4px;
+  background: var(--panel-2);
+  color: var(--txt);
+  font-size: 14px;
+  outline: 0;
+}
+.chat-input:focus{ border-color: var(--morado); }
+.chat-input::placeholder{ color: var(--txt-2); }
+.chat-enviar{
+  float: right;
+  margin-top: 10px;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 4px;
+  background: var(--morado);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+.chat-enviar:hover{ background: var(--morado-hov); }
+
+
+/* ── 10. Botón de volver ────────────────────────────────── */
+.fila-volver{
+  display: flex;
+  justify-content: center;
+  padding: 10px 20px 50px;
+}
+.btn-volver{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 0 26px;
+  border-radius: 4px;
+  background: var(--morado);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  transition: background .2s, transform .2s, box-shadow .2s;
+}
+.btn-volver:hover{
+  background: var(--morado-hov);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(145,71,255,.4);
+}
+.btn-volver .ico{ width: 20px; height: 20px; }
+
+
+/* ── 11. Responsive ─────────────────────────────────────── */
+@media (max-width: 1100px){
+  .chat{ display: none; }
+}
+@media (max-width: 780px){
+  .rail{ display: none; }
+  .nav-link, .btn-prime span{ display: none; }
+  .info-vod, .seccion{ padding-left: 12px; padding-right: 12px; }
+  .tarjeta-canal{ margin-left: 12px; margin-right: 12px; }
+  .botones-canal{ margin-left: 0; width: 100%; }
+}

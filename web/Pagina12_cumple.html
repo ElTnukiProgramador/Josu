@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>(8) Ultimo Live de Agosto :3 - Twi</title>
+
+<!-- icono de la pestaña -->
+<!-- icono de la pestaña. El id lo usa el script del final para probar
+     varias rutas y quedarse con la que exista de verdad. -->
+<link id="favicon" rel="icon" type="image/png" href="../logodetwitch.png?v=4">
+
+<link rel="stylesheet" href="/Styles/style12.css">
+</head>
+
+<body>
+
+<!-- ══════════════ BARRA SUPERIOR ══════════════ -->
+<header class="tw-header">
+
+  <div class="izq">
+    <a href="#" class="logo-tw"><img id="logoTwitch" src="../logodetwitch.png?v=4" alt="Twitch"></a>
+    <a href="#" class="nav-link">Siguiendo</a>
+    <a href="#" class="nav-link">Explorar</a>
+    <button class="btn-redondo" aria-label="Más">
+      <svg class="ico" viewBox="0 0 20 20"><path d="M10 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 5.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 5.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>
+    </button>
+  </div>
+
+  <div class="buscador">
+    <input type="text" placeholder="Buscar" aria-label="Buscar">
+    <button class="lupa" aria-label="Buscar">
+      <svg class="ico" viewBox="0 0 20 20"><path d="M13.2 14.6a7 7 0 111.4-1.4l3.1 3.1-1.4 1.4-3.1-3.1zM14 9a5 5 0 10-10 0 5 5 0 0010 0z"/></svg>
+    </button>
+  </div>
+
+  <div class="der">
+    <button class="btn-redondo" aria-label="Notificaciones">
+      <svg class="ico" viewBox="0 0 20 20"><path d="M4 3h12v10H7l-3 3V3z"/></svg>
+      <span class="globo">37</span>
+    </button>
+
+    <button class="btn-redondo" aria-label="Regalos">
+      <svg class="ico" viewBox="0 0 20 20"><path d="M3 8h14v9H3V8zm0-3h14v2H3V5zm6-3h2v15H9V2z"/></svg>
+      <span class="globo">8</span>
+    </button>
+
+    <button class="btn-redondo" aria-label="Mensajes">
+      <svg class="ico" viewBox="0 0 20 20"><path d="M2 3h16v11H6l-4 4V3z"/></svg>
+    </button>
+
+    <button class="btn-redondo" aria-label="Puntos">
+      <svg class="ico" viewBox="0 0 20 20"><path d="M10 2l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z"/></svg>
+    </button>
+
+    <button class="btn-prime">
+      <svg class="ico" viewBox="0 0 20 20"><path d="M2 5h11v10H2V5zm13 2l4-2v10l-4-2V7z"/></svg>
+      <span>Prueba 1 mes sin anuncios</span>
+    </button>
+
+    <img class="avatar-header" src="/josu.png" alt="josuyelin">
+  </div>
+</header>
+
+
+<div class="cuerpo">
+
+  <!-- ══════════════ RAIL IZQUIERDO ══════════════ -->
+  <nav class="rail">
+    <button class="abrir" aria-label="Abrir menú">
+      <svg class="ico" viewBox="0 0 20 20"><path d="M2 2h2v16H2V2zm5 8h9l-3-3 1.4-1.4L19.8 10l-5.4 4.4L13 13l3-3H7z"/></svg>
+    </button>
+    <button class="abrir" aria-label="Favoritos">
+      <svg class="ico" viewBox="0 0 20 20"><path d="M10 17S2 12 2 7a4 4 0 018-1 4 4 0 018 1c0 5-8 10-8 10z"/></svg>
+    </button>
+
+    <!-- canales seguidos (cambia las imágenes por las que tengas) -->
+    <img class="canalito" src="/josu.png" alt="">
+    <img class="canalito" src="/perfil.png" alt="">
+    <img class="canalito" src="/fotoyoutube.png" alt="">
+    <img class="canalito" src="/logo.png" alt="">
+    <img class="canalito" src="/Oscuras.png" alt="">
+    <img class="canalito" src="/generadorDeLuz.png" alt="">
+    <img class="canalito" src="/josu.png" alt="">
+    <img class="canalito" src="/perfil.png" alt="">
+  </nav>
+
+
+  <!-- ══════════════ COLUMNA CENTRAL ══════════════ -->
+  <main class="central">
+
+    <!-- Reproductor. Cambia el src del <video> por tu archivo. -->
+    <div class="reproductor pausado" id="reproductor">
+      <video id="video"
+             src="../videos/Video Project 14.mp4"
+             preload="metadata"
+             playsinline></video>
+
+      <div class="capa-click" id="capaClick"></div>
+      <div class="play-grande"></div>
+
+      <!-- aviso de contenido silenciado -->
+      <div class="aviso-mute" id="avisoMute">
+        <span>Se han silenciado algunos fragmentos del vídeo porque al parecer incluye contenido protegido por derechos de autor o controlado por terceros.</span>
+        <button id="cerrarAviso" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="controles">
+        <div class="barra" id="barra">
+          <div class="riel">
+            <div class="avance" id="avance"></div>
+            <div class="bolita" id="bolita"></div>
+          </div>
+        </div>
+
+        <div class="fila-ctrl">
+          <button class="ctrl" id="btnPlay" aria-label="Reproducir">
+            <svg class="ico" id="icoPlay" viewBox="0 0 20 20"><path d="M5 3l12 7-12 7V3z"/></svg>
+          </button>
+
+          <div class="grupo-vol">
+            <button class="ctrl" id="btnMute" aria-label="Silenciar">
+              <svg class="ico" id="icoVol" viewBox="0 0 20 20"><path d="M2 7h4l5-4v14l-5-4H2V7zm12 3a3 3 0 00-2-2.8v5.6A3 3 0 0014 10z"/></svg>
+            </button>
+            <input class="volumen" id="volumen" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volumen">
+          </div>
+
+          <span class="tiempo"><span id="actual">0:00</span> / <span id="total">1:32:36</span></span>
+
+          <div class="der">
+            <button class="ctrl" aria-label="Configuración">
+              <svg class="ico" viewBox="0 0 20 20"><path d="M10 13a3 3 0 110-6 3 3 0 010 6zm7-2.2l1.5 1.2-1.6 2.8-1.8-.8c-.4.3-.9.6-1.4.8l-.3 2h-3.2l-.3-2c-.5-.2-1-.5-1.4-.8l-1.8.8L4.1 12l1.5-1.2a5.7 5.7 0 010-1.6L4.1 8l1.6-2.8 1.8.8c.4-.3.9-.6 1.4-.8l.3-2h3.2l.3 2c.5.2 1 .5 1.4.8l1.8-.8L17.5 8 16 9.2c.1.5.1 1.1 0 1.6z"/></svg>
+            </button>
+            <button class="ctrl" id="btnFull" aria-label="Pantalla completa">
+              <svg class="ico" viewBox="0 0 20 20"><path d="M3 3h5v2H5v3H3V3zm14 0v5h-2V5h-3V3h5zM3 17v-5h2v3h3v2H3zm14 0h-5v-2h3v-3h2v5z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Info del VOD ─── -->
+    <div class="info-vod">
+      <div class="fila-fecha">
+        <span class="fecha">hace 14 días</span>
+
+        <div class="acciones-vod">
+          <button class="btn-gris">
+            <svg class="ico" viewBox="0 0 20 20"><path d="M13 6V2l6 6-6 6v-4H8a5 5 0 00-5 5H1a7 7 0 017-7h5z"/></svg>
+            Compartir
+          </button>
+          <button class="btn-gris" aria-label="Más">
+            <svg class="ico" viewBox="0 0 20 20"><path d="M10 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 5.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 5.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <h1 class="titulo-vod">Ultimo Live de Agosto :3</h1>
+      <p class="meta-vod"><a href="#" class="juego">VRChat</a> · 846 visualizaciones</p>
+    </div>
+
+    <!-- ─── Tarjeta del canal ─── -->
+    <section class="tarjeta-canal">
+      <img class="foto" src="/josu.png" alt="josuyelin">
+
+      <div>
+        <div class="nombre">josuyelin</div>
+        <div class="estado">En directo por última vez hace 13 días</div>
+        <div class="seguidores">8363 seguidores</div>
+      </div>
+
+      <div class="botones-canal">
+        <button class="btn-corazon" id="btnCorazon" aria-label="Seguir">
+          <svg class="ico" viewBox="0 0 20 20"><path d="M10 17S2 12 2 7a4 4 0 018-1 4 4 0 018 1c0 5-8 10-8 10z"/></svg>
+        </button>
+
+        <button class="btn-campana" aria-label="Notificaciones">
+          <svg class="ico" viewBox="0 0 20 20"><path d="M4 14l1.5-2V9a4.5 4.5 0 019 0v3l1.5 2H4zm6 4a2 2 0 01-2-2h4a2 2 0 01-2 2z"/></svg>
+          <svg class="ico" style="width:12px" viewBox="0 0 20 20"><path d="M5 7l5 6 5-6z"/></svg>
+        </button>
+
+        <button class="btn-sub regalo">
+          <svg class="ico" viewBox="0 0 20 20"><path d="M3 8h14v9H3V8zm0-3h14v2H3V5zm6-3h2v15H9V2z"/></svg>
+          Regalar una sub
+        </button>
+
+        <button class="btn-sub">
+          <svg class="ico" viewBox="0 0 20 20"><path d="M10 2l2.4 5.9 6.1.4-4.7 3.9 1.5 6-5.3-3.4L4.7 18l1.5-6L1.5 8.3l6.1-.4L10 2z"/></svg>
+          Volver a suscribirte
+          <svg class="ico" style="width:12px" viewBox="0 0 20 20"><path d="M5 7l5 6 5-6z"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ─── Emisiones recientes ─── -->
+    <section class="seccion">
+      <div class="fila-filtro">
+        <span>Filtrar por</span>
+        <span class="select-falso">
+          Predeterminado
+          <svg class="ico" style="width:12px" viewBox="0 0 20 20"><path d="M5 7l5 6 5-6z"/></svg>
+        </span>
+      </div>
+
+      <div class="titulo-seccion">
+        <h2>Emisiones recientes</h2>
+        <a href="#">Ver todo ›</a>
+      </div>
+
+      <div class="grid-vods">
+
+        <article class="vod">
+          <div class="miniatura">
+            <img src="/1d.png" alt="">
+            <span class="tag dur">1:32:36</span>
+            <span class="tag vistas">846 visualizaciones</span>
+            <span class="tag hace">hace 14 días</span>
+          </div>
+          <div class="datos">
+            <img class="caratula" src="/josu.png" alt="">
+            <div>
+              <div class="tit">Ultimo Live de Agosto :3</div>
+              <div class="canal">josuyelin</div>
+              <div class="juego">VRChat</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="vod">
+          <div class="miniatura">
+            <img src="/1s.png" alt="">
+            <span class="tag dur">2:14:02</span>
+            <span class="tag vistas">1,2 K visualizaciones</span>
+            <span class="tag hace">hace 21 días</span>
+          </div>
+          <div class="datos">
+            <img class="caratula" src="/josu.png" alt="">
+            <div>
+              <div class="tit">Noche de mundos raros en VRChat</div>
+              <div class="canal">josuyelin</div>
+              <div class="juego">VRChat</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="vod">
+          <div class="miniatura">
+            <img src="/halo.png" alt="">
+            <span class="tag dur">3:05:47</span>
+            <span class="tag vistas">2,4 K visualizaciones</span>
+            <span class="tag hace">hace 1 mes</span>
+          </div>
+          <div class="datos">
+            <img class="caratula" src="/josu.png" alt="">
+            <div>
+              <div class="tit">Halo: Campaign Evolved</div>
+              <div class="canal">josuyelin</div>
+              <div class="juego">Genshin Impact</div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─── Botón de volver ─── -->
+    <div class="fila-volver">
+      <a class="btn-volver" href="/web/Pagina4_cumple.html">
+        <svg class="ico" viewBox="0 0 20 20"><path d="M17 9H5.8l4.6-4.6L9 3l-7 7 7 7 1.4-1.4L5.8 11H17z"/></svg>
+        Devolver
+      </a>
+    </div>
+  </main>
+
+
+  <!-- ══════════════ CHAT ══════════════ -->
+  <aside class="chat">
+    <div class="chat-cabecera">
+      <button class="btn-redondo" aria-label="Contraer chat">
+        <svg class="ico" viewBox="0 0 20 20"><path d="M18 2h-2v16h2V2zM4 10h9l-3-3 1.4-1.4L16.8 10l-5.4 4.4L10 13l3-3H4z"/></svg>
+      </button>
+      <span class="titulo">Chatea sobre vídeos</span>
+    </div>
+
+    <div class="chat-mensajes" id="chatMensajes">
+      <div class="msj"><span class="hora">54:13</span><span class="autor" style="color:#00b5ad">Erick</span> Quiero una gotica</div>
+      <div class="msj"><span class="hora">54:36</span><span class="insignia sub">★</span><span class="autor" style="color:#5b5bff">jesukilito</span> a</div>
+      <div class="msj"><span class="hora">54:41</span><span class="insignia sub">★</span><span class="insignia mod">✚</span><span class="autor" style="color:#ff4d4d">yoko2</span> te pidió fianza xd</div>
+      <div class="msj"><span class="hora">55:04</span><span class="insignia sub">★</span><span class="autor" style="color:#ff4d4d">maxivilla1306</span> Estoy desesperado por que hasta a mi papá le salió ramielle menos a mi</div>
+      <div class="msj"><span class="hora">55:34</span><span class="autor" style="color:#00b5ad">llonk380</span> por que haces eso</div>
+      <div class="msj"><span class="hora">55:39</span><span class="insignia sub">★</span><span class="insignia mod">✚</span><span class="autor" style="color:#ff4d4d">yoko2</span> por que haces eso</div>
+      <div class="msj"><span class="hora">55:41</span><span class="insignia sub">★</span><span class="insignia mod">✚</span><span class="autor" style="color:#ff4d4d">El_Tanuki</span> Buena pregunta</div>
+      <div class="msj"><span class="hora">55:42</span><span class="insignia sub">★</span><span class="insignia vip">◆</span><span class="autor" style="color:#00c000">solovino_735</span> pero porque</div>
+      <div class="msj"><span class="hora">55:47</span><span class="insignia sub">★</span><span class="autor" style="color:#5b5bff">jesukilito</span> xd</div>
+      <div class="msj"><span class="hora">55:47</span><span class="autor" style="color:#ff7f50">El_Tanuki</span> Primer inocente</div>
+      <div class="msj"><span class="hora">55:52</span><span class="autor" style="color:#b28dff">drago_1995</span> Ese vehículo está en las últimas</div>
+      <div class="msj"><span class="hora">56:03</span><span class="insignia sub">★</span><span class="autor" style="color:#ff4d4d">maxivilla1306</span> Mi papá estaba haciendo sus tiradas enfrente mío y le salió y yo le dije desinstale la wea altiro</div>
+      <div class="msj"><span class="hora">56:10</span><span class="autor" style="color:#00b5ad">llonk380</span> lo que maneja el ayaya</div>
+      <div class="msj"><span class="hora">56:11</span><span class="insignia sub">★</span><span class="insignia mod">✚</span><span class="autor" style="color:#ff4d4d">yoko2</span> Me encanta ERP, gracias moy por eneñarme tanto</div>
+      <div class="msj"><span class="hora">56:42</span><span class="autor" style="color:#00b5ad">llonk380</span> noo josu, le pusiste gasolina y es de diesel</div>
+      <div class="msj"><span class="hora">56:46</span><span class="insignia sub">★</span><span class="insignia vip">◆</span><span class="autor" style="color:#00c000">solovino_735</span> mañosa</div>
+      <div class="msj"><span class="hora">56:58</span><span class="insignia sub">★</span><span class="autor" style="color:#ff4d4d">OswaldQ</span> Donde esta mi baki?</div>
+    </div>
+
+    <div class="chat-abajo">
+      <input class="chat-input" id="chatInput" type="text" placeholder="Envía un mensaje" aria-label="Mensaje">
+      <button class="chat-enviar" id="chatEnviar">Chatear</button>
+    </div>
+  </aside>
+</div>
+
+
+<script>
+/* ═══════════════════════════════════════════
+   1. CONFIGURACIÓN
+═══════════════════════════════════════════ */
+
+/* mensajes que van cayendo solos en el chat */
+var MENSAJES_AUTO = [
+  { autor: 'llonk380',    color: '#00b5ad', texto: 'feliz cumple josu 🎉' },
+  { autor: 'yoko2',       color: '#ff4d4d', texto: 'la mejor streamer', sub: true, mod: true },
+  { autor: 'maxivilla1306',color:'#ff4d4d', texto: 'jajajaja no puede ser', sub: true },
+  { autor: 'solovino_735',color: '#00c000', texto: 'PogChamp', sub: true, vip: true },
+  { autor: 'puppet_11',   color: '#ff7f50', texto: 'otra vuelta!!' },
+  { autor: 'jesukilito',  color: '#5b5bff', texto: 'xd', sub: true },
+  { autor: 'drago_1995',  color: '#b28dff', texto: 'ya se le acabó la gasolina otra vez' }
+];
+var CADA_CUANTO = 4000;   // milisegundos entre mensajes
+
+
+/* ═══════════════════════════════════════════
+   2. REPRODUCTOR
+═══════════════════════════════════════════ */
+var repro   = document.getElementById('reproductor');
+var video   = document.getElementById('video');
+var capa    = document.getElementById('capaClick');
+var btnPlay = document.getElementById('btnPlay');
+var icoPlay = document.getElementById('icoPlay');
+var btnMute = document.getElementById('btnMute');
+var icoVol  = document.getElementById('icoVol');
+var rangoVol= document.getElementById('volumen');
+var barra   = document.getElementById('barra');
+var avance  = document.getElementById('avance');
+var bolita  = document.getElementById('bolita');
+var tActual = document.getElementById('actual');
+var tTotal  = document.getElementById('total');
+var btnFull = document.getElementById('btnFull');
+
+var D_PLAY  = 'M5 3l12 7-12 7V3z';
+var D_PAUSA = 'M5 3h4v14H5zm6 0h4v14h-4z';
+var D_VOL   = 'M2 7h4l5-4v14l-5-4H2V7zm12 3a3 3 0 00-2-2.8v5.6A3 3 0 0014 10z';
+var D_MUTE  = 'M2 7h4l5-4v14l-5-4H2V7zm11.6 1.2l1.4-1.4 3.2 3.2-1.4 1.4-1.6-1.6-1.6 1.6-1.4-1.4 1.6-1.6-1.6-1.6z';
+
+function reloj(s){
+  if (!isFinite(s)) return '0:00';
+  s = Math.floor(s);
+  var h = Math.floor(s / 3600);
+  var m = Math.floor((s % 3600) / 60);
+  var g = s % 60;
+  var dos = function(n){ return n < 10 ? '0' + n : n; };
+  return h ? h + ':' + dos(m) + ':' + dos(g) : m + ':' + dos(g);
+}
+
+function alternarPlay(){
+  if (video.paused){
+    video.play().catch(function(err){
+      console.error('El navegador no pudo reproducir el video:', err);
+    });
+  } else {
+    video.pause();
+  }
+}
+
+/* diagnóstico: si el archivo no carga o el códec no sirve, sale en la consola */
+video.addEventListener('error', function(){
+  var e = video.error;
+  console.error('Error del video (código ' + (e ? e.code : '?') + '):', video.currentSrc || video.src);
+});
+video.addEventListener('loadeddata', function(){
+  console.log('Video cargado bien:', video.videoWidth + 'x' + video.videoHeight);
+});
+
+capa.addEventListener('click', alternarPlay);
+btnPlay.addEventListener('click', alternarPlay);
+
+video.addEventListener('play', function(){
+  repro.classList.remove('pausado');
+  icoPlay.innerHTML = '<path d="' + D_PAUSA + '"/>';
+});
+video.addEventListener('pause', function(){
+  repro.classList.add('pausado');
+  icoPlay.innerHTML = '<path d="' + D_PLAY + '"/>';
+});
+
+video.addEventListener('loadedmetadata', function(){
+  tTotal.textContent = reloj(video.duration);
+});
+
+video.addEventListener('timeupdate', function(){
+  var pct = video.duration ? (video.currentTime / video.duration) * 100 : 0;
+  avance.style.width = pct + '%';
+  bolita.style.left  = pct + '%';
+  tActual.textContent = reloj(video.currentTime);
+});
+
+barra.addEventListener('click', function(e){
+  var r = barra.getBoundingClientRect();
+  if (video.duration) video.currentTime = ((e.clientX - r.left) / r.width) * video.duration;
+});
+
+btnMute.addEventListener('click', function(){
+  video.muted = !video.muted;
+  icoVol.innerHTML = '<path d="' + (video.muted ? D_MUTE : D_VOL) + '"/>';
+  rangoVol.value = video.muted ? 0 : video.volume;
+});
+rangoVol.addEventListener('input', function(){
+  video.volume = rangoVol.value;
+  video.muted = (rangoVol.value === '0');
+  icoVol.innerHTML = '<path d="' + (video.muted ? D_MUTE : D_VOL) + '"/>';
+});
+
+btnFull.addEventListener('click', function(){
+  if (document.fullscreenElement) document.exitFullscreen();
+  else repro.requestFullscreen();
+});
+
+document.addEventListener('keydown', function(e){
+  if (e.target.tagName === 'INPUT') return;
+  if (e.code === 'Space'){ e.preventDefault(); alternarPlay(); }
+  if (e.code === 'ArrowRight') video.currentTime += 5;
+  if (e.code === 'ArrowLeft')  video.currentTime -= 5;
+});
+
+/* cerrar el aviso de contenido silenciado */
+document.getElementById('cerrarAviso').addEventListener('click', function(){
+  document.getElementById('avisoMute').classList.add('oculto');
+});
+
+
+/* ═══════════════════════════════════════════
+   3. BOTÓN DE CORAZÓN
+═══════════════════════════════════════════ */
+document.getElementById('btnCorazon').addEventListener('click', function(){
+  this.classList.toggle('activo');
+});
+
+
+/* ═══════════════════════════════════════════
+   4. CHAT
+═══════════════════════════════════════════ */
+var chat  = document.getElementById('chatMensajes');
+var input = document.getElementById('chatInput');
+var enviar= document.getElementById('chatEnviar');
+
+function horaChat(){
+  var d = new Date();
+  var dos = function(n){ return n < 10 ? '0' + n : n; };
+  return dos(d.getMinutes()) + ':' + dos(d.getSeconds());
+}
+
+function agregarMensaje(m){
+  var div = document.createElement('div');
+  div.className = 'msj';
+
+  var insignias = '';
+  if (m.sub) insignias += '<span class="insignia sub">★</span>';
+  if (m.mod) insignias += '<span class="insignia mod">✚</span>';
+  if (m.vip) insignias += '<span class="insignia vip">◆</span>';
+
+  div.innerHTML =
+    '<span class="hora">' + horaChat() + '</span>' +
+    insignias +
+    '<span class="autor" style="color:' + m.color + '">' + m.autor + '</span> ' +
+    m.texto;
+
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+
+  // no dejar que crezca infinito
+  while (chat.children.length > 80) chat.removeChild(chat.firstChild);
+}
+
+/* mensajes automáticos */
+var i = 0;
+setInterval(function(){
+  agregarMensaje(MENSAJES_AUTO[i % MENSAJES_AUTO.length]);
+  i++;
+}, CADA_CUANTO);
+
+/* mensaje propio */
+function enviarMio(){
+  var texto = input.value.trim();
+  if (!texto) return;
+  agregarMensaje({ autor: 'josuyelin', color: '#a970ff', texto: texto, sub: true });
+  input.value = '';
+}
+enviar.addEventListener('click', enviarMio);
+input.addEventListener('keydown', function(e){
+  if (e.key === 'Enter') enviarMio();
+});
+
+/* arrancar el chat abajo del todo */
+chat.scrollTop = chat.scrollHeight;
+
+/* ═══════════════════════════════════════════
+   5. ICONO DE LA PESTAÑA (favicon)
+   Prueba varias rutas y se queda con la que exista,
+   así funciona sin importar desde qué carpeta sirva el servidor.
+═══════════════════════════════════════════ */
+(function(){
+  var RUTAS = [
+    '../logodetwitch.png',
+    '/logodetwitch.png',
+    'logodetwitch.png',
+    '../../logodetwitch.png'
+  ];
+
+  var favicon = document.getElementById('favicon');
+  var logo    = document.getElementById('logoTwitch');
+  var i = 0;
+
+  function probar(){
+    if (i >= RUTAS.length){
+      console.warn('No se encontró logodetwitch.png en ninguna ruta');
+      return;
+    }
+
+    var ruta  = RUTAS[i++];
+    var prueba = new Image();
+
+    prueba.onload = function(){
+      favicon.href = ruta + '?v=' + Date.now();   // fuerza recargar el icono
+      if (logo) logo.src = ruta;
+      console.log('Logo encontrado en:', ruta);
+    };
+    prueba.onerror = probar;                      // no existe, prueba la siguiente
+    prueba.src = ruta;
+  }
+
+  probar();
+})();
+
+
+/* si una imagen no carga, se oculta en vez de mostrar el icono roto */
+document.querySelectorAll('img').forEach(function(img){
+  img.addEventListener('error', function(){ img.style.visibility = 'hidden'; });
+});
+</script>
+
+</body>
+</html>
