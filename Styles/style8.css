@@ -1,0 +1,321 @@
+/* ============================================================
+   BASE
+   ============================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+::-webkit-scrollbar { display: none; }
+
+body {
+    font-family: 'Crimson Text', 'Georgia', serif;
+    background: #0a0500;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: crosshair;
+}
+
+/* ============================================================
+   FONDO
+   ============================================================ */
+.hero-img {
+    position: fixed;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    z-index: 0;
+    filter: brightness(0.55) saturate(1.15);
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(circle at center, rgba(20, 12, 0, 0.25) 0%, rgba(10, 5, 0, 0.7) 100%);
+}
+
+#chispas {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+}
+
+@keyframes subirChispa {
+    0%   { opacity: 0; transform: translateY(0); }
+    20%  { opacity: 1; }
+    80%  { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(-80vh); }
+}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.wrap {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.caja {
+    position: relative;
+    max-width: 640px;
+    width: 100%;
+    text-align: center;
+    padding: 48px 55px;
+    background: linear-gradient(160deg, rgba(80, 55, 0, 0.28) 0%, rgba(10, 5, 0, 0.35) 55%, rgba(80, 55, 0, 0.28) 100%);
+    border: 1px solid rgba(255, 212, 0, 0.35);
+    border-radius: 6px;
+    backdrop-filter: blur(3px);
+    box-shadow: 0 0 70px rgba(255, 149, 0, 0.25), inset 0 0 40px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    animation: fadeUp 1s 0.2s both;
+}
+
+.esquina {
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    border-color: #ffd400;
+    border-style: solid;
+    opacity: 0.85;
+}
+.esquina-tl { top: 14px; left: 14px; border-width: 2px 0 0 2px; }
+.esquina-tr { top: 14px; right: 14px; border-width: 2px 2px 0 0; }
+.esquina-bl { bottom: 14px; left: 14px; border-width: 0 0 2px 2px; }
+.esquina-br { bottom: 14px; right: 14px; border-width: 0 2px 2px 0; }
+
+/* ============================================================
+   SEPARADORES
+   ============================================================ */
+.separador {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    width: 100%;
+}
+.separador .linea {
+    flex: 1;
+    max-width: 110px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #ffd400, transparent);
+}
+.separador .icono {
+    color: #ffe066;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    white-space: nowrap;
+}
+.rayo {
+    animation: parpadeo 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(255, 212, 0, 0.8));
+}
+@keyframes parpadeo {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+/* ============================================================
+   TEXTOS
+   ============================================================ */
+.pre-titulo {
+    font-family: 'Cinzel Decorative', cursive;
+    letter-spacing: 8px;
+    font-size: 0.9rem;
+    color: rgba(255, 224, 102, 0.9);
+    text-transform: uppercase;
+    text-shadow: 0 0 12px rgba(255, 212, 0, 0.5);
+}
+
+.titulo {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(1.7rem, 5vw, 2.6rem);
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+    background: linear-gradient(160deg, #fffbd6 0%, #ffd400 40%, #ff9500 75%, #fff3b0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: brillar 3s ease-in-out infinite alternate;
+}
+@keyframes brillar {
+    from { filter: drop-shadow(0 0 12px rgba(255, 212, 0, 0.55)); }
+    to   { filter: drop-shadow(0 0 30px rgba(255, 224, 102, 0.95)) drop-shadow(0 0 55px rgba(255, 149, 0, 0.5)); }
+}
+
+.mensaje {
+    font-size: 1.15rem;
+    font-style: italic;
+    color: #fff3d6;
+    line-height: 1.6;
+}
+.corazon {
+    color: #ffd400;
+    font-style: normal;
+    text-shadow: 0 0 10px rgba(255, 212, 0, 0.8);
+}
+
+/* ============================================================
+   BOTÓN
+   ============================================================ */
+
+/* --- contenedor + adornos laterales --- */
+.btn-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 12px;
+    animation: fadeUp 1s 0.8s both;
+}
+
+.bside {
+    color: #ffd400;
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    opacity: 0.7;
+    text-shadow: 0 0 10px rgba(255, 212, 0, 0.7);
+    animation: parpadeoSide 2.4s ease-in-out infinite;
+}
+.bside.r { animation-delay: 1.2s; }
+
+@keyframes parpadeoSide {
+    0%, 100% { opacity: 0.35; }
+    50%      { opacity: 0.9; }
+}
+
+/* --- marco exterior (aura del generador) --- */
+.btn-outer {
+    position: relative;
+    padding: 3px;
+    border-radius: 4px;
+    background: linear-gradient(120deg, #ff9500, #ffd400, #fffbd6, #ffd400, #ff9500);
+    background-size: 300% 100%;
+    box-shadow: 0 0 22px rgba(255, 149, 0, 0.45);
+    animation: correrAura 4s linear infinite;
+    transition: box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+@keyframes correrAura {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+}
+
+.btn-outer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 38px rgba(255, 212, 0, 0.75), 0 0 70px rgba(255, 149, 0, 0.4);
+}
+
+/* --- botón --- */
+.btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+    padding: 15px 40px;
+    border-radius: 2px;
+    background: linear-gradient(160deg, #1a0f00 0%, #0a0500 100%);
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #ffe066;
+    text-shadow: 0 0 12px rgba(255, 212, 0, 0.6);
+    transition: color 0.3s ease, background 0.3s ease, letter-spacing 0.3s ease;
+}
+
+/* destello que barre el botón */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 251, 214, 0.35), transparent);
+    transform: skewX(-20deg);
+    animation: barrerDestello 3.5s ease-in-out infinite;
+}
+
+@keyframes barrerDestello {
+    0%, 65%  { left: -120%; }
+    100%     { left: 160%; }
+}
+
+.btn:hover {
+    background: linear-gradient(160deg, #3a2200 0%, #1a0f00 100%);
+    color: #fffbd6;
+    letter-spacing: 4px;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn:focus-visible {
+    outline: 2px solid #fffbd6;
+    outline-offset: 4px;
+}
+
+/* --- flecha --- */
+.bico {
+    display: inline-block;
+    font-size: 1.05rem;
+    transition: transform 0.3s ease;
+}
+.btn:hover .bico {
+    transform: translateX(6px);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 600px) {
+    .caja { padding: 36px 28px; }
+
+    .btn-wrap { gap: 10px; }
+    .bside { display: none; }
+    .btn {
+        padding: 14px 26px;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+    }
+}
+
+/* ============================================================
+   ACCESIBILIDAD
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

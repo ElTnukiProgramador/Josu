@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cumple de josu</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/Styles/style2.css">
+</head>
+
+<body>
+
+  <!-- ══════════════ CAPAS DE FONDO ══════════════ -->
+  <div class="bg-layer"></div>
+  <div class="scanlines"></div>
+  <div class="particles" id="particles"></div>
+
+
+  <!-- ══════════════ HERO ══════════════ -->
+  <section class="hero-section">
+    <img src="/fotos de vrchat/nilou normal.png" alt="Feliz Cumpleaños Josuyelin" class="hero-img">
+    <div class="hero-fade"></div>
+
+    <div class="title-overlay">
+      <div class="title-card">
+        <div class="c-br"></div>
+        <div class="c-tr"></div>
+
+        <div class="deco">
+          <div class="dline"></div>
+          <div class="ddot"></div>
+          <div class="ddiam"></div>
+          <div class="ddot"></div>
+          <svg width="18" height="18" viewBox="0 0 22 22">
+            <polygon points="11,1 13.5,8 21,8 15,13 17.5,20 11,16 4.5,20 7,13 1,8 8.5,8" fill="url(#sg1)" />
+            <defs>
+              <linearGradient id="sg1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="100%" stop-color="#FF2EC4" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ddot"></div>
+          <div class="ddiam"></div>
+          <div class="ddot"></div>
+          <div class="dline"></div>
+        </div>
+
+        <span class="card-label">🍕 &nbsp; Para Josu &nbsp; 🍕</span>
+        <span class="card-title-main">Mensaje de tus amigos</span>
+
+        <div class="deco bot">
+          <div class="dline"></div>
+          <div class="ddot"></div>
+          <div class="ddiam"></div>
+          <div class="ddot"></div>
+          <svg width="18" height="18" viewBox="0 0 22 22">
+            <polygon points="11,1 13.5,8 21,8 15,13 17.5,20 11,16 4.5,20 7,13 1,8 8.5,8" fill="url(#sg2)" />
+            <defs>
+              <linearGradient id="sg2" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ffffff" />
+                <stop offset="100%" stop-color="#FF2EC4" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ddot"></div>
+          <div class="ddiam"></div>
+          <div class="ddot"></div>
+          <div class="dline"></div>
+        </div>
+
+        <div class="dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════ CONTENIDO ══════════════ -->
+  <div class="page-wrap">
+
+    <!-- collage de fondo (se llena solo desde el array COLLAGE) -->
+    <div class="vrchat-bg" id="vrchatBg"></div>
+
+    <!-- tarjetas de mensajes (se llenan solas desde el array MENSAJES) -->
+    <div class="cards-grid" id="cardsGrid"></div>
+
+    <!-- ─── Pie / botón siguiente ─── -->
+    <footer class="page-footer">
+      <div class="next-btn-wrap">
+        <div class="nbw-tl"></div>
+        <div class="nbw-tr"></div>
+        <div class="nbw-bl"></div>
+        <div class="nbw-br"></div>
+
+        <p class="footer-zzz">✦ Aún hay más sorpresas ✦</p>
+
+        <span class="bside l">✦ ✦</span>
+        <div class="btn-outer">
+          <a href="/web/www.tiktok.com/@josuyelin.html" class="back-btn">
+            <span class="rac">🦝</span>Siguiente<span class="rac">🦝</span>
+          </a>
+        </div>
+        <span class="bside r">✦ ✦</span>
+      </div>
+    </footer>
+  </div>
+
+  <audio id="sonido" preload="auto" loop>
+    <source src="/Musica/Mi corazon encantado DJ ED version.mp3" type="audio/mpeg">
+  </audio>
+
+
+  <script>
+    var MENSAJES = [
+      {
+        nombre: 'Tanuki', clase: 'card-c1',
+        imgs: ['/Mensajes de amigos/cumple1.png']
+      },
+
+      {
+        nombre: 'Ayaka Fan', clase: 'card-c2',
+        imgs: ['/Mensajes de amigos/cumple2.png'],
+        mini: ['/fotos de vrchat/ayaya.png']
+      },
+
+      {
+        nombre: 'Yoko', clase: 'card-c3',
+        imgs: ['/Mensajes de amigos/mensaje.png']
+      },
+
+      {
+        nombre: 'Erick', clase: 'card-c4',
+        imgs: ['/Mensajes de amigos/cumple4.png']
+      },
+
+      {
+        nombre: 'Moy', clase: 'card-c5',
+        imgs: ['/Mensajes de amigos/cumple5.png'],
+        mini: ['/Mensajes de amigos/moy_josu.png']
+      },
+
+      {
+        nombre: 'Ivan', clase: 'card-c6',
+        imgs: ['/Mensajes de amigos/ivan.png']
+      }
+
+      ,{
+        nombre: 'Baki', clase: 'card-c7',
+        imgs: ['/Mensajes de amigos/cumple7.png']
+      },
+
+      {
+        nombre: 'OswaldQ', clase: 'card-c8',
+        imgs: ['/Mensajes de amigos/cumple8.png']
+      },
+
+      {
+        nombre: 'Enderlape', clase: 'card-c80',
+        imgs: ['/Mensajes de amigos/ender.png'],
+        mini: ['/Mensajes de amigos/fotoender.png']
+      },
+      
+
+      {
+        nombre: 'maza', clase: 'card-c11',
+        imgs: ['/Mensajes de amigos/maza.png']
+      },
+      
+
+      {
+        nombre: 'Yahir botcito', clase: 'card-c12',
+        imgs: ['/Mensajes de amigos/bocito.png']
+      },
+
+      {
+        nombre: 'thorvaldsson', clase: 'card-c10',
+        imgs: ['/Mensajes de amigos/cumple9.png',
+          '/Mensajes de amigos/cachondo.png',
+          '/Mensajes de amigos/besos.png']
+      },
+
+      {
+        nombre: 'natalie', clase: 'card-c9',
+        texto: 'De la pregunta nace el saber; de la curiosidad, el descubrimiento. Natalie te manda un mensaje especial: ¡Feliz cumpleaños! Espero la sigas pasando bien. Mira este video en privado, pero comparte la canción con todos los que te apoyamos.',
+        imgs: ['/Mensajes de amigos/natalie.png'],
+        boton: { texto: 'Mensaje especial ', url: 'https://www.youtube.com/watch?v=t2FFjBSXVcA' }
+      }
+    ];
+
+    /* Collage de fondo */
+    var CARPETA_FOTOS = '/fotos de vrchat/';
+    var COLLAGE = [
+      'burnice.png', 'image copy 10.png', 'image copy 11.png', 'image copy 13.png',
+      'image copy 14.png', 'image copy 15.png', 'image copy 16.png', 'image copy 17.png',
+      'image copy 18.png', 'image copy 19.png', 'image copy 2.png', 'image copy 20.png',
+      'image copy 21.png', 'image copy 22.png', 'image copy 23.png', 'image copy 24.png',
+      'image copy 25.png', 'image copy 26.png', 'image copy 27.png', 'image copy 28.png',
+      'image copy 29.png', 'image copy 3.png', 'image copy 30.png', 'image copy 31.png',
+      'image copy 32.png', 'image copy 33.png', 'image copy 34.png', 'image copy 6.png',
+      'image copy 7.png', 'image copy 8.png', 'image copy 9.png', 'image copy.png',
+      'zzz.png'
+    ];
+
+    var EMOJIS_CLICK = ['🍕', '🍕', '🍕', '🦝', '🦝'];
+    var EMOJIS_BORDE = ['🍕', '🦝'];
+    var VOLUMEN_MUSICA = 0.2;
+
+
+    /* ═══════════════════════════════════════════
+       2. UTILIDADES
+    ═══════════════════════════════════════════ */
+    function azar(min, max) { return min + Math.random() * (max - min); }
+    function alAzar(lista) { return lista[Math.floor(Math.random() * lista.length)]; }
+
+    /* <img> con la ruta codificada (los nombres tienen espacios) */
+    function imagen(ruta, clase) {
+      return '<img src="' + encodeURI(ruta) + '" alt="Mensaje" class="' + clase + '">';
+    }
+
+    /* crea un emoji que sale volando desde (x, y) */
+    function volar(x, y, texto, angulo, distancia, tam) {
+      var p = document.createElement('div');
+      var rad = angulo * Math.PI / 180;
+
+      p.className = 'click-pizza';
+      p.textContent = texto;
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      p.style.fontSize = tam + 'px';
+      p.style.setProperty('--dx', Math.cos(rad) * distancia + 'px');
+      p.style.setProperty('--dy', Math.sin(rad) * distancia + 'px');
+
+      document.body.appendChild(p);
+      setTimeout(function () { p.remove(); }, 800);
+    }
+
+
+    /* ═══════════════════════════════════════════
+       3. COLLAGE DE FONDO
+    ═══════════════════════════════════════════ */
+    var ALTO_FILA = 700;   // debe coincidir con grid-auto-rows del CSS
+
+    function pintarCollage() {
+      var capa = document.getElementById('vrchatBg');
+      var zona = document.querySelector('.page-wrap');
+      if (!capa || !zona) return;
+
+      // cuántas fotos hacen falta para cubrir justo el alto del contenido
+      var filas = Math.ceil(zona.offsetHeight / ALTO_FILA);
+      var total = Math.max(filas * 3, 3);
+
+      var html = '';
+      for (var i = 0; i < total; i++) {
+        // si se acaban las fotos, vuelve a empezar por la primera
+        html += '<img src="' + encodeURI(CARPETA_FOTOS + COLLAGE[i % COLLAGE.length]) + '" alt="">';
+      }
+      capa.innerHTML = html;
+    }
+
+    /* recalcular cuando cambie el alto (imágenes cargadas, ventana redimensionada) */
+    function vigilarCollage() {
+      window.addEventListener('load', pintarCollage);
+      window.addEventListener('resize', pintarCollage);
+      setTimeout(pintarCollage, 600);   // por si alguna imagen tarda
+    }
+
+
+    /* ═══════════════════════════════════════════
+       4. TARJETAS DE MENSAJES
+    ═══════════════════════════════════════════ */
+    function pintarTarjetas() {
+      var grid = document.getElementById('cardsGrid');
+      if (!grid) return;
+
+      MENSAJES.forEach(function (m) {
+        var card = document.createElement('div');
+        card.className = 'msg-card ' + m.clase;
+
+        var html =
+          '<div class="mc-tl"></div><div class="mc-tr"></div>' +
+          '<div class="mc-bl"></div><div class="mc-br"></div>' +
+          '<div class="mc-name"><span class="mc-star">✦</span> ' + m.nombre + '</div>';
+
+        if (m.texto) html += '<p>' + m.texto + '</p>';
+
+        (m.imgs || []).forEach(function (r) { html += imagen(r, 'msg-img'); });
+        (m.mini || []).forEach(function (r) { html += imagen(r, 'msg-imgg'); });
+
+        if (m.boton) {
+          html += '<a class="card-btn" href="' + m.boton.url + '" target="_blank" rel="noopener">' +
+            '<span class="cb-ico">▶</span> ' + m.boton.texto +
+            '</a>';
+        }
+
+        card.innerHTML = html;
+        grid.appendChild(card);
+      });
+    }
+
+
+    /* ═══════════════════════════════════════════
+       5. PIZZAS AL HACER CLICK
+    ═══════════════════════════════════════════ */
+    function estallido(x, y) {
+      for (var i = 0; i < 6; i++) {
+        volar(x, y, alAzar(EMOJIS_CLICK), (i / 6) * 360 + azar(-15, 15), azar(40, 100), azar(14, 28));
+      }
+    }
+
+
+    /* ═══════════════════════════════════════════
+       6. PIZZAS ALREDEDOR DEL BOTÓN FINAL
+    ═══════════════════════════════════════════ */
+    function estallidoBorde(caja) {
+      var r = caja.getBoundingClientRect();
+
+      var puntos = [
+        { x: r.left, y: r.top },
+        { x: r.right, y: r.top },
+        { x: r.left, y: r.bottom },
+        { x: r.right, y: r.bottom },
+        { x: r.left + r.width / 2, y: r.top },
+        { x: r.left + r.width / 2, y: r.bottom },
+        { x: r.left, y: r.top + r.height / 2 },
+        { x: r.right, y: r.top + r.height / 2 },
+        { x: r.left + r.width * .25, y: r.top },
+        { x: r.left + r.width * .75, y: r.top },
+        { x: r.left + r.width * .25, y: r.bottom },
+        { x: r.left + r.width * .75, y: r.bottom }
+      ];
+
+      puntos.forEach(function (pos, i) {
+        volar(pos.x, pos.y,
+          EMOJIS_BORDE[i % EMOJIS_BORDE.length],
+          (i / puntos.length) * 360 + azar(-15, 15),
+          azar(50, 120),
+          azar(16, 30));
+      });
+    }
+
+
+    /* ═══════════════════════════════════════════
+       7. MÚSICA DE FONDO
+    ═══════════════════════════════════════════ */
+    function activarMusica() {
+      var sonido = document.getElementById('sonido');
+      if (!sonido) return;
+
+      sonido.volume = VOLUMEN_MUSICA;
+
+      var yaSonado = false;
+
+      function reproducir() {
+        if (yaSonado) return;
+        sonido.play().then(function () { yaSonado = true; }).catch(function () { });
+      }
+
+      // intento inmediato al cargar
+      window.addEventListener('load', reproducir);
+
+      // respaldo: el primer gesto del usuario lo dispara
+      ['click', 'keydown', 'scroll', 'touchstart', 'mousemove'].forEach(function (evt) {
+        document.addEventListener(evt, reproducir, { once: true });
+      });
+    }
+
+
+    /* ═══════════════════════════════════════════
+       8. ARRANQUE
+    ═══════════════════════════════════════════ */
+    pintarTarjetas();   // primero las tarjetas: definen el alto de la página
+    pintarCollage();    // después el collage, que se ajusta a ese alto
+    vigilarCollage();
+    activarMusica();
+
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('a, button')) return;   // no estallar sobre botones
+      estallido(e.clientX, e.clientY);
+    });
+
+    var cajaBoton = document.querySelector('.next-btn-wrap');
+    if (cajaBoton) {
+      cajaBoton.addEventListener('mouseenter', function () { estallidoBorde(cajaBoton); });
+    }
+  </script>
+
+</body>
+
+</html>

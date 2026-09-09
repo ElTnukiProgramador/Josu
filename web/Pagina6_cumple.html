@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mensaje Especial - Josuyelin</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/Styles/style6.css">
+</head>
+<body class="blackout-body">
+
+<div class="blackout-wrap">
+  <h1 class="blackout-title">Lograste poner la contraseña bien,<br> pero el gobierno te volvió a desconectar la luz por costumbre</h1>
+  <a href="/web/Pagina7_cumple.html" class="reconnect-btn">Reconectar la luz ⚡</a>
+</div>
+<audio id="sonido" preload="auto">
+    <source src="/Musica/Sin-luz-3.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    const sonido = document.getElementById("sonido");
+    let yaSonado = false;
+
+    function reproducirSonido() {
+        if (yaSonado) return;
+        yaSonado = true;
+        sonido.play().catch(error => {
+            console.log("No se pudo reproducir el audio:", error);
+        });
+    }
+
+    // Intento normal al cargar (funcionará si el navegador lo permite)
+    window.addEventListener("load", () => {
+        sonido.play().then(() => {
+            yaSonado = true;
+        }).catch(() => {
+            console.log("Autoplay bloqueado, esperando interacción del usuario.");
+        });
+    });
+
+    // Fallback: se reproduce en cuanto el usuario interactúa (click en cualquier parte)
+    document.addEventListener("click", reproducirSonido, { once: true });
+</script>
+</body>
+</html>

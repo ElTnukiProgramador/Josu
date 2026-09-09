@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis nombres — Tanuki</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/Styles/tanuki.css">
+
+  <!-- ═══════════════════════════════════════════════════════════
+     ESTILOS DE ESTA PÁGINA
+     Va después de tanuki.css, así que este bloque manda.
+
+     1. Variables
+     2. Lluvia de imágenes (/Emojis/)
+     3. Cuadros: marco, esquinas y adornos
+     4. Cabecera
+     5. Galería de apodos
+     6. Cuadros "Fakiu" (imagen y video)
+     7. Ruleta rusa de memes
+     8. Pie / botón
+     9. Responsive + movimiento reducido
+═══════════════════════════════════════════════════════════ -->
+  <style>
+    /* ── 1. Variables ───────────────────────────────────────── */
+    :root {
+      --neon: #ff3ec8;
+      --neon-2: #ff8ae5;
+      --tinta: #ffeaf9;
+      --tinta-suave: rgba(255, 234, 249, .62);
+
+      --cuadro-bg: linear-gradient(160deg, rgba(10, 18, 32, .88), rgba(5, 9, 18, .74));
+      --cuadro-borde: rgba(255, 62, 200, .28);
+      --cuadro-radio: 16px;
+      --cuadro-sombra:
+        inset 0 1px 0 rgba(255, 255, 255, .06),
+        0 20px 50px rgba(0, 0, 0, .55),
+        0 0 34px rgba(255, 62, 200, .10);
+
+      /* respaldo de las variables que el JS pone en cada gota */
+      --gota-op: .95;
+      --gota-vaiven: 0px;
+      --gota-r0: 0deg;
+      --gota-rf: 0deg;
+    }
+
+    /* ── 2. Lluvia de imágenes de fondo ─────────────────────── */
+    #cayendo {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .cae {
+      position: absolute;
+      top: 0;
+      will-change: transform;
+      animation-name: caer, vaiven;
+      animation-timing-function: linear, ease-in-out;
+      animation-iteration-count: infinite, infinite;
+      animation-direction: normal, alternate;
+    }
+
+    .cae img {
+      display: block;
+      width: 100%;
+      height: auto;
+      opacity: var(--op, var(--gota-op));
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .4);
+      image-rendering: high-quality;
+      /* nada de pixelado al reducir */
+      backface-visibility: hidden;
+      transform: translateZ(0);
+      /* la compone la GPU, sin desenfoque */
+    }
+
+    .cae .fallback {
+      /* emoji si la imagen no carga */
+      display: block;
+      text-align: center;
+      font-size: 2.2rem;
+      line-height: 1;
+      opacity: var(--op, var(--gota-op));
+    }
+
+    @keyframes caer {
+      from {
+        transform: translateY(-30vh) rotate(var(--r0, var(--gota-r0)));
+      }
+
+      to {
+        transform: translateY(125vh) rotate(var(--rf, var(--gota-rf)));
+      }
+    }
+
+    @keyframes vaiven {
+      from {
+        margin-left: calc(var(--sw, var(--gota-vaiven)) * -1);
+      }
+
+      to {
+        margin-left: var(--sw, var(--gota-vaiven));
+      }
+    }
+
+    /* el contenido siempre por encima de la lluvia */
+    .cabecera,
+    .panel-wrap,
+    .pie {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── 3. Cuadros ─────────────────────────────────────────── */
+    body .panel-wrap {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 1.4rem 1.1rem;
+    }
+
+    body .titulo-card,
+    body .panel {
+      position: relative;
+      padding: clamp(1.4rem, 4vw, 2.6rem);
+      background: var(--cuadro-bg);
+      border: 1px solid var(--cuadro-borde);
+      border-radius: var(--cuadro-radio);
+      box-shadow: var(--cuadro-sombra);
+      backdrop-filter: blur(10px) saturate(1.15);
+      -webkit-backdrop-filter: blur(10px) saturate(1.15);
+      overflow: hidden;
+    }
+
+    /* filo de luz en el borde superior */
+    body .titulo-card::before,
+    body .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--neon), transparent);
+      opacity: .85;
+    }
+
+    /* esquinas en L */
+    .esq {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--neon);
+      filter: drop-shadow(0 0 6px rgba(255, 62, 200, .55));
+      pointer-events: none;
+    }
+
+    .esq.tl {
+      top: 10px;
+      left: 10px;
+      border-right: 0;
+      border-bottom: 0;
+      border-radius: 6px 0 0 0;
+    }
+
+    .esq.tr {
+      top: 10px;
+      right: 10px;
+      border-left: 0;
+      border-bottom: 0;
+      border-radius: 0 6px 0 0;
+    }
+
+    .esq.bl {
+      bottom: 10px;
+      left: 10px;
+      border-right: 0;
+      border-top: 0;
+      border-radius: 0 0 0 6px;
+    }
+
+    .esq.br {
+      bottom: 10px;
+      right: 10px;
+      border-left: 0;
+      border-top: 0;
+      border-radius: 0 0 6px 0;
+    }
+
+    /* sin puntitos en los extremos (por si tanuki.css los agrega) */
+    .esq::before,
+    .esq::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    /* adornos ✦ */
+    .deco {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .7rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .deco.bot {
+      margin: 1.3rem 0 0;
+    }
+
+    .deco .linea {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cuadro-borde), transparent);
+    }
+
+    .deco .rombo {
+      width: 8px;
+      height: 8px;
+      transform: rotate(45deg);
+      background: var(--neon);
+      box-shadow: 0 0 12px var(--neon);
+    }
+
+    .deco .icono {
+      font-family: "Rajdhani", sans-serif;
+      font-size: .85rem;
+      letter-spacing: .35em;
+      color: var(--neon);
+      text-shadow: 0 0 10px rgba(255, 62, 200, .6);
+    }
+
+    /* ── 4. Cabecera ────────────────────────────────────────── */
+    body .cabecera {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 2rem 1.1rem .4rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 .5rem;
+      font-family: "Rajdhani", sans-serif;
+      font-size: .8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .38em;
+      text-align: center;
+      color: var(--tinta-suave);
+    }
+
+    .titulo {
+      margin: 0;
+      font-family: "Orbitron", sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.35rem, 4.4vw, 2.5rem);
+      line-height: 1.28;
+      text-align: center;
+      color: var(--tinta);
+      text-shadow: 0 0 18px rgba(255, 62, 200, .45), 0 0 42px rgba(255, 62, 200, .18);
+    }
+
+    /* ── 5. Galería de apodos ───────────────────────────────── */
+    .galeria {
+      display: flex;
+      flex-direction: column;
+      /* una imagen y abajo la otra */
+      gap: 1.5rem;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .galeria .foto {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid var(--cuadro-borde);
+      border-radius: 12px;
+      background: rgba(6, 10, 20, .55);
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+
+    .galeria .foto:hover {
+      transform: translateY(-5px);
+      border-color: var(--neon);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, .5), 0 0 22px rgba(255, 62, 200, .28);
+    }
+
+    .galeria .foto img {
+      display: block;
+      width: 100%;
+      height: auto;
+      /* se ve completa, sin recortes */
+    }
+
+    /* barra con el número y el apodo — va ARRIBA de la imagen, sin taparla */
+    .etiqueta {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      padding: .6rem .85rem;
+      background: linear-gradient(180deg, rgba(255, 62, 200, .12), rgba(255, 62, 200, .04));
+      border-bottom: 1px solid rgba(255, 62, 200, .25);
+    }
+
+    .etiqueta .num {
+      font-family: "Orbitron", sans-serif;
+      font-size: .7rem;
+      padding: .12rem .38rem;
+      border: 1px solid var(--neon);
+      border-radius: 5px;
+      color: var(--neon);
+      box-shadow: 0 0 10px rgba(255, 62, 200, .25) inset;
+    }
+
+    .etiqueta .nombre {
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: 1.02rem;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--tinta);
+    }
+
+    /* ── 6. Cuadros "Fakiu" ─────────────────────────────────── */
+    body .panel-fakiu {
+      --cuadro-borde: rgba(255, 138, 229, .30);
+      text-align: center;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .06),
+        0 20px 50px rgba(0, 0, 0, .55),
+        0 0 34px rgba(255, 138, 229, .12);
+    }
+
+    body .panel-fakiu::before {
+      background: linear-gradient(90deg, transparent, var(--neon-2), transparent);
+    }
+
+    .panel-fakiu .esq {
+      border-color: var(--neon-2);
+      filter: drop-shadow(0 0 6px rgba(255, 138, 229, .55));
+    }
+
+    .panel-fakiu .deco .rombo {
+      background: var(--neon-2);
+      box-shadow: 0 0 12px var(--neon-2);
+    }
+
+    .panel-fakiu .deco .icono {
+      color: var(--neon-2);
+      text-shadow: 0 0 10px rgba(255, 138, 229, .6);
+    }
+
+    .fakiu-eyebrow {
+      margin: 0 0 .5rem;
+      font-family: "Rajdhani", sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .38em;
+      color: rgba(255, 138, 229, .85);
+    }
+
+    .fakiu-titulo {
+      margin: 0;
+      font-family: "Orbitron", sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.05rem, 3.2vw, 1.6rem);
+      line-height: 1.4;
+      color: var(--tinta);
+      text-shadow: 0 0 16px rgba(255, 138, 229, .35);
+    }
+
+    .foto-fakiu {
+      max-width: 420px;
+      margin: 1.5rem auto 1.1rem;
+      overflow: hidden;
+      border: 1px solid rgba(255, 138, 229, .35);
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .5);
+    }
+
+    /* imagen y video se comportan igual dentro del cuadro */
+    .foto-fakiu img,
+    .foto-fakiu video {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .foto-fakiu video {
+      background: #000;
+      /* mientras carga el primer cuadro */
+      outline: none;
+    }
+
+    .foto-video {
+      max-width: 480px;
+    }
+
+    .fakiu-firma {
+      margin: 0;
+      font-family: "Orbitron", sans-serif;
+      font-weight: 900;
+      font-size: 1.35rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--neon-2);
+      text-shadow: 0 0 16px rgba(255, 138, 229, .6);
+    }
+
+    /* ── 7. Ruleta rusa de memes ─────────────────────────────── */
+    .panel-ruleta {
+      text-align: center;
+    }
+
+    .ruleta-balas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      justify-content: center;
+      max-width: 460px;
+      margin: 1.2rem auto .7rem;
+    }
+
+    .bala {
+      width: 8px;
+      height: 22px;
+      border-radius: 3px 3px 7px 7px;
+      background: linear-gradient(180deg, #ffe08a, #b8860b);
+      box-shadow: 0 0 7px rgba(255, 224, 138, .65);
+      transition: opacity .3s ease, transform .3s ease, background .3s ease, box-shadow .3s ease;
+    }
+
+    .bala.gastada {
+      background: rgba(255, 255, 255, .07);
+      box-shadow: none;
+      transform: scaleY(.65);
+      opacity: .35;
+    }
+
+    .ruleta-contador {
+      margin: 0 0 1.3rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 600;
+      font-size: .95rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--tinta-suave);
+    }
+
+    .ruleta-resultado {
+      min-height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .ruleta-placeholder {
+      margin: 0;
+      font-family: "Rajdhani", sans-serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--tinta-suave);
+    }
+
+    .ruleta-titulo {
+      margin-bottom: .9rem;
+    }
+
+    .ruleta-gatillo {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      padding: .85rem 2.1rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--tinta);
+      background: rgba(10, 18, 32, .75);
+      border: 1px solid var(--neon-2);
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 138, 229, .2);
+      transition: transform .15s ease, box-shadow .2s ease, background .2s ease, opacity .2s ease;
+    }
+
+    .ruleta-gatillo:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 138, 229, .12);
+      box-shadow: 0 0 30px rgba(255, 138, 229, .5);
+    }
+
+    .ruleta-gatillo.disparo {
+      animation: gatillo-disparo .3s ease;
+    }
+
+    @keyframes gatillo-disparo {
+      0% {
+        transform: scale(1);
+      }
+
+      30% {
+        transform: scale(.92) rotate(-2deg);
+      }
+
+      60% {
+        transform: scale(1.06) rotate(2deg);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .ruleta-vacio {
+      margin: 1rem 0 0;
+      font-family: "Rajdhani", sans-serif;
+      font-size: .95rem;
+      color: var(--tinta-suave);
+    }
+
+    .ruleta-recargar {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--neon-2);
+      text-decoration: underline;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .ruleta-gatillo.temblor {
+      animation: gatillo-temblor .35s ease;
+    }
+
+    @keyframes gatillo-temblor {
+      0%, 100% { transform: translateX(0); }
+      25%      { transform: translateX(-4px); }
+      75%      { transform: translateX(4px); }
+    }
+
+    /* bala de oro: mensaje tierno junto con la foto */
+    .oro-caja {
+      margin-bottom: 1.1rem;
+      padding: .9rem 1.1rem;
+      border: 1px solid rgba(255, 214, 100, .55);
+      border-radius: 10px;
+      background: linear-gradient(160deg, rgba(255, 214, 100, .12), rgba(255, 214, 100, .03));
+      box-shadow: 0 0 22px rgba(255, 214, 100, .25);
+    }
+
+    .oro-eyebrow {
+      margin: 0 0 .4rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: .78rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: #ffd664;
+    }
+
+    .oro-texto {
+      margin: 0;
+      font-family: "Rajdhani", sans-serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--tinta);
+    }
+
+    .foto-fakiu.foto-oro {
+      border-color: rgba(255, 214, 100, .6);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .5), 0 0 26px rgba(255, 214, 100, .35);
+    }
+
+    /* historial de memes ya vistos */
+    .ruleta-historial {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      max-width: 480px;
+      margin: 1.3rem auto 0;
+    }
+
+    .ruleta-historial img {
+      width: 46px;
+      height: 46px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--cuadro-borde);
+      opacity: .85;
+      transition: transform .2s ease, opacity .2s ease;
+    }
+
+    .ruleta-historial img:hover {
+      transform: scale(1.18);
+      opacity: 1;
+    }
+
+    /* confeti al vaciar el tambor */
+    .confeti {
+      position: fixed;
+      top: -12px;
+      width: 8px;
+      height: 14px;
+      border-radius: 2px;
+      z-index: 10000;
+      pointer-events: none;
+      animation: confeti-caer linear forwards;
+    }
+
+    @keyframes confeti-caer {
+      to {
+        transform: translateY(112vh) rotate(720deg);
+        opacity: .25;
+      }
+    }
+
+    /* ── 8. Pie / botón ──────────────────────────────────────── */
+    body .pie {
+      display: flex;
+      justify-content: center;
+      padding: 1.6rem 1.1rem 3rem;
+    }
+
+    .pie .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      padding: .8rem 1.9rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--tinta);
+      background: rgba(10, 18, 32, .75);
+      border: 1px solid var(--neon);
+      border-radius: 999px;
+      box-shadow: 0 0 20px rgba(255, 62, 200, .18);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .pie .btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 62, 200, .12);
+      box-shadow: 0 0 30px rgba(255, 62, 200, .45);
+    }
+
+    /* ── 9. Responsive + movimiento reducido ────────────────── */
+    @media (max-width: 560px) {
+      .galeria {
+        gap: 1.1rem;
+      }
+
+      .esq {
+        width: 15px;
+        height: 15px;
+      }
+
+      body .titulo-card,
+      body .panel {
+        padding: 1.3rem 1rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cae {
+        animation: none;
+        display: none;
+      }
+
+      .galeria .foto,
+      .pie .btn,
+      .ruleta-gatillo {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════ FONDO ══════════════ -->
+  <div class="bg-layer"></div>
+  <div class="scanlines"></div>
+  <div id="cayendo"></div>
+
+  <!-- ══════════════ CABECERA ══════════════ -->
+  <header class="cabecera">
+    <div class="titulo-card">
+      <span class="esq tl"></span><span class="esq tr"></span>
+      <span class="esq bl"></span><span class="esq br"></span>
+
+      <div class="deco">
+        <span class="linea"></span>
+        <span class="rombo"></span>
+        <span class="icono">✦ ✦ ✦</span>
+        <span class="rombo"></span>
+        <span class="linea"></span>
+      </div>
+
+      <p class="eyebrow">Momentos random</p>
+      <h1 class="titulo">Estos son unos de<br>los nombres que me pusiste</h1>
+
+      <div class="deco bot">
+        <span class="linea"></span>
+        <span class="icono">✦</span>
+        <span class="linea"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════ GALERÍA DE APODOS ══════════════ -->
+  <main class="panel-wrap">
+    <section class="panel">
+      <span class="esq tl"></span><span class="esq tr"></span>
+      <span class="esq bl"></span><span class="esq br"></span>
+
+      <!-- se llena solo desde el array APODOS -->
+      <div class="galeria" id="galeria"></div>
+    </section>
+  </main>
+
+  <!-- ══════════════ CUADRO ESPECIAL: APAREAMIENTO ══════════════ -->
+  <section class="panel-wrap">
+    <div class="panel panel-fakiu">
+      <span class="esq tl"></span><span class="esq tr"></span>
+      <span class="esq bl"></span><span class="esq br"></span>
+
+      <div class="deco">
+        <span class="linea"></span>
+        <span class="rombo"></span>
+        <span class="icono">✦</span>
+        <span class="rombo"></span>
+        <span class="linea"></span>
+      </div>
+
+      <p class="fakiu-eyebrow">Mención de honor</p>
+
+      <h2 class="fakiu-titulo">
+        Muchas gracias por nunca<br>ponerme este nombre :3
+      </h2>
+
+      <figure class="foto foto-fakiu">
+        <img src="/tanuki/apareamiento.jpg" alt="Fakiu" loading="lazy">
+      </figure>
+
+      <p class="fakiu-firma">Fakiu</p>
+
+      <div class="deco bot">
+        <span class="linea"></span>
+        <span class="icono">✦</span>
+        <span class="linea"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CUADRO ESPECIAL: FAKIU ══════════════ -->
+  <section class="panel-wrap">
+    <div class="panel panel-fakiu">
+      <span class="esq tl"></span><span class="esq tr"></span>
+      <span class="esq bl"></span><span class="esq br"></span>
+
+      <div class="deco">
+        <span class="linea"></span>
+        <span class="rombo"></span>
+        <span class="icono">✦</span>
+        <span class="rombo"></span>
+        <span class="linea"></span>
+      </div>
+
+      <p class="fakiu-eyebrow">Mención de honor</p>
+
+      <h2 class="fakiu-titulo">
+        Muchas gracias por apoyarme<br>en mi emprendimiento
+      </h2>
+
+      <figure class="foto foto-fakiu">
+        <img src="/tanuki/fakiu.png" alt="Fakiu" loading="lazy">
+      </figure>
+
+      <p class="fakiu-firma">Fakiu</p>
+      <div class="deco bot">
+        <span class="linea"></span>
+        <span class="icono">✦</span>
+        <span class="linea"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CUADRO ESPECIAL: MEME ══════════════ -->
+  <section class="panel-wrap">
+    <div class="panel panel-fakiu">
+      <span class="esq tl"></span><span class="esq tr"></span>
+      <span class="esq bl"></span><span class="esq br"></span>
+
+      <div class="deco">
+        <span class="linea"></span>
+        <span class="rombo"></span>
+        <span class="icono">✦</span>
+        <span class="rombo"></span>
+        <span class="linea"></span>
+      </div>
+
+      <p class="fakiu-eyebrow">Meme de honor</p>
+
+      <h2 class="fakiu-titulo">
+        ¿Quién es quién?
+      </h2>
+
+      <figure class="foto foto-fakiu">
+        <img src="/tanuki/meme.png" alt="Meme" loading="lazy">
+      </figure>
+
+      <p class="fakiu-firma">Buena pregunta</p>
+
+      <div class="deco bot">
+        <span class="linea"></span>
+        <span class="icono">✦</span>
+        <span class="linea"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CUADRO ESPECIAL: VIDEO ══════════════ -->
+  <section class="panel-wrap">
+    <div class="panel panel-fakiu">
+      <span class="esq tl"></span><span class="esq tr"></span>
+      <span class="esq bl"></span><span class="esq br"></span>
+
+      <div class="deco">
+        <span class="linea"></span>
+        <span class="rombo"></span>
+        <span class="icono">✦</span>
+        <span class="rombo"></span>
+        <span class="linea"></span>
+      </div>
+
+      <p class="fakiu-eyebrow">Video de honor de cuando hice la revolución</p>
+
+      <h2 class="fakiu-titulo">
+        Un millón de likes
+      </h2>
+
+      <!-- controls: barra de reproducción · playsinline: en iPhone no se va a pantalla completa
+         preload="metadata": solo carga la duración, no el video entero -->
+      <figure class="foto foto-fakiu foto-video">
+        <video id="videoMeme" src="/tanuki/millondelike.mp4" controls playsinline preload="metadata">
+          Tu navegador no puede reproducir este video.
+        </video>
+      </figure>
+
+      <p class="fakiu-firma">Este dia gano el Tanuki</p>
+
+      <div class="deco bot">
+        <span class="linea"></span>
+        <span class="icono">✦</span>
+        <span class="linea"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel-wrap">
+    <div class="panel panel-fakiu">
+      <span class="esq tl"></span><span class="esq tr"></span>
+      <span class="esq bl"></span><span class="esq br"></span>
+
+      <div class="deco">
+        <span class="linea"></span>
+        <span class="rombo"></span>
+        <span class="icono">✦</span>
+        <span class="rombo"></span>
+        <span class="linea"></span>
+      </div>
+
+      <p class="fakiu-eyebrow">Meme de honor</p>
+
+      <h2 class="fakiu-titulo">
+        Para que estudies
+      </h2>
+
+      <figure class="foto foto-fakiu">
+        <img src="/Mensajes de amigos/tabla.png" alt="Meme" loading="lazy">
+      </figure>
+
+      <div class="deco bot">
+        <span class="linea"></span>
+        <span class="icono">✦</span>
+        <span class="linea"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ RULETA RUSA DE MEMES ══════════════ -->
+  <section class="panel-wrap">
+    <div class="panel panel-fakiu panel-ruleta">
+      <span class="esq tl"></span><span class="esq tr"></span>
+      <span class="esq bl"></span><span class="esq br"></span>
+
+      <div class="deco">
+        <span class="linea"></span>
+        <span class="rombo"></span>
+        <span class="icono">✦</span>
+        <span class="rombo"></span>
+        <span class="linea"></span>
+      </div>
+
+      <p class="fakiu-eyebrow">Ruleta rusa de memes</p>
+      <h2 class="fakiu-titulo">Aprieta el gatillo si te atreves</h2>
+
+      <div class="ruleta-balas" id="ruletaBalas"></div>
+      <p class="ruleta-contador" id="ruletaContador">balas en el tambor</p>
+
+      <div class="ruleta-resultado" id="ruletaResultado">
+        <p class="ruleta-placeholder">Todavía no has disparado…</p>
+      </div>
+
+      <button type="button" class="ruleta-gatillo" id="ruletaGatillo">
+        <span class="emo">🔫</span> Disparar
+      </button>
+
+      <p class="ruleta-vacio" id="ruletaVacio" hidden>
+        Se acabaron las balas —
+        <button type="button" class="ruleta-recargar" id="ruletaRecargar">recargar</button>
+      </p>
+
+      <div class="ruleta-historial" id="ruletaHistorial"></div>
+
+      <div class="deco bot">
+        <span class="linea"></span>
+        <span class="icono">✦</span>
+        <span class="linea"></span>
+      </div>
+    </div>
+  </section>
+  <!-- ══════════════ PIE ══════════════ -->
+
+  <footer class="pie">
+    <div class="btn-outer">
+      <a href="/web/Pagina4_cumple.html" class="btn">
+        <span class="emo">🦝</span>
+        Volver
+        <span class="emo">🦝</span>
+      </a>
+    </div>
+  </footer>
+
+  <audio id="sonido" preload="auto" loop>
+    <source src="/Musica/Don Omar - Virtual Diva (Visualizer).mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    var CARPETA = '/tanuki/'; 
+
+    var APODOS = [
+      { archivo: 'desatado.png', nombre: 'Desatado' },
+      { archivo: 'dieta.png', nombre: 'Dieta' },
+      { archivo: 'empresario.png', nombre: 'Empresario' },
+      { archivo: 'forest.png', nombre: 'Forest' },
+      { archivo: 'guerra.png', nombre: 'Guerra' },
+      { archivo: 'infiel.png', nombre: 'Infiel' },
+      { archivo: 'mielero.png', nombre: 'Mielero' },
+      { archivo: 'patronus.png', nombre: 'Patronus' },
+      { archivo: 'profeta.png', nombre: 'Profeta' },
+      { archivo: 'ranger.png', nombre: 'Ranger' },
+      { archivo: 'rapero.png', nombre: 'Rapero' },
+      { archivo: 'todoPoderoso.png', nombre: 'Todopoderoso' },
+      { archivo: 'tembloroso.png', nombre: 'Tembloroso' },
+      { archivo: 'falso.png', nombre: 'Falso heroe' }
+    ];
+
+    /* ═══════════════════════════════════════════
+       MEMES DE LA RULETA RUSA
+       (antes era la lista larga y estática;
+        ahora salen uno por uno, sin repetir)
+    ═══════════════════════════════════════════ */
+    var RULETA_MEMES = [
+      { titulo: '¿Yokito?', archivo: 'yoko.png' },
+      { titulo: '¿YOko?', archivo: 'yokoovulando.png' },
+      { titulo: '¿YOkolate?', archivo: 'primeravez.png' },
+      { titulo: '¿Ayaya?', archivo: 'ayaya.png' },
+      { titulo: 'Bro? 🏳️‍🌈🤨 📸', archivo: 'encima.png' },
+      { titulo: 'Moy? 🏳️‍🌈🤨 📸', archivo: 'argentinos.png' },
+      { titulo: 'cada quien.....', archivo: 'chorizo.png' },
+      { titulo: '¿Este es tu idolo?', archivo: 'erick.png' },
+      { titulo: 'Los novios...', archivo: 'amigos.png' },
+      { titulo: 'que?', archivo: 'antojo.png' },
+      { titulo: 'A como el kilo', archivo: 'carbon.png' },
+      { titulo: 'Rugido de tripas', archivo: 'tienda.png' },
+      { titulo: 'Falta de luz', archivo: 'luz.png' },
+      { titulo: 'Gustos de Yoko', archivo: 'gustodeyoko.png' },
+      { titulo: 'Aceites', archivo: 'aceite.png' },
+      { titulo: 'Presidente', archivo: 'maduro.png' },
+      { titulo: '¿🏳️‍🌈?', archivo: 'soyyo.png' },
+      { titulo: 'Moy cachondo', archivo: 'cachondo.png' },
+      { titulo: 'Erick sumiso', archivo: 'erick1.png' },
+      { titulo: '5 negros y ayaya', archivo: '5negros.png' },
+      { titulo: 'Como?', archivo: 'yokokai.png' },
+      { titulo: 'Chikito...', archivo: 'pequeño.png' },
+      { titulo: 'Cantando la quemona', archivo: 'quemona.png' },
+      { titulo: 'Confirmamos', archivo: 'maduros.png' },
+      { titulo: 'Primera vez de yokito...', archivo: 'amor.png' },
+      { titulo: 'Ya deja de quemarte boludo...', archivo: 'quemado.png' },
+      { titulo: 'Los cachonboys en acción', archivo: 'cahondos.png' },
+      { titulo: 'Dedicatorias al yoko...', archivo: 'yoko1.png' },
+      { titulo: 'Asbel enamorada', archivo: 'enamorado.png' },
+      { titulo: 'Asbel dedicando', archivo: 'asbelamor.png' },
+      { titulo: 'Servicios de Asbel para Tanukas', archivo: 'image copy.png' },
+      { titulo: 'Mi colita', archivo: 'yoko4.png' },
+      { titulo: 'Los pinky infieles', archivo: 'infiel_yoko.png' }
+    ];
+
+    var ruletaRestantes = [];
+    var ruletaPosicion = 0;
+    var ruletaIndiceOro = -1;
+    var ruletaHistorial = [];
+    var audioCtx = null;
+
+    var MENSAJES_TIERNOS = [
+      'Bala de oro: entre tanto meme, esto es solo para recordarte que el sotano no tiene comida.',
+      'Si realmente tienes valor lleva esta pistola y veras como tienes luz gratis de un 1 año a 6 años.',
+      'Esta te la ganaste: eres Yoimiya :3',
+      'Bala de oro desbloqueada. Gracias por aguantar estas desgracias humanas.'
+    ];
+
+    var CAYENDO = [
+      '/Emojis/burni.jpg',
+      '/Emojis/culebra.jpg',
+      '/Emojis/kurukuru.jpg',
+      '/Emojis/lucy.jpg',
+      '/Emojis/mevalevrg.png',
+      '/Emojis/celos.png'
+    ];
+    var CANTIDAD_CAYENDO = 15;   
+    var ANCHO_MIN = 95;      
+    var ANCHO_MAX = 180;
+    var CENTRO_LIBRE = 0.46;    
+    var EMOJI_RESPALDO = '🦝';   
+
+    var EMOJIS_CLICK = ['🦝', '✦', '⚡', '✧'];
+
+    function azar(min, max) { return min + Math.random() * (max - min); }
+
+    function posicionLateral(i) {
+      var banda = (1 - CENTRO_LIBRE) / 2;          
+      var izq = (i % 2 === 0);                   
+      return izq ? azar(0, banda)
+        : azar(1 - banda, 1);
+    }
+
+    function pintarGaleria() {
+      var galeria = document.getElementById('galeria');
+      if (!galeria) return;
+
+      APODOS.forEach(function (item, i) {
+        var fila = document.createElement('figure');
+        fila.className = 'foto';
+        fila.innerHTML =
+          '<div class="etiqueta">' +
+          '<span class="num">' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<span class="nombre">' + item.nombre + '</span>' +
+          '</div>' +
+          '<img src="' + encodeURI(CARPETA + item.archivo) + '" alt="' + item.nombre + '" loading="lazy">';
+        galeria.appendChild(fila);
+      });
+    }
+
+    function crearGota(i) {
+      var wrap = document.createElement('div');
+      wrap.className = 'cae';
+
+      var img = document.createElement('img');
+      img.src = encodeURI(CAYENDO[i % CAYENDO.length]);
+      img.alt = '';
+      img.decoding = 'async';
+
+      img.onload = function () {
+        var ancho = parseInt(wrap.style.width, 10);
+        if (img.naturalWidth && ancho > img.naturalWidth) {
+          wrap.style.width = img.naturalWidth + 'px';
+        }
+      };
+
+      img.onerror = function () {
+        console.warn('No cargó la imagen de fondo:', img.src);
+        img.remove();
+        var span = document.createElement('span');
+        span.className = 'fallback';
+        span.textContent = EMOJI_RESPALDO;
+        wrap.appendChild(span);
+      };
+
+      var ancho = Math.round(azar(ANCHO_MIN, ANCHO_MAX));
+      wrap.style.width = ancho + 'px';
+
+      wrap.dataset.pos = posicionLateral(i).toFixed(4);
+      wrap.style.left = Math.round(wrap.dataset.pos * (window.innerWidth - ancho)) + 'px';
+
+      wrap.style.setProperty('--r0', azar(-20, 20).toFixed(0) + 'deg');
+      wrap.style.setProperty('--rf', azar(-45, 45).toFixed(0) + 'deg');
+      wrap.style.setProperty('--op', azar(0.85, 1).toFixed(2));
+      wrap.style.setProperty('--sw', azar(-18, 18).toFixed(0) + 'px');
+
+      var dur = azar(13, 25).toFixed(1);  
+      var vaiven = azar(4, 8).toFixed(1);     
+      var retraso = azar(-25, 0).toFixed(1);
+
+      wrap.style.animationDuration = dur + 's, ' + vaiven + 's';
+      wrap.style.animationDelay = retraso + 's, ' + retraso + 's';
+
+      wrap.appendChild(img);
+      return wrap;
+    }
+
+    function lluviaFondo() {
+      var capa = document.getElementById('cayendo');
+      if (!capa) return;
+
+      for (var i = 0; i < CANTIDAD_CAYENDO; i++) {
+        capa.appendChild(crearGota(i));
+      }
+
+      window.addEventListener('resize', function () {
+        Array.prototype.forEach.call(capa.children, function (w) {
+          var ancho = parseInt(w.style.width, 10) || 0;
+          w.style.left = Math.round(w.dataset.pos * (window.innerWidth - ancho)) + 'px';
+        });
+      });
+    }
+
+    function estallido(e) {
+
+      if (e.target.closest('a, video, audio, button')) return;
+
+      var b = document.createElement('div');
+      b.className = 'burst';
+      b.style.left = e.clientX + 'px';
+      b.style.top = e.clientY + 'px';
+
+      for (var k = 0; k < 8; k++) {
+        var p = document.createElement('div');
+        p.className = 'bp';
+        p.textContent = EMOJIS_CLICK[k % EMOJIS_CLICK.length];
+
+        var ang = (k / 8) * 360 + azar(-15, 15);
+        var dist = azar(45, 100);
+        var rad = ang * Math.PI / 180;
+
+        p.style.setProperty('--tx', (Math.cos(rad) * dist).toFixed(1) + 'px');
+        p.style.setProperty('--ty', (Math.sin(rad) * dist).toFixed(1) + 'px');
+        p.style.fontSize = azar(14, 26).toFixed(0) + 'px';
+
+        b.appendChild(p);
+      }
+
+      document.body.appendChild(b);
+      setTimeout(function () { b.remove(); }, 1000);
+    }
+
+    var sonido = document.getElementById('sonido');
+    var yaSonado = false;
+
+    function reproducirSonido() {
+      if (yaSonado || !sonido) return;
+      sonido.play().then(function () { yaSonado = true; }).catch(function () { });
+    }
+
+    function prepararVideo() {
+      var video = document.getElementById('videoMeme');
+      if (!video) return;
+
+      video.addEventListener('error', function () {
+        console.warn('No cargó el video:', video.currentSrc || video.src);
+      });
+
+      video.addEventListener('play', function () {
+        if (sonido) sonido.volume = 0.02;
+      });
+
+      ['pause', 'ended'].forEach(function (evt) {
+        video.addEventListener(evt, function () {
+          if (sonido) sonido.volume = 0.2;
+        });
+      });
+    }
+
+    /* ═══════════════════════════════════════════
+       RULETA RUSA DE MEMES
+    ═══════════════════════════════════════════ */
+    function barajar(lista) {
+      var copia = lista.slice();
+      for (var i = copia.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = copia[i];
+        copia[i] = copia[j];
+        copia[j] = tmp;
+      }
+      return copia;
+    }
+
+    /* ═══════════════════════════════════════════
+       SONIDOS SINTETIZADOS (sin archivos de audio)
+    ═══════════════════════════════════════════ */
+    function obtenerAudioCtx() {
+      if (!audioCtx) {
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+          audioCtx = null;
+        }
+      }
+      return audioCtx;
+    }
+
+    function sonidoDisparo() {
+      var ctx = obtenerAudioCtx();
+      if (!ctx) return;
+      try {
+        var duracion = 0.22;
+        var buffer = ctx.createBuffer(1, ctx.sampleRate * duracion, ctx.sampleRate);
+        var datos = buffer.getChannelData(0);
+        for (var i = 0; i < datos.length; i++) {
+          datos[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / datos.length, 2.2);
+        }
+        var ruido = ctx.createBufferSource();
+        ruido.buffer = buffer;
+        var ganancia = ctx.createGain();
+        ganancia.gain.setValueAtTime(0.55, ctx.currentTime);
+        ganancia.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duracion);
+        ruido.connect(ganancia);
+        ganancia.connect(ctx.destination);
+        ruido.start();
+      } catch (e) {}
+    }
+
+    function sonidoVacio() {
+      var ctx = obtenerAudioCtx();
+      if (!ctx) return;
+      try {
+        var osc = ctx.createOscillator();
+        var ganancia = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = 160;
+        ganancia.gain.setValueAtTime(0.18, ctx.currentTime);
+        ganancia.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.09);
+        osc.connect(ganancia);
+        ganancia.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.1);
+      } catch (e) {}
+    }
+
+    /* ═══════════════════════════════════════════
+       CONFETI AL VACIAR EL TAMBOR
+    ═══════════════════════════════════════════ */
+    function lanzarConfeti() {
+      var colores = ['#FF2EC4', '#ff8ae5', '#ffd664', '#c084fc', '#7ef7c4'];
+      var cantidad = 60;
+
+      for (var i = 0; i < cantidad; i++) {
+        (function () {
+          var pieza = document.createElement('div');
+          pieza.className = 'confeti';
+          pieza.style.left = azar(0, 100) + 'vw';
+          pieza.style.background = colores[Math.floor(Math.random() * colores.length)];
+          pieza.style.animationDuration = azar(2.2, 4) + 's';
+          pieza.style.animationDelay = azar(0, 0.6) + 's';
+          if (Math.random() > 0.5) pieza.style.borderRadius = '50%';
+          document.body.appendChild(pieza);
+          setTimeout(function () { pieza.remove(); }, 5000);
+        })();
+      }
+    }
+
+    function pintarBalas() {
+      var capa = document.getElementById('ruletaBalas');
+      if (!capa) return;
+
+      capa.innerHTML = '';
+      var total = RULETA_MEMES.length;
+      var usadas = total - ruletaRestantes.length;
+
+      for (var i = 0; i < total; i++) {
+        var b = document.createElement('span');
+        b.className = 'bala' + (i < usadas ? ' gastada' : '');
+        capa.appendChild(b);
+      }
+    }
+
+    function actualizarEstadoRuleta() {
+      var contador = document.getElementById('ruletaContador');
+      var vacio = document.getElementById('ruletaVacio');
+      if (!contador || !vacio) return;
+
+      if (ruletaRestantes.length > 0) {
+        contador.textContent = ruletaRestantes.length + ' bala' +
+          (ruletaRestantes.length === 1 ? '' : 's') + ' en el tambor';
+        vacio.hidden = true;
+      } else {
+        contador.textContent = 'El tambor está vacío';
+        vacio.hidden = false;
+      }
+    }
+
+    function pintarHistorial() {
+      var capa = document.getElementById('ruletaHistorial');
+      if (!capa) return;
+
+      capa.innerHTML = '';
+      ruletaHistorial.forEach(function (meme) {
+        var img = document.createElement('img');
+        img.src = encodeURI(CARPETA + meme.archivo);
+        img.alt = meme.titulo;
+        img.loading = 'lazy';
+        capa.appendChild(img);
+      });
+    }
+
+    function iniciarRuleta() {
+      ruletaRestantes = barajar(RULETA_MEMES);
+      ruletaPosicion = 0;
+      ruletaIndiceOro = Math.floor(Math.random() * ruletaRestantes.length);
+      ruletaHistorial = [];
+
+      var resultado = document.getElementById('ruletaResultado');
+      if (resultado) {
+        resultado.innerHTML = '<p class="ruleta-placeholder">Todavía no has disparado…</p>';
+      }
+
+      pintarBalas();
+      pintarHistorial();
+      actualizarEstadoRuleta();
+    }
+
+    function disparar() {
+      var boton = document.getElementById('ruletaGatillo');
+
+      // tambor vacío: click en seco, sin foto
+      if (!ruletaRestantes.length) {
+        sonidoVacio();
+        if (boton) {
+          boton.classList.remove('temblor');
+          void boton.offsetWidth;
+          boton.classList.add('temblor');
+        }
+        return;
+      }
+
+      var esOro = (ruletaPosicion === ruletaIndiceOro);
+      var meme = ruletaRestantes.shift();
+      ruletaPosicion++;
+
+      sonidoDisparo();
+
+      var resultado = document.getElementById('ruletaResultado');
+      if (resultado) {
+        var mensajeOro = MENSAJES_TIERNOS[Math.floor(Math.random() * MENSAJES_TIERNOS.length)];
+        resultado.innerHTML =
+          '<div>' +
+          (esOro
+            ? '<div class="oro-caja"><p class="oro-eyebrow">✨ Bala de oro ✨</p><p class="oro-texto">' + mensajeOro + '</p></div>'
+            : '') +
+          '<h3 class="fakiu-titulo ruleta-titulo">' + meme.titulo + '</h3>' +
+          '<figure class="foto foto-fakiu' + (esOro ? ' foto-oro' : '') + '">' +
+          '<img src="' + encodeURI(CARPETA + meme.archivo) + '" alt="' + meme.titulo + '" loading="lazy">' +
+          '</figure>' +
+          '</div>';
+      }
+
+      ruletaHistorial.push(meme);
+      pintarHistorial();
+      pintarBalas();
+      actualizarEstadoRuleta();
+
+      if (boton) {
+        boton.classList.remove('disparo');
+        void boton.offsetWidth; // reinicia la animación aunque se dispare seguido
+        boton.classList.add('disparo');
+      }
+
+      // se acaba de disparar la última bala: confeti
+      if (!ruletaRestantes.length) {
+        lanzarConfeti();
+      }
+    }
+
+    function activarRuleta() {
+      var boton = document.getElementById('ruletaGatillo');
+      var recargar = document.getElementById('ruletaRecargar');
+      if (!boton) return;
+
+      iniciarRuleta();
+      boton.addEventListener('click', disparar);
+      if (recargar) recargar.addEventListener('click', iniciarRuleta);
+    }
+
+    if (sonido) sonido.volume = 0.2;
+
+    console.log('%c[tanuki.html] versión RULETA v2 cargada correctamente', 'color:#0f0;font-weight:bold');
+
+    pintarGaleria();
+    lluviaFondo();
+    prepararVideo();
+    activarRuleta();
+    document.addEventListener('click', estallido);
+
+    window.addEventListener('load', reproducirSonido);
+
+    ['click', 'keydown', 'scroll', 'touchstart', 'mousemove'].forEach(function (evt) {
+      document.addEventListener(evt, reproducirSonido, { once: true });
+    });
+  </script>
+</body>
+
+</html>

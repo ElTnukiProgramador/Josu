@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tuturu 1 Hour - YouTube</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/Styles/style11.css">
+
+  <!-- icono de la pestaña. El id lo usa el script del final para probar
+     varias rutas y quedarse con la que exista de verdad. -->
+  <link id="favicon" rel="icon" type="image/png" href="../logos/logoyoutube.png">
+</head>
+
+<body>
+
+  <!-- ══════════════ CABECERA ══════════════ -->
+  <header class="yt-header">
+
+    <div class="izq">
+      <button class="btn-icono" aria-label="Menú">
+        <svg class="icono" viewBox="0 0 24 24">
+          <path d="M21 6H3V5h18v1zm0 5H3v1h18v-1zm0 6H3v1h18v-1z" />
+        </svg>
+      </button>
+
+      <a href="#" class="logo">
+        <img id="logoYoutube" class="logo-img" src="../logos/logoyoutube.png" alt="YouTube">
+        <span class="texto">YouTube</span>
+        <span class="pais">CO</span>
+      </a>
+    </div>
+
+    <div class="buscador">
+      <div class="caja-busqueda">
+        <input type="text" value="josuyelin" aria-label="Buscar">
+        <button class="limpiar" aria-label="Borrar">
+          <svg class="icono" viewBox="0 0 24 24">
+            <path d="M12.7 12l6.6 6.6-.7.7-6.6-6.6-6.6 6.6-.7-.7 6.6-6.6-6.6-6.6.7-.7 6.6 6.6 6.6-6.6.7.7-6.6 6.6z" />
+          </svg>
+        </button>
+        <button class="lupa" aria-label="Buscar">
+          <svg class="icono" viewBox="0 0 24 24">
+            <path
+              d="M20.87 20.17l-5.59-5.59C16.35 13.35 17 11.75 17 10c0-3.87-3.13-7-7-7s-7 3.13-7 7 3.13 7 7 7c1.75 0 3.35-.65 4.58-1.71l5.59 5.59.7-.71zM10 16c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" />
+          </svg>
+        </button>
+      </div>
+      <button class="mic" aria-label="Buscar con la voz">
+        <svg class="icono" viewBox="0 0 24 24">
+          <path
+            d="M12 3c-1.66 0-3 1.37-3 3.07v5.86c0 1.7 1.34 3.07 3 3.07s3-1.37 3-3.07V6.07C15 4.37 13.66 3 12 3zm6.5 9h-1c0 3.03-2.47 5.5-5.5 5.5S6.5 15.03 6.5 12h-1c0 3.24 2.39 5.93 5.5 6.41V21h2v-2.59c3.11-.48 5.5-3.17 5.5-6.41z" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="der">
+      <button class="btn-crear">
+        <svg class="icono" viewBox="0 0 24 24">
+          <path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="1.6" fill="none" />
+        </svg>
+        <span>Crear</span>
+      </button>
+
+      <button class="btn-icono campana" aria-label="Notificaciones">
+        <svg class="icono" viewBox="0 0 24 24">
+          <path
+            d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm8-3v1H6v-1l2-2v-4c0-2.5 1.5-4.6 4-5.2V5c0-.6.4-1 1-1s1 .4 1 1v.8c2.5.6 3 2.7 3 5.2v4l2 2z" />
+        </svg>
+        <span class="globo">9+</span>
+      </button>
+
+      <img class="avatar-header" src="/fotoyoutube.png" alt="Josuyelin">
+    </div>
+  </header>
+
+
+  <!-- ══════════════ CONTENIDO ══════════════ -->
+  <main class="contenido">
+
+    <!-- ─── Columna principal ─── -->
+    <div class="columna-video">
+
+      <!-- Reproductor. Cambia el src del <video> por tu archivo. -->
+      <div class="reproductor pausado" id="reproductor">
+        <video id="video" src="/videos/tuturu.mp4" poster="/fotos de vrchat/furina.png" playsinline></video>
+
+        <div class="capa-click" id="capaClick"></div>
+        <div class="play-grande"></div>
+
+        <div class="controles">
+          <div class="barra-progreso" id="barraProgreso">
+            <div class="riel">
+              <div class="avance" id="avance"></div>
+              <div class="bolita" id="bolita"></div>
+            </div>
+          </div>
+
+          <div class="fila-controles">
+            <button class="ctrl" id="btnPlay" aria-label="Reproducir">
+              <svg class="icono" id="iconoPlay" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </button>
+
+            <div class="grupo-volumen">
+              <button class="ctrl" id="btnMute" aria-label="Silenciar">
+                <svg class="icono" id="iconoVol" viewBox="0 0 24 24">
+                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                </svg>
+              </button>
+              <input class="volumen" id="volumen" type="range" min="0" max="1" step="0.05" value="1"
+                aria-label="Volumen">
+            </div>
+
+            <span class="tiempo"><span id="actual">0:00</span> / <span id="total">1:00:00</span></span>
+
+            <div class="der">
+              <button class="ctrl" aria-label="Subtítulos">
+                <svg class="icono" viewBox="0 0 24 24">
+                  <path
+                    d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zM6 13h4v1.5H6V13zm0-3h6v1.5H6V10zm12 4.5h-6V13h6v1.5zm0-3h-4V10h4v1.5z" />
+                </svg>
+              </button>
+              <button class="ctrl" aria-label="Configuración">
+                <svg class="icono" viewBox="0 0 24 24">
+                  <path
+                    d="M12 15.5A3.5 3.5 0 1112 8.5a3.5 3.5 0 010 7zm7.4-2.6l1.8 1.4-1.9 3.3-2.2-.9c-.5.4-1.1.7-1.7.9l-.3 2.4h-3.8l-.3-2.4c-.6-.2-1.2-.5-1.7-.9l-2.2.9-1.9-3.3 1.8-1.4a6.9 6.9 0 010-2l-1.8-1.4 1.9-3.3 2.2.9c.5-.4 1.1-.7 1.7-.9l.3-2.4h3.8l.3 2.4c.6.2 1.2.5 1.7.9l2.2-.9 1.9 3.3-1.8 1.4c.1.7.1 1.3 0 2z" />
+                </svg>
+              </button>
+              <button class="ctrl" id="btnPantalla" aria-label="Pantalla completa">
+                <svg class="icono" viewBox="0 0 24 24">
+                  <path
+                    d="M4 9V4h5v1.5H5.5V9H4zm11-5h5v5h-1.5V5.5H15V4zM4 15h1.5v3.5H9V20H4v-5zm14.5 0H20v5h-5v-1.5h3.5V15z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="titulo-video">ayayadas</h1>
+
+      <div class="fila-canal">
+        <div class="canal">
+          <img src="/fotoyoutube.png" alt="Josuyelin">
+          <div>
+            <div class="nombre">Josuyelin</div>
+            <div class="subs">3 M suscriptores</div>
+          </div>
+        </div>
+
+        <button class="btn-suscrito">
+          <svg class="icono" viewBox="0 0 24 24">
+            <path
+              d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm8-3v1H6v-1l2-2v-4c0-2.5 1.5-4.6 4-5.2V5c0-.6.4-1 1-1s1 .4 1 1v.8c2.5.6 3 2.7 3 5.2v4l2 2z" />
+          </svg>
+          <svg class="icono" style="width:16px" viewBox="0 0 24 24">
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
+        </button>
+
+        <div class="acciones">
+          <div class="grupo-like">
+            <button id="btnLike">
+              <svg class="icono" viewBox="0 0 24 24">
+                <path
+                  d="M18.8 9H14V4.4C14 3.1 12.9 2 11.6 2h-.3L8 9.7V21h9.3c1 0 1.9-.7 2.1-1.7l1.5-7c.3-1.4-.7-2.7-2.1-2.7v-.6zM3 9h3v12H3z" />
+              </svg>
+              <span id="numLikes">25</span>
+            </button>
+            <span class="separador"></span>
+            <button aria-label="No me gusta">
+              <svg class="icono" viewBox="0 0 24 24">
+                <path
+                  d="M5.2 15H10v4.6c0 1.3 1.1 2.4 2.4 2.4h.3l3.3-7.7V3H6.7c-1 0-1.9.7-2.1 1.7l-1.5 7c-.3 1.4.7 2.7 2.1 2.7V15zM21 3h-3v12h3z" />
+              </svg>
+            </button>
+          </div>
+
+          <button class="pastilla">
+            <svg class="icono" viewBox="0 0 24 24">
+              <path
+                d="M15 5.6L20.4 11H10a6 6 0 00-6 6v2h1.5v-2A4.5 4.5 0 0110 12.5h10.4L15 17.9l1 1.1 7.1-7.1L16 4.5l-1 1.1z" />
+            </svg>
+            Compartir
+          </button>
+
+          <button class="pastilla">
+            <svg class="icono" viewBox="0 0 24 24">
+              <path d="M12 2l2.4 6.9 7.6.2-6 4.6 2.2 7-6.2-4.3-6.2 4.3 2.2-7-6-4.6 7.6-.2L12 2z" />
+            </svg>
+            Preguntar
+          </button>
+
+          <button class="pastilla">
+            <svg class="icono" viewBox="0 0 24 24">
+              <path d="M18 3H6v18l6-4.5 6 4.5V3z" />
+            </svg>
+            Guardar
+          </button>
+
+          <button class="pastilla" aria-label="Más">
+            <svg class="icono" viewBox="0 0 24 24">
+              <path d="M12 7a2 2 0 110-4 2 2 0 010 4zm0 7a2 2 0 110-4 2 2 0 010 4zm0 7a2 2 0 110-4 2 2 0 010 4z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="descripcion">
+        <div class="datos">1.245 vistas · hace 2 días</div>
+        <div>Para tu cumpleaños. No preguntes por qué, solo disfrútalo. 🎂</div>
+      </div>
+    </div>
+
+
+    <!-- ─── Barra lateral ─── -->
+    <aside class="columna-lateral">
+      <div class="chips">
+        <button class="chip activo">Todos</button>
+        <button class="chip">Para ti</button>
+        <button class="chip">Subidas recientes</button>
+        <button class="chip">Visto</button>
+      </div>
+
+      <div class="lista-recomendados">
+
+        <a class="recomendado" href="#">
+          <div class="miniatura">
+            <img src="/fotos de vrchat/amigos.png" alt="">
+            <span class="duracion">27:23</span>
+          </div>
+          <div>
+            <div class="titulo">Torneo de natalie</div>
+            <div class="canal-mini">Josuyelin</div>
+            <div class="meta">219 K vistas · hace 5 h</div>
+            <span class="etiqueta-nuevo">Nuevo</span>
+          </div>
+        </a>
+
+        <a class="recomendado" href="#">
+          <div class="miniatura">
+            <img src="/fotos de vrchat/amigos2.png" alt="">
+            <span class="duracion">17:28</span>
+          </div>
+          <div>
+            <div class="titulo">Pendejos no duran nada.....</div>
+            <div class="canal-mini">El Tanukas</div>
+            <div class="meta">209 K vistas · hace 19 h</div>
+            <span class="etiqueta-nuevo">Nuevo</span>
+          </div>
+        </a>
+
+        <a class="recomendado" href="#">
+          <div class="miniatura">
+            <img src="/fotos de vrchat/amigos3.png" alt="">
+            <span class="duracion">9:48</span>
+          </div>
+          <div>
+            <div class="titulo">Aprendiendo la tabla del 7</div>
+            <div class="canal-mini">Josurail</div>
+            <div class="meta">1,3 M vistas · hace 2 a</div>
+          </div>
+        </a>
+
+        <a class="recomendado" href="#">
+          <div class="miniatura">
+            <img src="/Oscuras.png" alt="">
+            <span class="duracion">42:30</span>
+          </div>
+          <div>
+            <div class="titulo">Recuerdos de VR que nadie pidió</div>
+            <div class="canal-mini">Frijol con puerco</div>
+            <div class="meta">3 M vistas · hace 5 d</div>
+            <span class="etiqueta-nuevo">Nuevo</span>
+          </div>
+        </a>
+
+        <a class="recomendado" href="#">
+          <div class="miniatura">
+            <img src="/generadorDeLuz.png" alt="">
+            <span class="duracion">5:12</span>
+          </div>
+          <div>
+            <div class="titulo">Generador de luz — tutorial definitivo</div>
+            <div class="canal-mini">Honduras</div>
+            <div class="meta">88 K vistas · hace 1 sem</div>
+          </div>  
+        </a>
+
+        <a class="recomendado" href="#">
+          <div class="miniatura">
+            <img src="/fondo.jpg" alt="">
+            <span class="duracion">1:00:00</span>
+          </div>
+          <div>
+            <div class="titulo">Tuturu 1 Hour (pero en loop otra vez)</div>
+            <div class="canal-mini">Josuyelin</div>
+            <div class="meta">12 K vistas · hace 3 d</div>
+          </div>
+        </a>
+
+      </div>
+    </aside>
+
+
+    <!-- ─── Botón de volver ─── -->
+    <div class="fila-volver">
+      <a class="btn-volver" href="/web/Pagina4_cumple.html">
+        <svg class="icono" viewBox="0 0 24 24">
+          <path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z" />
+        </svg>
+        Devolver
+      </a>
+    </div>
+  </main>
+
+
+  <script>
+    /* ═══════════════════════════════════════════
+       1. CONTROLES DEL REPRODUCTOR
+    ═══════════════════════════════════════════ */
+    var repro = document.getElementById('reproductor');
+    var video = document.getElementById('video');
+    var capa = document.getElementById('capaClick');
+    var btnPlay = document.getElementById('btnPlay');
+    var icoPlay = document.getElementById('iconoPlay');
+    var btnMute = document.getElementById('btnMute');
+    var icoVol = document.getElementById('iconoVol');
+    var rangoVol = document.getElementById('volumen');
+    var barra = document.getElementById('barraProgreso');
+    var avance = document.getElementById('avance');
+    var bolita = document.getElementById('bolita');
+    var tActual = document.getElementById('actual');
+    var tTotal = document.getElementById('total');
+    var btnFull = document.getElementById('btnPantalla');
+
+    var D_PLAY = 'M8 5v14l11-7z';
+    var D_PAUSA = 'M6 5h4v14H6zm8 0h4v14h-4z';
+    var D_VOL = 'M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z';
+    var D_MUTE = 'M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.2-.5-2.3-1.3-3.1l1.1-1.1 4 4-1.1 1.1-1.4-1.4-1.4 1.4-1.1-1.1c.1-.3.2-.5.2-.8z';
+
+    function reloj(s) {
+      if (!isFinite(s)) return '0:00';
+      s = Math.floor(s);
+      var h = Math.floor(s / 3600);
+      var m = Math.floor((s % 3600) / 60);
+      var g = s % 60;
+      var dos = function (n) { return n < 10 ? '0' + n : n; };
+      return h ? h + ':' + dos(m) + ':' + dos(g) : m + ':' + dos(g);
+    }
+
+    function alternarPlay() {
+      if (video.paused) video.play(); else video.pause();
+    }
+
+    capa.addEventListener('click', alternarPlay);
+    btnPlay.addEventListener('click', alternarPlay);
+
+    video.addEventListener('play', function () {
+      repro.classList.remove('pausado');
+      icoPlay.innerHTML = '<path d="' + D_PAUSA + '"/>';
+    });
+    video.addEventListener('pause', function () {
+      repro.classList.add('pausado');
+      icoPlay.innerHTML = '<path d="' + D_PLAY + '"/>';
+    });
+
+    video.addEventListener('loadedmetadata', function () {
+      tTotal.textContent = reloj(video.duration);
+    });
+
+    video.addEventListener('timeupdate', function () {
+      var pct = video.duration ? (video.currentTime / video.duration) * 100 : 0;
+      avance.style.width = pct + '%';
+      bolita.style.left = pct + '%';
+      tActual.textContent = reloj(video.currentTime);
+    });
+
+    /* saltar a un punto de la barra */
+    barra.addEventListener('click', function (e) {
+      var r = barra.getBoundingClientRect();
+      var pct = (e.clientX - r.left) / r.width;
+      if (video.duration) video.currentTime = pct * video.duration;
+    });
+
+    /* volumen */
+    btnMute.addEventListener('click', function () {
+      video.muted = !video.muted;
+      icoVol.innerHTML = '<path d="' + (video.muted ? D_MUTE : D_VOL) + '"/>';
+      rangoVol.value = video.muted ? 0 : video.volume;
+    });
+    rangoVol.addEventListener('input', function () {
+      video.volume = rangoVol.value;
+      video.muted = (rangoVol.value === '0');
+      icoVol.innerHTML = '<path d="' + (video.muted ? D_MUTE : D_VOL) + '"/>';
+    });
+
+    /* pantalla completa */
+    btnFull.addEventListener('click', function () {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else repro.requestFullscreen();
+    });
+
+    /* atajos: espacio = play/pausa, flechas = 5 s */
+    document.addEventListener('keydown', function (e) {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.code === 'Space') { e.preventDefault(); alternarPlay(); }
+      if (e.code === 'ArrowRight') video.currentTime += 5;
+      if (e.code === 'ArrowLeft') video.currentTime -= 5;
+    });
+
+
+    /* ═══════════════════════════════════════════
+       2. LIKE
+    ═══════════════════════════════════════════ */
+    var btnLike = document.getElementById('btnLike');
+    var numLikes = document.getElementById('numLikes');
+    btnLike.addEventListener('click', function () {
+      var dado = btnLike.classList.toggle('activo');
+      numLikes.textContent = dado ? 26 : 25;
+    });
+
+
+    /* ═══════════════════════════════════════════
+       3. LOGO Y FAVICON
+       Prueba varias rutas y se queda con la que exista,
+       así funciona sin importar desde qué carpeta sirva el servidor.
+    ═══════════════════════════════════════════ */
+    (function () {
+      var RUTAS = [
+        '../logoyoutube.png',
+        '/logoyoutube.png',
+        'logoyoutube.png',
+        '../../logoyoutube.png'
+      ];
+
+      var favicon = document.getElementById('favicon');
+      var logo = document.getElementById('logoYoutube');
+      var i = 0;
+
+      function probar() {
+        if (i >= RUTAS.length) {
+          console.warn('No se encontró logoyoutube.png en ninguna ruta');
+          return;
+        }
+
+        var ruta = RUTAS[i++];
+        var prueba = new Image();
+
+        prueba.onload = function () {
+          favicon.href = ruta + '?v=' + Date.now();   // fuerza recargar el icono
+          if (logo) logo.src = ruta;
+          console.log('Logo encontrado en:', ruta);
+        };
+        prueba.onerror = probar;                      // no existe, prueba la siguiente
+        prueba.src = ruta;
+      }
+
+      probar();
+    })();
+
+
+    /* si una miniatura no carga, queda el bloque gris en vez del icono roto */
+    document.querySelectorAll('.miniatura img, .avatar-header, .canal img').forEach(function (img) {
+      img.addEventListener('error', function () { img.style.visibility = 'hidden'; });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,686 @@
+/* ==========================================================================
+   style10.css — Carta "Para Josy"
+
+    1. Variables y base
+    2. Capas de fondo (estrellas, corazones, destellos, motas, viñeta)
+    3. Muñecos cayendo
+    4. Sobre inicial (se abre de verdad)
+    5. Carta: papel, marco y ornamentos
+    6. Títulos
+    7. Cuerpo del texto
+    8. Firma y lacre
+    9. Estallido al hacer click
+   10. Botón de volver
+   11. Responsive
+   ========================================================================== */
+
+
+/* ── 1. Variables y base ────────────────────────────────── */
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+:root{
+  --fucsia:        #FF2E9A;
+  --fucsia-claro:  #FF7AC4;
+  --fucsia-suave:  #FFB3E0;
+  --fucsia-hondo:  #C1006E;
+  --oro:           #F3C969;
+  --rosa-papel:    #FFF0F8;
+  --papel:         #FDE9F4;
+  --tinta:         #4A0B33;
+  --oscuro:        #1A0518;
+}
+
+html{ scroll-behavior:smooth; scrollbar-width:none; -ms-overflow-style:none; }
+::-webkit-scrollbar{ display:none; }
+
+body{
+  min-height:100vh;
+  font-family:'Cormorant Garamond','Crimson Text',Georgia,serif;
+  color:var(--rosa-papel);
+  cursor:crosshair;
+  overflow-x:hidden;
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 12%, rgba(255,46,154,.24) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 45% at 82% 20%, rgba(200,60,220,.18) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 55% at 50% 95%, rgba(255,122,196,.18) 0%, transparent 62%),
+    linear-gradient(165deg,#1A0518 0%,#2E0A2A 45%,#150312 100%);
+  background-attachment:fixed;
+}
+
+
+/* ── 2. Capas de fondo ──────────────────────────────────── */
+.estrellas{
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background-image:
+    radial-gradient(1.6px 1.6px at 10% 14%, rgba(255,209,240,.9), transparent),
+    radial-gradient(1.2px 1.2px at 22% 32%, rgba(255,154,213,.7), transparent),
+    radial-gradient(1.8px 1.8px at 34% 9%,  rgba(255,255,255,.8), transparent),
+    radial-gradient(1.2px 1.2px at 47% 26%, rgba(255,209,240,.6), transparent),
+    radial-gradient(1.6px 1.6px at 58% 12%, rgba(255,255,255,.75), transparent),
+    radial-gradient(1.2px 1.2px at 69% 30%, rgba(255,154,213,.65), transparent),
+    radial-gradient(1.8px 1.8px at 80% 8%,  rgba(255,209,240,.85), transparent),
+    radial-gradient(1.2px 1.2px at 91% 22%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1.4px 1.4px at 6%  58%, rgba(255,154,213,.5), transparent),
+    radial-gradient(1.4px 1.4px at 28% 72%, rgba(255,209,240,.45), transparent),
+    radial-gradient(1.4px 1.4px at 63% 66%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.4px 1.4px at 87% 80%, rgba(255,154,213,.5), transparent);
+  background-repeat:no-repeat;
+  animation:centellear 5s ease-in-out infinite alternate;
+}
+@keyframes centellear{ from{opacity:.5} to{opacity:1} }
+
+/* corazones que caen */
+#corazones{ position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+.corazon{
+  position:absolute; top:-50px;
+  animation-name:caerCorazon, mecerCorazon;
+  animation-timing-function:linear, ease-in-out;
+  animation-iteration-count:infinite, infinite;
+  animation-direction:normal, alternate;
+  will-change:top, transform;
+}
+.corazon svg{
+  width:100%; height:auto; display:block;
+  fill:var(--c, #FF7AC4);
+  opacity:var(--op,.75);
+  filter:drop-shadow(0 0 8px rgba(255,46,154,.7));
+}
+@keyframes caerCorazon{
+  0%  {top:-50px; opacity:0; transform:rotate(var(--r0,0deg)) scale(var(--sc,1))}
+  10% {opacity:var(--op,.75)}
+  88% {opacity:var(--op,.75)}
+  100%{top:112vh; opacity:0; transform:rotate(var(--rf,0deg)) scale(var(--sc,1))}
+}
+@keyframes mecerCorazon{
+  from{ margin-left:calc(var(--sw,0px) * -1) }
+  to  { margin-left:var(--sw,0px) }
+}
+
+#destellos{ position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+.destello{
+  position:absolute; top:-40px;
+  animation-name:caer,mecer;
+  animation-timing-function:linear,ease-in-out;
+  animation-iteration-count:infinite,infinite;
+  will-change:top,transform;
+  color:var(--fucsia-claro);
+  text-shadow:0 0 10px rgba(255,46,154,.85),0 0 20px rgba(255,46,154,.45);
+}
+@keyframes caer{
+  0%  {top:-40px;opacity:0;transform:rotate(var(--r0)) scale(var(--sc))}
+  10% {opacity:var(--op)}
+  90% {opacity:var(--op)}
+  100%{top:110vh;opacity:0;transform:rotate(var(--rf)) scale(var(--sc))}
+}
+@keyframes mecer{ 0%,100%{margin-left:0} 50%{margin-left:var(--sw)} }
+
+#motas{ position:fixed; inset:0; z-index:2; pointer-events:none; overflow:hidden; }
+.mota{
+  position:absolute; width:3px; height:3px; border-radius:50%;
+  opacity:0; animation:subirMota linear infinite;
+}
+@keyframes subirMota{
+  0%{opacity:0;transform:translateY(0)} 15%{opacity:1} 85%{opacity:.5}
+  100%{opacity:0;transform:translateY(-90vh)}
+}
+
+.vineta{
+  position:fixed; inset:0; z-index:3; pointer-events:none;
+  background:radial-gradient(ellipse at center, transparent 42%, rgba(15,2,14,.78) 100%);
+}
+
+
+/* ── 3. Muñecos cayendo ─────────────────────────────────── */
+#munecos{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+
+.muneco{
+  position:absolute; top:-160px;
+  animation-name:caerMuneco, mecerMuneco;
+  animation-timing-function:linear, ease-in-out;
+  animation-iteration-count:infinite, infinite;
+  animation-direction:normal, alternate;
+  will-change:top, transform;
+}
+.muneco img{
+  display:block; width:100%; height:auto;
+  border-radius:50%;
+  border:2px solid rgba(255,122,196,.55);
+  box-shadow:0 0 18px rgba(255,46,154,.45), 0 8px 22px rgba(0,0,0,.45);
+  opacity:var(--op,.8);
+}
+@keyframes caerMuneco{
+  0%  {top:-160px; opacity:0; transform:rotate(var(--r0,0deg))}
+  8%  {opacity:var(--op,.8)}
+  92% {opacity:var(--op,.8)}
+  100%{top:118vh; opacity:0; transform:rotate(var(--rf,0deg))}
+}
+@keyframes mecerMuneco{
+  from{ margin-left:calc(var(--sw,0px) * -1) }
+  to  { margin-left:var(--sw,0px) }
+}
+
+
+/* ── 4. Sobre inicial ───────────────────────────────────── */
+#sobre-pantalla{
+  position:fixed; inset:0; z-index:60;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:34px;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 45%, rgba(255,46,154,.16) 0%, transparent 65%),
+    linear-gradient(165deg,#1A0518 0%,#2E0A2A 45%,#150312 100%);
+  transition:opacity .9s ease, visibility .9s ease;
+}
+#sobre-pantalla.abierto{
+  opacity:0; visibility:hidden;
+  transform:scale(1.25);
+}
+#sobre-pantalla{ transform:scale(1); transition:opacity .9s ease, visibility .9s ease, transform 1.1s ease; }
+
+/* halo detrás del sobre */
+#sobre-pantalla::before{
+  content:''; position:absolute;
+  width:min(560px,90vw); height:min(560px,90vw);
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,46,154,.20) 0%, transparent 65%);
+  animation:respirarHalo 4s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes respirarHalo{
+  0%,100%{ transform:scale(1); opacity:.7 }
+  50%    { transform:scale(1.12); opacity:1 }
+}
+
+.sobre{
+  position:relative;
+  width:min(320px,76vw); height:min(212px,50vw);
+  cursor:pointer;
+  perspective:1000px;
+  transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.2,.8,.3,1);
+  animation:latirSobre 2.4s ease-in-out infinite;
+}
+.sobre:hover{ transform:translateY(-10px) scale(1.04); }
+
+/* al abrirse deja de latir y se aleja un poco */
+.sobre.abriendo{
+  animation:none;
+  transform:translateY(-6px) scale(1.02);
+}
+@keyframes latirSobre{
+  0%,100%{ filter:drop-shadow(0 0 22px rgba(255,46,154,.45)) }
+  50%    { filter:drop-shadow(0 0 46px rgba(255,46,154,.85)) }
+}
+
+/* parte de atrás */
+.sobre-atras{
+  position:absolute; inset:0; border-radius:8px; z-index:1;
+  background:linear-gradient(150deg,#FF9AD5 0%,#FF4FAC 60%,#C1006E 100%);
+  box-shadow:0 20px 46px rgba(0,0,0,.55), inset 0 0 40px rgba(255,255,255,.12);
+}
+
+/* solapa que se abre */
+.sobre-solapa{
+  position:absolute; top:0; left:0; right:0; height:64%;
+  z-index:4;
+  background:linear-gradient(160deg,#FFB3E0 0%,#FF6FBE 100%);
+  clip-path:polygon(0 0, 100% 0, 50% 100%);
+  border-radius:8px 8px 0 0;
+  transform-origin:top center;
+  transform:rotateX(0deg);
+  transition:transform .8s cubic-bezier(.6,.05,.3,1);
+  box-shadow:0 4px 14px rgba(0,0,0,.22);
+}
+.sobre.abriendo .sobre-solapa{ transform:rotateX(-172deg); }
+
+/* papelito que sale */
+.carta-mini{
+  position:absolute; left:9%; right:9%; top:16%; height:74%;
+  z-index:2;
+  border-radius:5px;
+  background:linear-gradient(160deg,#FFF6FB 0%,#FDE9F4 100%);
+  box-shadow:0 8px 22px rgba(0,0,0,.35);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.9rem; color:var(--fucsia);
+  opacity:0;
+  transform:translateY(6px);
+  transition:transform .9s .35s cubic-bezier(.2,.8,.3,1), opacity .35s .35s ease;
+}
+.sobre.abriendo .carta-mini{ opacity:1; transform:translateY(-72%) scale(1.06) rotate(-1.5deg); }
+
+/* bolsillo del frente */
+.sobre-frente{
+  position:absolute; inset:0; z-index:3;
+  border-radius:8px;
+  background:linear-gradient(150deg,#FF7AC4 0%,#FF2E9A 55%,#C1006E 100%);
+  clip-path:polygon(0 22%, 50% 62%, 100% 22%, 100% 100%, 0 100%);
+}
+.sobre-frente::before{
+  content:''; position:absolute; inset:14px 12px 12px;
+  border:1px solid rgba(255,240,248,.32);
+  border-radius:4px;
+}
+
+/* sello de lacre con corazón */
+.sobre-sello{
+  position:absolute; top:56%; left:50%; transform:translate(-50%,-50%);
+  z-index:5;
+  width:62px; height:62px; border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, #FFE8F5, #FF2E9A 58%, #8E0050 100%);
+  border:2px solid rgba(255,240,248,.55);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.5rem; color:#FFF0F8;
+  box-shadow:0 0 26px rgba(255,46,154,.8), inset 0 -4px 10px rgba(0,0,0,.3);
+  transition:transform .45s ease, opacity .45s ease;
+}
+.sobre.abriendo .sobre-sello{ transform:translate(-50%,-50%) scale(.4) rotate(25deg); opacity:0; }
+
+.abrir-txt{
+  position:relative;
+  font-family:'Cinzel Decorative',cursive;
+  font-size:.78rem; letter-spacing:.36em; text-transform:uppercase;
+  color:var(--fucsia-suave);
+  text-shadow:0 0 14px rgba(255,46,154,.6);
+  animation:parpadeo 2s ease-in-out infinite alternate;
+}
+@keyframes parpadeo{ from{opacity:.4} to{opacity:1} }
+#sobre-pantalla.abriendo .abrir-txt{ opacity:0; animation:none; transition:opacity .4s ease; }
+
+
+/* ── 5. Carta ───────────────────────────────────────────── */
+.wrap{
+  position:relative; z-index:10; min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:80px 20px;
+
+  /* visible por defecto: si el JS falla, el mensaje se lee igual.
+     Mientras el sobre está cerrado, el JS pone body.esperando y la oculta. */
+  opacity:1;
+  transform:scale(1);
+  transition:opacity 1s ease, transform 1s cubic-bezier(.2,.8,.3,1);
+}
+body.esperando .wrap{ opacity:0; transform:scale(.96); }
+
+.carta{
+  position:relative;
+  width:100%; max-width:680px;
+  padding:74px 62px 58px;
+  border-radius:12px;
+  color:var(--rosa-papel);
+  background:
+    /* renglones tenues, como papel de carta */
+    repeating-linear-gradient(0deg, rgba(255,122,196,.045) 0 1px, transparent 1px 36px),
+    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255,46,154,.16) 0%, transparent 70%),
+    linear-gradient(155deg, rgba(58,8,44,.86) 0%, rgba(26,5,24,.90) 48%, rgba(52,7,40,.86) 100%);
+  border:1px solid rgba(255,122,196,.45);
+  backdrop-filter:blur(9px);
+  -webkit-backdrop-filter:blur(9px);
+  box-shadow:
+    0 0 100px rgba(255,46,154,.30),
+    0 34px 90px rgba(0,0,0,.65),
+    inset 0 1px 0 rgba(255,255,255,.10),
+    inset 0 0 80px rgba(0,0,0,.45);
+  animation:flotarCarta 6s ease-in-out infinite;
+}
+
+/* halo rosado detrás de la carta (va dentro de .wrap, no de .carta) */
+.carta-halo{
+  position:absolute;
+  inset:-8%;
+  border-radius:50%;
+  background:radial-gradient(ellipse at center, rgba(255,46,154,.26) 0%, transparent 62%);
+  filter:blur(24px);
+  pointer-events:none;
+  z-index:0;
+  animation:respirarHalo 5s ease-in-out infinite;
+}
+.carta{ z-index:1; }
+@keyframes flotarCarta{
+  0%,100%{ transform:translateY(0) }
+  50%    { transform:translateY(-8px) }
+}
+
+/* marco interior doble */
+.carta::before{
+  content:''; position:absolute; inset:16px; border-radius:6px;
+  border:1px solid rgba(255,122,196,.28);
+  box-shadow:inset 0 0 40px rgba(255,46,154,.06);
+  pointer-events:none;
+}
+/* brillo que recorre el borde */
+.carta::after{
+  content:''; position:absolute; inset:-1px; border-radius:12px; padding:1px;
+  background:linear-gradient(120deg,transparent 20%,rgba(255,46,154,.75) 50%,transparent 80%);
+  background-size:250% 250%;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor; mask-composite:exclude;
+  animation:recorrer 7s linear infinite;
+  pointer-events:none;
+}
+@keyframes recorrer{ 0%{background-position:0% 0%} 100%{background-position:200% 200%} }
+
+/* corazón colgando arriba de la carta */
+.corazon-titulo{
+  position:absolute; top:-22px; left:50%; transform:translateX(-50%);
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(circle at 34% 30%, #FFE8F5, #FF2E9A 60%, #C1006E 100%);
+  box-shadow:0 0 22px rgba(255,46,154,.8);
+  font-size:1.2rem; color:#FFF0F8;
+  animation:latir 1.6s ease-in-out infinite;
+  z-index:3;
+}
+
+/* filigranas de esquina */
+.filigrana{ position:absolute; width:62px; height:62px; pointer-events:none; opacity:.6; }
+.filigrana svg{ width:100%; height:100%; stroke:var(--fucsia-claro); fill:none; stroke-width:1.4;
+  filter:drop-shadow(0 0 5px rgba(255,46,154,.55)); }
+.filigrana.tl{ top:22px; left:22px }
+.filigrana.tr{ top:22px; right:22px; transform:scaleX(-1) }
+.filigrana.bl{ bottom:22px; left:22px; transform:scaleY(-1) }
+.filigrana.br{ bottom:22px; right:22px; transform:scale(-1,-1) }
+.filigrana .gema{ fill:var(--fucsia); stroke:none; filter:drop-shadow(0 0 5px var(--fucsia)); }
+
+/* aparición escalonada */
+.rev{
+  opacity:0; transform:translateY(22px);
+  animation:subir .95s ease forwards;
+}
+/* mientras el sobre está cerrado, las animaciones esperan */
+body.esperando .rev{ animation-play-state:paused; }
+@keyframes subir{ to{opacity:1;transform:translateY(0)} }
+
+/* ornamentos */
+.ornamento{
+  display:block; width:min(280px,72%); height:auto; margin:0 auto 18px;
+  stroke:var(--fucsia-claro); fill:none; stroke-width:1.3;
+  filter:drop-shadow(0 0 8px rgba(255,46,154,.6));
+}
+.ornamento .punto-orn{ fill:var(--fucsia); stroke:none; filter:drop-shadow(0 0 5px var(--fucsia)); }
+.ornamento.abajo{ margin:28px auto 0; transform:rotate(180deg); }
+
+/* divisor con rombo central */
+.divisor{
+  display:flex; align-items:center; justify-content:center; gap:16px;
+  width:86%; margin:26px auto;
+}
+.divisor .linea{
+  flex:1; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,122,196,.8),transparent);
+}
+.divisor .joya{
+  position:relative; width:9px; height:9px; flex:none;
+  background:var(--fucsia); transform:rotate(45deg);
+  box-shadow:0 0 14px var(--fucsia);
+}
+.divisor .joya::before,
+.divisor .joya::after{
+  content:''; position:absolute; width:5px; height:5px; background:var(--fucsia-claro);
+  box-shadow:0 0 8px rgba(255,122,196,.8);
+}
+.divisor .joya::before{ top:-11px; left:2px }
+.divisor .joya::after{ bottom:-11px; left:2px }
+
+/* corazón latiendo entre secciones */
+.corazon-div{
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  width:70%; margin:26px auto;
+}
+.corazon-div .linea{
+  flex:1; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,122,196,.65),transparent);
+}
+.corazon-div svg{
+  width:22px; height:22px; flex:none;
+  fill:var(--fucsia-claro);
+  filter:drop-shadow(0 0 12px rgba(255,46,154,.9));
+  animation:latir 1.5s ease-in-out infinite;
+}
+@keyframes latir{
+  0%,100%{ transform:scale(1) }
+  25%    { transform:scale(1.18) }
+  40%    { transform:scale(1) }
+  60%    { transform:scale(1.12) }
+}
+
+
+/* ── 6. Títulos ─────────────────────────────────────────── */
+.eyebrow{
+  text-align:center;
+  font-family:'Cinzel Decorative',cursive;
+  font-size:.7rem; letter-spacing:.44em; text-transform:uppercase;
+  color:var(--fucsia-suave);
+  margin-bottom:14px;
+  opacity:.9;
+  text-shadow:0 0 14px rgba(255,46,154,.5);
+}
+
+.titulo{
+  text-align:center;
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(3rem,9vw,4.8rem);
+  font-weight:400; line-height:1.05; letter-spacing:.01em;
+  color:transparent;
+  background:linear-gradient(160deg,#FFF0F8 0%,#FF9AD5 35%,#FF2E9A 70%,#FFD1EE 100%);
+  -webkit-background-clip:text; background-clip:text;
+  padding-bottom:.08em;
+  animation:brillarTitulo 3.4s ease-in-out infinite alternate;
+}
+@keyframes brillarTitulo{
+  from{ filter:drop-shadow(0 0 16px rgba(255,46,154,.6)) }
+  to  { filter:drop-shadow(0 0 34px rgba(255,154,213,.95)) drop-shadow(0 0 60px rgba(255,46,154,.55)) }
+}
+
+.subtitulo{
+  text-align:center;
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(1.15rem,3vw,1.5rem);
+  color:var(--fucsia-suave);
+  margin-top:6px;
+  opacity:.9;
+  text-shadow:0 0 12px rgba(255,46,154,.35);
+}
+
+.feliz-cumple{
+  text-align:center;
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(2rem,6vw,3rem);
+  font-weight:400; letter-spacing:.01em;
+  color:transparent;
+  background:linear-gradient(120deg,#FFF0F8,#FF9AD5,#FF2E9A,#FFD1EE);
+  background-size:250% 100%;
+  -webkit-background-clip:text; background-clip:text;
+  margin:34px 0 4px;
+  padding-bottom:.1em;
+  animation:desplazar 5s linear infinite;
+}
+@keyframes desplazar{ 0%{background-position:0% 50%} 100%{background-position:250% 50%} }
+
+
+/* ── 7. Cuerpo del texto ────────────────────────────────── */
+.texto{
+  font-size:clamp(1.14rem,2.5vw,1.3rem);
+  line-height:2.05;
+  color:rgba(255,240,248,.94);
+  letter-spacing:.005em;
+  font-weight:400;
+}
+.texto p{ margin-bottom:24px; }
+.texto p:last-of-type{ margin-bottom:0; }
+
+.texto .destacar{
+  color:var(--fucsia-claro);
+  font-weight:500;
+  text-shadow:0 0 14px rgba(255,46,154,.55);
+  border-bottom:1px dashed rgba(255,122,196,.5);
+  padding-bottom:1px;
+}
+
+.saludo{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(1.8rem,5vw,2.3rem);
+  color:var(--fucsia-suave);
+  margin-bottom:20px;
+  text-shadow:0 0 16px rgba(255,46,154,.5);
+}
+
+/* letra capital */
+.capital::first-letter{
+  float:left;
+  font-family:'Great Vibes',cursive;
+  font-size:4.2rem;
+  line-height:.8;
+  padding:14px 14px 0 0;
+  color:var(--fucsia-claro);
+  filter:drop-shadow(0 0 16px rgba(255,46,154,.75));
+}
+
+/* frase resaltada */
+.frase{
+  position:relative;
+  margin:34px auto;
+  padding:26px 34px;
+  max-width:94%;
+  text-align:center;
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(1.5rem,4vw,2rem);
+  line-height:1.5;
+  color:var(--fucsia-suave);
+  border-top:1px solid rgba(255,122,196,.4);
+  border-bottom:1px solid rgba(255,122,196,.4);
+  background:linear-gradient(180deg, rgba(255,46,154,.14), rgba(255,46,154,.04));
+  text-shadow:0 0 18px rgba(255,46,154,.45);
+}
+.frase::before,
+.frase::after{
+  content:'❝';
+  position:absolute;
+  font-family:Georgia,serif;
+  font-size:2rem;
+  color:var(--fucsia-claro);
+  opacity:.55;
+}
+.frase::before{ top:4px; left:10px }
+.frase::after{ content:'❞'; bottom:-4px; right:10px }
+.frase .destacar{ border:0; }
+
+
+/* ── 8. Firma y lacre ───────────────────────────────────── */
+.pie{
+  display:flex; align-items:center; justify-content:flex-end; gap:22px;
+  margin-top:32px;
+}
+.firma{
+  text-align:right;
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(1.5rem,4vw,1.95rem);
+  color:var(--fucsia-suave);
+  line-height:1.4;
+  text-shadow:0 0 16px rgba(255,46,154,.5);
+}
+.lacre{
+  position:relative;
+  flex:none; width:70px; height:70px; border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, #FF9AD5, #FF2E9A 55%, #8E0050 100%);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.6rem; color:#FFF0F8;
+  box-shadow:
+    0 0 26px rgba(255,46,154,.65),
+    inset 0 -5px 12px rgba(0,0,0,.32),
+    inset 0 4px 10px rgba(255,255,255,.22);
+  animation:respirarLacre 3.6s ease-in-out infinite;
+}
+.lacre::before{
+  content:''; position:absolute; width:56px; height:56px; border-radius:50%;
+  border:1px dashed rgba(255,240,248,.5);
+}
+@keyframes respirarLacre{
+  0%,100%{ transform:scale(1) }
+  50%    { transform:scale(1.06) }
+}
+
+.puntos{ display:flex; gap:13px; justify-content:center; margin-top:30px; }
+.punto{
+  width:9px; height:9px; border-radius:50%; background:var(--fucsia);
+  box-shadow:0 0 8px var(--fucsia),0 0 18px rgba(255,46,154,.6);
+  animation:pulso 1.6s ease-in-out infinite;
+}
+.punto:nth-child(2){ animation-delay:.3s; background:var(--fucsia-claro) }
+.punto:nth-child(3){ animation-delay:.6s }
+@keyframes pulso{ 0%,100%{transform:scale(1);opacity:.6} 50%{transform:scale(1.6);opacity:1} }
+
+
+/* fila de corazoncitos que laten en cadena */
+.hilera-corazones{
+  display:flex; justify-content:center; align-items:center; gap:12px;
+  margin:18px auto 0;
+}
+.hilera-corazones span{
+  font-size:.9rem;
+  color:var(--fucsia-claro);
+  text-shadow:0 0 12px rgba(255,46,154,.8);
+  animation:latir 1.6s ease-in-out infinite;
+}
+.hilera-corazones span:nth-child(2){ animation-delay:.2s; font-size:1.25rem; color:var(--fucsia) }
+.hilera-corazones span:nth-child(3){ animation-delay:.4s }
+.hilera-corazones span:nth-child(4){ animation-delay:.6s; font-size:1.25rem; color:var(--fucsia) }
+.hilera-corazones span:nth-child(5){ animation-delay:.8s }
+
+
+/* ── 9. Estallido al hacer click ────────────────────────── */
+.burst{ position:fixed; pointer-events:none; z-index:999; }
+.bp{
+  position:absolute; transform:translate(-50%,-50%);
+  animation:volar .9s ease-out forwards;
+  color:var(--fucsia-claro); text-shadow:0 0 8px rgba(255,46,154,.85);
+}
+@keyframes volar{
+  0%  {opacity:1;transform:translate(-50%,-50%) translate(0,0) scale(.5) rotate(0deg)}
+  100%{opacity:0;transform:translate(-50%,-50%) translate(var(--tx),var(--ty)) scale(1.2) rotate(180deg)}
+}
+
+
+/* ── 10. Botón de volver ────────────────────────────────── */
+.fila-volver{
+  display:flex; justify-content:center;
+  margin-top:36px;
+}
+.btn-volver{
+  display:inline-flex; align-items:center; gap:12px;
+  padding:15px 36px;
+  font-family:'Cinzel Decorative',cursive;
+  font-size:.72rem; font-weight:700; letter-spacing:.2em;
+  text-transform:uppercase; text-decoration:none;
+  color:#2A0021;
+  background:linear-gradient(135deg,#FFF0F8 0%,#FF9AD5 45%,#FF2E9A 100%);
+  border-radius:30px;
+  box-shadow:0 0 24px rgba(255,46,154,.45), 0 8px 20px rgba(0,0,0,.3);
+  transition:transform .25s, filter .25s, box-shadow .25s;
+}
+.btn-volver:hover{
+  transform:translateY(-3px) scale(1.03);
+  filter:brightness(1.08);
+  box-shadow:0 0 38px rgba(255,46,154,.7), 0 10px 26px rgba(0,0,0,.35);
+}
+
+
+/* ── 11. Responsive ─────────────────────────────────────── */
+@media (max-width:640px){
+  .carta{ padding:52px 24px 40px }
+  .carta::before{ inset:11px }
+  .wrap{ padding:54px 14px }
+  .filigrana{ width:42px; height:42px }
+  .filigrana.tl,.filigrana.tr{ top:15px }
+  .filigrana.bl,.filigrana.br{ bottom:15px }
+  .filigrana.tl,.filigrana.bl{ left:15px }
+  .filigrana.tr,.filigrana.br{ right:15px }
+  .texto{ line-height:1.9; font-size:1.08rem }
+  .capital::first-letter{ font-size:3.4rem; padding:10px 10px 0 0 }
+  .frase{ padding:20px 16px; max-width:100% }
+  .pie{ flex-direction:column; align-items:center; gap:16px }
+  .firma{ text-align:center }
+  .destello{ --sw:0px }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .muneco, .destello, .mota, .corazon{ animation:none; display:none; }
+  .carta{ animation:none }
+}
