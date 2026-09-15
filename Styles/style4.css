@@ -1,0 +1,256 @@
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --accent: #FF2EC4;
+  --accent-soft: #ff9ce8;
+  --bg-dark: #04040a;
+  --bg-mid: #150a24;
+  --text-light: rgba(220,245,240,0.92);
+}
+
+html, body { height: 100%; overflow: hidden; }
+body {
+  min-height: 100vh;
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--bg-dark);
+  overflow-x: hidden;
+  cursor: crosshair;
+  color: var(--text-light);
+}
+
+/* ── Fondo: un solo color en movimiento (índigo casi negro, misterioso) ── */
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0;
+  background: linear-gradient(135deg, #04040a 0%, #150a24 50%, #04040a 100%);
+  background-size: 200% 200%;
+  animation: bgMove 20s ease-in-out infinite;
+}
+@keyframes bgMove {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+.bg-layer::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 25%, rgba(255,46,196,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 15% 85%, rgba(0,255,200,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 85% 80%, rgba(255,46,196,0.07) 0%, transparent 60%);
+  animation: glowMove 14s ease-in-out infinite alternate;
+}
+@keyframes glowMove {
+  from { opacity: .6; }
+  to   { opacity: 1; }
+}
+
+.scanlines {
+  position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 4px);
+}
+
+.particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.particle { position: absolute; border-radius: 50%; opacity: 0; animation: float-up linear infinite; }
+@keyframes float-up {
+  0%   { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-10vh) scale(1) rotate(180deg); opacity: 0; }
+}
+
+/* ── Imágenes cayendo ── */
+.grapes { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.grape {
+  position: absolute; top: -60px;
+  animation: grapeFall linear infinite;
+  filter: drop-shadow(0 0 6px rgba(180,255,140,0.4));
+}
+@keyframes grapeFall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  8%   { opacity: .85; }
+  92%  { opacity: .85; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+.grape-img {
+  filter: drop-shadow(0 0 10px rgba(255,46,196,0.55));
+}
+.grape-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 50%;
+  border: 2px solid rgba(255,46,196,0.6);
+  box-shadow: 0 0 14px rgba(255,46,196,0.45);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes tG {
+  from { filter: drop-shadow(0 0 10px rgba(255,46,196,.55)); }
+  to   { filter: drop-shadow(0 0 22px rgba(255,255,255,.85)) drop-shadow(0 0 40px rgba(0,0,0,.6)); }
+}
+
+@keyframes shim { 0%{transform:translateX(-100%)} 100%{transform:translateX(200%)} }
+
+/* ══════════════════════════════════════
+   GATE (tarjeta central)
+══════════════════════════════════════ */
+.gate-wrap {
+  position: relative; z-index: 10;
+  height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+
+.gate-card {
+  position: relative;
+  text-align: center;
+  max-width: 560px; width: 100%;
+  padding: 50px 40px;
+  background: linear-gradient(145deg, rgba(2,2,6,0.85) 0%, rgba(12,5,20,0.78) 50%, rgba(2,2,6,0.85) 100%);
+  border: 1px solid rgba(255,46,196,0.45);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 0 40px rgba(255,46,196,0.12), inset 0 0 40px rgba(0,0,0,0.5);
+  animation: fadeUp 1s .2s both;
+}
+.gate-card .nbw-tl, .gate-card .nbw-tr, .gate-card .nbw-bl, .gate-card .nbw-br {
+  content: ''; position: absolute; width: 30px; height: 30px;
+  border-color: rgba(255,46,196,0.55); border-style: solid; opacity: .9;
+}
+.gate-card .nbw-tl { top:10px; left:10px; border-width: 2px 0 0 2px; }
+.gate-card .nbw-tr { top:10px; right:10px; border-width: 2px 2px 0 0; }
+.gate-card .nbw-bl { bottom:10px; left:10px; border-width: 0 0 2px 2px; }
+.gate-card .nbw-br { bottom:10px; right:10px; border-width: 0 2px 2px 0; }
+
+.gate-label {
+  font-family: 'Press Start 2P', cursive;
+  font-size: clamp(.55rem,1.4vw,.7rem); letter-spacing:.25em;
+  color: #c084fc; text-transform:uppercase;
+  display:block; margin-bottom:18px;
+  text-shadow:0 0 12px rgba(192,132,252,.5);
+}
+
+.gate-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: clamp(1.3rem,4.2vw,2.2rem); font-weight:400;
+  color: transparent;
+  background: linear-gradient(160deg, #aef8ff 0%, #ff9ce8 35%, #FF2EC4 70%, #6e0060 100%);
+  -webkit-background-clip:text; background-clip:text;
+  line-height:1.6; letter-spacing:.06em; display:block;
+  margin-bottom: 26px;
+  animation: tG 3s ease-in-out infinite alternate;
+}
+
+.gate-msg {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: clamp(1rem,2.4vw,1.15rem);
+  color: rgba(220,235,235,.8);
+  line-height: 1.8;
+  margin-bottom: 36px;
+}
+.gate-msg strong {
+  color: #FF2EC4;
+  text-shadow: 0 0 10px rgba(255,46,196,0.5);
+}
+
+/* ══════════════════════════════════════
+   BOTONES — "Ver Video" y "Entrar" comparten TODO
+   (.btn-wrap y .btn quedan como alias por si el HTML viejo los usa)
+══════════════════════════════════════ */
+.video-btn-wrap,
+.btn-wrap { display: inline-block; margin-bottom: 36px; }
+
+.video-btn,
+.btn,
+.pass-submit {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: 14px;
+  padding: 16px 50px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem; letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #04060a;
+  background: linear-gradient(135deg, #14B8A6 0%, #ff6fe0 35%, #FF2EC4 70%, #b3009e 100%);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 0 26px rgba(255,46,196,0.3), 0 6px 18px rgba(0,0,0,0.5);
+  transition: transform 0.25s, filter 0.25s;
+}
+
+/* brillo que cruza el botón */
+.video-btn::after,
+.btn::after,
+.pass-submit::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: shim 2.5s 1s infinite;
+}
+
+.video-btn:hover,
+.btn:hover,
+.pass-submit:hover { transform: translateY(-3px) scale(1.03); filter: brightness(1.1); }
+
+/* ── Separador ── */
+.gate-divider {
+  width: 70%; height: 1px;
+  margin: 0 auto 32px;
+  background: linear-gradient(90deg, transparent, rgba(20,184,166,0.4), rgba(255,46,196,0.45), transparent);
+}
+
+/* ── Formulario de contraseña ── */
+.pass-form {
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.pass-label {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem; letter-spacing: 0.2em;
+  color: #14B8A6; text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(20,184,166,0.45);
+}
+.pass-input {
+  width: 100%; max-width: 320px;
+  padding: 14px 20px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1rem; letter-spacing: 0.3em; text-align: center;
+  color: #fff;
+  background: rgba(2,2,6,0.8);
+  border: 1px solid rgba(255,46,196,0.45);
+  border-radius: 6px;
+  outline: none;
+  box-shadow: inset 0 0 15px rgba(255,46,196,0.12);
+  transition: box-shadow 0.25s, border-color 0.25s;
+}
+.pass-input:focus {
+  border-color: #14B8A6;
+  box-shadow: 0 0 18px rgba(20,184,166,0.4), inset 0 0 15px rgba(20,184,166,0.15);
+}
+
+/* ── Efecto de click: energía + mapaches ── */
+.click-fx {
+  position: fixed; z-index: 9999; pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: fx-pop 0.8s ease-out forwards;
+}
+@keyframes fx-pop {
+  0%   { opacity: 1; transform: translate(-50%, -50%) translate(0,0) scale(0.5) rotate(0deg); }
+  60%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(1.2) rotate(180deg); }
+}
+
+/* ── Emojis dentro de textos con fuente pixel ── */
+.emo {
+  display: inline-block;
+  font-size: 1.7em;          /* relativo al texto que lo rodea */
+  line-height: 1;
+  vertical-align: -0.25em;   /* lo baja para alinearlo con las letras */
+  font-family: 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
+}

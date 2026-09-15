@@ -1,0 +1,550 @@
+/* ==========================================================================
+   style11.css — Vista estilo YouTube (página del video)
+
+   1. Variables y base
+   2. Cabecera (barra superior)
+   3. Layout principal
+   4. Reproductor + controles
+   5. Info del video (título, canal, botones)
+   6. Barra lateral de recomendados
+   7. Botón de volver
+   8. Responsive
+   ========================================================================== */
+
+
+/* ── 1. Variables y base ────────────────────────────────── */
+:root{
+  --bg:        #0f0f0f;
+  --bg-2:      #212121;
+  --chip:      #272727;
+  --chip-hov:  #3f3f3f;
+  --borde:     #303030;
+  --txt:       #f1f1f1;
+  --txt-2:     #aaaaaa;
+  --rojo:      #ff0000;
+  --azul:      #3ea6ff;
+  --header-h:  56px;
+}
+
+*{ margin: 0; padding: 0; box-sizing: border-box; }
+
+body{
+  background: var(--bg);
+  color: var(--txt);
+  font-family: "Roboto", "Arial", sans-serif;
+  font-size: 14px;
+  padding-top: var(--header-h);
+  -webkit-font-smoothing: antialiased;
+}
+
+img{ display: block; }
+button{ font-family: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+a{ color: inherit; text-decoration: none; }
+
+.icono{ width: 24px; height: 24px; fill: currentColor; flex: none; }
+
+
+/* ── 2. Cabecera ────────────────────────────────────────── */
+.yt-header{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  background: var(--bg);
+}
+
+.yt-header .izq,
+.yt-header .der{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.yt-header .der{ margin-left: auto; }
+
+.btn-icono{
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--txt);
+  transition: background .15s;
+}
+.btn-icono:hover{ background: var(--chip); }
+
+/* logo */
+.logo{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 6px;
+}
+/* logo en imagen: el png es cuadrado con el botón centrado,
+   contain para que no se deforme ni se recorte */
+.logo .logo-img{
+  width: 34px;
+  height: 26px;
+  object-fit: contain;
+  flex: none;
+}
+.logo .texto{
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -1.2px;
+}
+.logo .pais{
+  font-size: 10px;
+  color: var(--txt-2);
+  align-self: flex-start;
+  margin-left: -2px;
+}
+
+/* buscador */
+.buscador{
+  flex: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.caja-busqueda{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  border: 1px solid var(--borde);
+  border-radius: 40px;
+  background: #121212;
+  overflow: hidden;
+}
+.caja-busqueda:focus-within{ border-color: var(--azul); }
+.caja-busqueda input{
+  flex: 1;
+  height: 100%;
+  padding: 0 16px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--txt);
+  font-size: 16px;
+}
+.caja-busqueda input::placeholder{ color: #888; }
+.caja-busqueda .limpiar,
+.caja-busqueda .lupa{
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: var(--txt);
+}
+.caja-busqueda .limpiar{ width: 40px; }
+.caja-busqueda .lupa{
+  width: 64px;
+  background: var(--chip);
+  border-left: 1px solid var(--borde);
+}
+.caja-busqueda .lupa:hover{ background: var(--chip-hov); }
+.mic{
+  width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--chip);
+  color: var(--txt);
+}
+.mic:hover{ background: var(--chip-hov); }
+
+/* botón crear + campana + avatar */
+.btn-crear{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  background: var(--chip);
+  font-size: 14px;
+  font-weight: 500;
+}
+.btn-crear:hover{ background: var(--chip-hov); }
+
+.campana{ position: relative; }
+.campana .globo{
+  position: absolute;
+  top: 4px; right: 2px;
+  min-width: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #cc0000;
+  color: #fff;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+}
+.avatar-header{
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+/* ── 3. Layout principal ────────────────────────────────── */
+.contenido{
+  max-width: 1754px;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 402px;
+  gap: 24px;
+}
+
+
+/* ── 4. Reproductor ─────────────────────────────────────── */
+.reproductor{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.reproductor video{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+/* capa que se pulsa para pausar/reanudar */
+.reproductor .capa-click{ position: absolute; inset: 0; }
+
+/* botón grande de play cuando está pausado */
+.play-grande{
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 72px; height: 72px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: rgba(0,0,0,.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.reproductor.pausado .play-grande{ opacity: 1; }
+.play-grande::after{
+  content: "";
+  width: 0; height: 0;
+  border-left: 22px solid #fff;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+  margin-left: 6px;
+}
+
+/* barra de controles */
+.controles{
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 0 12px 8px;
+  background: linear-gradient(0deg, rgba(0,0,0,.75), transparent);
+  opacity: 0;
+  transition: opacity .2s;
+}
+.reproductor:hover .controles,
+.reproductor.pausado .controles{ opacity: 1; }
+
+.barra-progreso{
+  height: 14px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.barra-progreso .riel{
+  position: relative;
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,.3);
+  border-radius: 2px;
+  transition: height .1s;
+}
+.barra-progreso:hover .riel{ height: 5px; }
+.barra-progreso .avance{
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--rojo);
+  border-radius: 2px;
+}
+.barra-progreso .bolita{
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 13px; height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  border-radius: 50%;
+  background: var(--rojo);
+  transform: scale(0);
+  transition: transform .1s;
+}
+.barra-progreso:hover .bolita{ transform: scale(1); }
+
+.fila-controles{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  color: #fff;
+}
+.fila-controles .der{ margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.ctrl{
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  opacity: .92;
+}
+.ctrl:hover{ opacity: 1; background: rgba(255,255,255,.12); }
+.tiempo{
+  font-size: 13px;
+  color: #fff;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+.volumen{
+  width: 0;
+  opacity: 0;
+  transition: width .2s, opacity .2s;
+  accent-color: #fff;
+}
+.grupo-volumen:hover .volumen,
+.volumen:focus{ width: 70px; opacity: 1; }
+.grupo-volumen{ display: flex; align-items: center; gap: 4px; }
+
+
+/* ── 5. Info del video ──────────────────────────────────── */
+.titulo-video{
+  margin: 12px 0 12px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.fila-canal{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.canal{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.canal img{
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.canal .nombre{ font-size: 16px; font-weight: 500; }
+.canal .subs{ font-size: 12px; color: var(--txt-2); }
+
+.acciones{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+.pastilla{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 18px;
+  background: var(--chip);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.pastilla:hover{ background: var(--chip-hov); }
+.pastilla .icono{ width: 22px; height: 22px; }
+
+/* like / dislike pegados */
+.grupo-like{
+  display: flex;
+  align-items: center;
+  background: var(--chip);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.grupo-like button{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.grupo-like button:hover{ background: var(--chip-hov); }
+.grupo-like .separador{
+  width: 1px;
+  height: 24px;
+  background: #4d4d4d;
+}
+.grupo-like .activo{ color: var(--azul); }
+
+.btn-suscrito{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px 0 14px;
+  border-radius: 18px;
+  background: var(--chip);
+  font-size: 14px;
+  font-weight: 500;
+}
+.btn-suscrito:hover{ background: var(--chip-hov); }
+
+/* descripción */
+.descripcion{
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--bg-2);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.descripcion .datos{ font-weight: 600; margin-bottom: 6px; }
+
+
+/* ── 6. Recomendados ────────────────────────────────────── */
+.chips{
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.chips::-webkit-scrollbar{ display: none; }
+.chip{
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: var(--chip);
+  font-size: 14px;
+  white-space: nowrap;
+}
+.chip.activo{ background: #f1f1f1; color: #0f0f0f; }
+
+.lista-recomendados{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.recomendado{
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  gap: 8px;
+  padding: 4px;
+  border-radius: 10px;
+}
+.recomendado:hover{ background: #1a1a1a; }
+.recomendado .miniatura{
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #272727;
+}
+.recomendado .miniatura img{
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.recomendado .duracion{
+  position: absolute;
+  right: 4px; bottom: 4px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: rgba(0,0,0,.8);
+  font-size: 12px;
+  font-weight: 500;
+}
+.recomendado .titulo{
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.recomendado .canal-mini,
+.recomendado .meta{
+  font-size: 12px;
+  color: var(--txt-2);
+  margin-top: 4px;
+}
+.etiqueta-nuevo{
+  display: inline-block;
+  margin-top: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--chip);
+  font-size: 12px;
+  color: var(--txt);
+}
+
+
+/* ── 7. Botón de volver ─────────────────────────────────── */
+.fila-volver{
+  grid-column: 1 / -1;          /* ocupa las dos columnas del grid */
+  display: flex;
+  justify-content: center;
+  padding: 32px 0 48px;
+}
+.btn-volver{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 28px;
+  border-radius: 22px;
+  background: var(--rojo);
+  color: #fff;
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  transition: background .2s, transform .2s, box-shadow .2s;
+}
+.btn-volver:hover{
+  background: #cc0000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(255,0,0,.35);
+}
+.btn-volver .icono{ width: 22px; height: 22px; }
+
+
+/* ── 8. Responsive ──────────────────────────────────────── */
+@media (max-width: 1100px){
+  .contenido{ grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 900px){
+  .buscador{ display: none; }
+  .contenido{ padding: 12px; }
+  .reproductor{ border-radius: 0; margin: -12px -12px 0; width: auto; }
+}
+@media (max-width: 700px){
+  .btn-crear span{ display: none; }
+  .btn-crear{ padding: 0 10px; }
+  .acciones{ width: 100%; margin-left: 0; overflow-x: auto; scrollbar-width: none; }
+  .acciones::-webkit-scrollbar{ display: none; }
+  .recomendado{ grid-template-columns: 160px 1fr; }
+}

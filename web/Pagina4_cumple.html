@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mensaje Especial - Josuyelin</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+  <link rel="stylesheet" href="/Styles/style4.css">
+
+  <style>
+    /* ═══════════════════════════════════════════
+       STICKER DE MAPACHE (clave mala)
+    ═══════════════════════════════════════════ */
+    .raccoon-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .raccoon-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .raccoon-sticker {
+      font-size: clamp(6rem, 25vw, 14rem);
+      line-height: 1;
+      filter: drop-shadow(0 0 25px #FF2EC4) drop-shadow(0 0 45px #d600a3);
+      animation: raccoon-pop 0.5s cubic-bezier(.34,1.56,.64,1) both,
+                 raccoon-float 2.4s ease-in-out infinite 0.5s;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .raccoon-text {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(1rem, 3.5vw, 1.8rem);
+      color: #ff9ce8;
+      text-shadow: 0 0 10px #FF2EC4, 0 0 20px #d600a3;
+      text-align: center;
+      padding: 0 1rem;
+      animation: raccoon-pop 0.5s ease 0.1s both;
+    }
+
+    .raccoon-hint {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem;
+      color: #d1a3d9;
+      opacity: 0.8;
+    }
+
+    @keyframes raccoon-pop {
+      0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    @keyframes raccoon-float {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-14px) rotate(3deg); }
+    }
+
+    /* ═══════════════════════════════════════════
+       OVERLAY DE CLAVE CORRECTA (mensaje del humo)
+    ═══════════════════════════════════════════ */
+    .smoke-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(10, 0, 15, 0.82);
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      overflow: hidden;
+    }
+
+    .smoke-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .smoke-icon {
+      font-size: clamp(5rem, 20vw, 10rem);
+      line-height: 1;
+      filter: drop-shadow(0 0 25px #c084fc) drop-shadow(0 0 45px #7c3aed);
+      animation: raccoon-pop 0.5s cubic-bezier(.34,1.56,.64,1) both,
+                 raccoon-float 2.6s ease-in-out infinite 0.5s;
+    }
+
+    .smoke-text {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(0.85rem, 3vw, 1.4rem);
+      color: #d8b4fe;
+      text-shadow: 0 0 10px #c084fc, 0 0 20px #7c3aed;
+      text-align: center;
+      max-width: 34rem;
+      padding: 0 1rem;
+      line-height: 1.7;
+      animation: raccoon-pop 0.5s ease 0.1s both;
+    }
+
+    .smoke-hint {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem;
+      color: #d1a3d9;
+      opacity: 0.8;
+    }
+
+    /* nubecitas de humo flotando de fondo dentro del overlay */
+    .smoke-puff {
+      position: absolute;
+      bottom: -10%;
+      font-size: 2.5rem;
+      opacity: 0;
+      animation: smoke-rise linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes smoke-rise {
+      0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+      15%  { opacity: 0.5; }
+      85%  { opacity: 0.35; }
+      100% { transform: translateY(-110vh) scale(1.3); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════ CAPAS DE FONDO ══════════════ -->
+  <div class="bg-layer"></div>
+  <div class="scanlines"></div>
+  <div class="particles" id="particles"></div>
+  <div class="grapes" id="grapes"></div>
+
+  <!-- ══════════════ STICKER MAPACHE (clave mala) ══════════════ -->
+  <div class="raccoon-overlay" id="raccoonOverlay">
+    <div class="raccoon-sticker" id="raccoonSticker">🍕🦝🍕</div>
+    <div class="raccoon-text">Por ser chismosa te robamos la pizza</div>
+  </div>
+
+  <!-- ══════════════ OVERLAY CLAVE BUENA (mensaje del humo) ══════════════ -->
+  <div class="smoke-overlay" id="smokeOverlay">
+    <div class="smoke-puffs" id="smokePuffs"></div>
+    <div class="smoke-icon">💨</div>
+    <div class="smoke-text">Felicidades por poner la contraseña bien,<br>pero existe otra más secreta<br>que se esconde en el humo…</div>
+  </div>
+
+  <!-- ══════════════ TARJETA ══════════════ -->
+  <div class="gate-wrap">
+    <div class="gate-card">
+
+      <!-- esquinas decorativas -->
+      <div class="nbw-tl"></div>
+      <div class="nbw-tr"></div>
+      <div class="nbw-bl"></div>
+      <div class="nbw-br"></div>
+
+      <span class="gate-label">
+        <span class="emo">🦝</span>Acceso Restringido<span class="emo">🦝</span>
+      </span>
+
+      <span class="gate-title">Mensaje<br>Especial</span>
+
+      <p class="gate-msg">
+Estimada señorita, se le informa que para acceder a este contenido clasificado es estrictamente obligatorio visualizar el video adjunto en su totalidad. Una vez cumplido este protocolo, utilice la clave de máxima seguridad asignada: 1234567 (favor de no compartirla con la NASA).
+
+Agradecemos su cooperación
+      </p>
+
+      <!-- botón: ver el video (misma pinta que el de Entrar) -->
+      <div class="video-btn-wrap">
+        <a class="video-btn" href="/web/Pagina11_cumple.html">
+          <span class="emo">🦝</span>Ver Video<span class="emo">🦝</span>
+        </a>
+      </div>
+
+      <div class="gate-divider"></div>
+
+      <!-- formulario: contraseña -->
+      <form class="pass-form" id="passForm">
+        <label class="pass-label" for="passInput">Ingresa la contraseña</label>
+
+        <input type="password" id="passInput" class="pass-input"
+               placeholder="••••••••" autocomplete="off" required>
+
+        <button type="submit" class="pass-submit">
+          <span class="emo">🦝</span>Entrar<span class="emo">🦝</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <audio id="sonido" preload="auto" loop>
+    <source src="/Musica/celos.mp3" type="audio/mpeg">
+  </audio>
+
+
+  <script>
+  /* ═══════════════════════════════════════════
+     1. CONFIGURACIÓN
+     (lo único que tocas normalmente)
+  ═══════════════════════════════════════════ */
+
+  /* contraseña → vista a la que lleva */
+  var CLAVES = {
+    'tanuki': '/web/tanuki.html',
+    '15/10/23':    '/web/Pagina6_cumple.html',
+    'live':   '/web/Pagina12_cumple.html'  
+  };
+  var PAGINA_ERROR = '/web/Pagina5_cumple.html'; 
+
+  /* imágenes que caen de fondo */
+  var IMAGENES = [
+    '/fotos de vrchat/Vivian.png',
+    '/fotos de vrchat/burnicee.png',
+    '/fotos de vrchat/lucy.png'
+  ];
+
+  var COLORES_PARTICULA = ['#FF2EC4', '#ff6fe0', '#ff9ce8', '#d600a3', '#c084fc'];
+  var EMOJIS_CLICK      = ['⚡', '🦝'];
+
+  var CANT_PARTICULAS = 45;
+  var CANT_IMAGENES   = 12;
+  var VOLUMEN_MUSICA  = 0.3;
+
+  /* claves usadas para detectar por qué volvió a esta página */
+  var CLAVE_MALA  = 'josuyelin_clave_mala';
+  var CLAVE_BUENA = 'josuyelin_clave_buena';
+
+  /* emojis de humo que suben de fondo en el overlay de clave buena */
+  var EMOJIS_HUMO = ['💨', '☁️'];
+  var CANT_HUMO   = 14;
+
+
+  /* ═══════════════════════════════════════════
+     2. UTILIDADES
+  ═══════════════════════════════════════════ */
+  function azar(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
+  function alAzar(lista) {
+    return lista[Math.floor(Math.random() * lista.length)];
+  }
+
+  /* quita espacios, tildes y mayúsculas */
+  function normalizar(texto) {
+    return texto.trim().toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+
+  /* ═══════════════════════════════════════════
+     3. PARTÍCULAS QUE SUBEN
+  ═══════════════════════════════════════════ */
+  function crearParticulas() {
+    var capa = document.getElementById('particles');
+    if (!capa) return;
+
+    for (var i = 0; i < CANT_PARTICULAS; i++) {
+      var p       = document.createElement('div');
+      var color   = alAzar(COLORES_PARTICULA);
+      var tam     = azar(2, 6);
+      var cuadrada = Math.random() > 0.6;
+
+      p.className = 'particle';
+      p.style.cssText =
+        'left:' + azar(0, 100) + '%;' +
+        'width:' + tam + 'px;height:' + tam + 'px;' +
+        'background:' + color + ';box-shadow:0 0 5px ' + color + ';' +
+        (cuadrada ? 'border-radius:0;transform:rotate(45deg);' : '') +
+        'animation-duration:' + azar(7, 16) + 's;' +
+        'animation-delay:' + azar(0, 7) + 's;';
+
+      capa.appendChild(p);
+    }
+  }
+
+
+  /* ═══════════════════════════════════════════
+     4. IMÁGENES CAYENDO
+  ═══════════════════════════════════════════ */
+  function crearImagenesCayendo() {
+    var capa = document.getElementById('grapes');
+    if (!capa) return;
+
+    for (var i = 0; i < CANT_IMAGENES; i++) {
+      var wrap = document.createElement('div');
+      wrap.className = 'grape grape-img';
+
+      var img = document.createElement('img');
+      img.src     = IMAGENES[i % IMAGENES.length];   // alterna entre las imágenes
+      img.alt     = '';
+      img.loading = 'lazy';
+
+      // se reparten a los costados, dejando libre el centro
+      var lado = Math.random() < 0.5 ? azar(0, 20) : azar(80, 100);
+
+      wrap.style.left              = lado + '%';
+      wrap.style.width             = azar(45, 100) + 'px';
+      wrap.style.animationDuration = azar(11, 21) + 's';
+      wrap.style.animationDelay    = azar(-22, 0) + 's';
+
+      wrap.appendChild(img);
+      capa.appendChild(wrap);
+    }
+  }
+
+
+  /* ═══════════════════════════════════════════
+     5. ESTALLIDO AL HACER CLICK
+  ═══════════════════════════════════════════ */
+  function estallido(x, y) {
+    for (var i = 0; i < 8; i++) {
+      var p     = document.createElement('div');
+      var ang   = (i / 8) * 360 + azar(-15, 15);
+      var dist  = azar(45, 110);
+      var rad   = ang * Math.PI / 180;
+
+      p.className   = 'click-fx';
+      p.textContent = alAzar(EMOJIS_CLICK);
+      p.style.left  = x + 'px';
+      p.style.top   = y + 'px';
+      p.style.fontSize = azar(15, 30) + 'px';
+      p.style.setProperty('--dx', Math.cos(rad) * dist + 'px');
+      p.style.setProperty('--dy', Math.sin(rad) * dist + 'px');
+
+      document.body.appendChild(p);
+
+      (function (el) {
+        setTimeout(function () { el.remove(); }, 800);
+      })(p);
+    }
+  }
+
+  function activarClicks() {
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('a, button')) return;   // no estallar sobre botones
+      estallido(e.clientX, e.clientY);
+    });
+  }
+
+
+  /* ═══════════════════════════════════════════
+     6. CONTRASEÑA
+  ═══════════════════════════════════════════ */
+  function activarFormulario() {
+    var form  = document.getElementById('passForm');
+    var campo = document.getElementById('passInput');
+    if (!form || !campo) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var clave = normalizar(campo.value);
+      var destino = CLAVES[clave];
+
+      if (destino) {
+        // clave correcta: marcamos para que al volver salga el mensaje del humo
+        localStorage.setItem(CLAVE_BUENA, '1');
+      } else {
+        // clave incorrecta: marcamos para que al volver salga el mapache
+        localStorage.setItem(CLAVE_MALA, '1');
+        destino = PAGINA_ERROR;
+      }
+
+      window.location.href = destino;
+    });
+  }
+
+
+  /* ═══════════════════════════════════════════
+     7. MÚSICA DE FONDO
+  ═══════════════════════════════════════════ */
+  function activarMusica() {
+    var sonido = document.getElementById('sonido');
+    if (!sonido) return;
+
+    sonido.volume = VOLUMEN_MUSICA;
+    var yaSonado = false;
+
+    function reproducir() {
+      if (yaSonado) return;
+      sonido.play().then(function () { yaSonado = true; }).catch(function () {});
+    }
+
+    // intento inmediato al cargar
+    window.addEventListener('load', reproducir);
+
+    // respaldo: el primer gesto del usuario lo dispara
+    ['click', 'keydown', 'scroll', 'touchstart', 'mousemove'].forEach(function (evt) {
+      document.addEventListener(evt, reproducir, { once: true });
+    });
+  }
+
+
+  /* ═══════════════════════════════════════════
+     8. OVERLAYS AL VOLVER (clave mala / clave buena)
+  ═══════════════════════════════════════════ */
+  function activarStickerMapache() {
+    var overlay = document.getElementById('raccoonOverlay');
+    if (!overlay) return;
+
+    function mostrar() {
+      overlay.classList.add('show');
+    }
+
+    function ocultar() {
+      overlay.classList.remove('show');
+      localStorage.removeItem(CLAVE_MALA);
+    }
+
+    function revisar() {
+      if (localStorage.getItem(CLAVE_MALA) === '1') mostrar();
+    }
+
+    revisar();
+    window.addEventListener('pageshow', revisar);
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') revisar();
+    });
+
+    overlay.addEventListener('click', ocultar);
+  }
+
+  function crearHumo() {
+    var capa = document.getElementById('smokePuffs');
+    if (!capa) return;
+
+    for (var i = 0; i < CANT_HUMO; i++) {
+      var p = document.createElement('div');
+      p.className = 'smoke-puff';
+      p.textContent = alAzar(EMOJIS_HUMO);
+      p.style.left = azar(0, 100) + '%';
+      p.style.fontSize = azar(1.6, 3.4) + 'rem';
+      p.style.animationDuration = azar(9, 18) + 's';
+      p.style.animationDelay = azar(0, 12) + 's';
+      capa.appendChild(p);
+    }
+  }
+
+  function activarOverlayHumo() {
+    var overlay = document.getElementById('smokeOverlay');
+    if (!overlay) return;
+
+    crearHumo();
+
+    function mostrar() {
+      overlay.classList.add('show');
+    }
+
+    function ocultar() {
+      overlay.classList.remove('show');
+      localStorage.removeItem(CLAVE_BUENA);
+    }
+
+    function revisar() {
+      if (localStorage.getItem(CLAVE_BUENA) === '1') mostrar();
+    }
+
+    revisar();
+    window.addEventListener('pageshow', revisar);
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'visible') revisar();
+    });
+
+    overlay.addEventListener('click', ocultar);
+  }
+
+
+  /* ═══════════════════════════════════════════
+     9. ARRANQUE
+  ═══════════════════════════════════════════ */
+  crearParticulas();
+  crearImagenesCayendo();
+  activarClicks();
+  activarFormulario();
+  activarMusica();
+  activarStickerMapache();
+  activarOverlayHumo();
+  </script>
+
+</body>
+
+</html>

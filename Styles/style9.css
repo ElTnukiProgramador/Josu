@@ -1,0 +1,487 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+::-webkit-scrollbar { display: none; }
+
+body {
+    font-family: 'Crimson Text', 'Georgia', serif;
+    color: #fff0f6;
+    cursor: crosshair;
+    overflow-x: hidden;
+    transition: background 0.9s ease;
+}
+
+/* ===== CAPAS DE EFECTOS (fijas, sobre toda la página) ===== */
+#petals {
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    overflow: hidden;
+}
+#sparks {
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* ===== PERSONAJES CAYENDO ===== */
+#personajes {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    overflow: hidden;
+}
+.personaje {
+    position: absolute;
+    top: -140px;
+    animation-name: caerPersonaje;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    filter: drop-shadow(0 0 12px rgba(255, 63, 164, 0.5));
+}
+.personaje img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 63, 164, 0.55);
+    box-shadow: 0 0 16px rgba(255, 63, 164, 0.45);
+}
+@keyframes caerPersonaje {
+    0%   { transform: translateY(0) rotate(0deg);    opacity: 0; }
+    8%   { opacity: 0.9; }
+    92%  { opacity: 0.9; }
+    100% { transform: translateY(118vh) rotate(360deg); opacity: 0; }
+}
+.burst {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+}
+.bp {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    animation: bFly 0.8s ease-out forwards;
+}
+
+/* pétalo individual */
+.petalo {
+    position: absolute;
+    top: -80px;
+    width: 12px;
+    height: 12px;
+    border-radius: 0 100% 0 100%;
+    opacity: 0;
+    animation-name: pCaer;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+/* chispa que sube */
+.chispa {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #ffd1f0;
+    box-shadow: 0 0 6px #ff9ad5, 0 0 12px rgba(255, 63, 164, 0.6);
+    opacity: 0;
+    animation-name: floatUp;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+}
+
+@keyframes pCaer {
+    0%   { top: -80px; opacity: 0; transform: translateX(0) rotate(var(--r0)) scale(var(--sc)); }
+    7%   { opacity: var(--op); }
+    50%  { transform: translateX(var(--dx1)) rotate(var(--rm)) scale(var(--sc)); }
+    93%  { opacity: var(--op); }
+    100% { top: 110vh; opacity: 0; transform: translateX(var(--dx2)) rotate(var(--rf)) scale(var(--sc)); }
+}
+@keyframes pSway {
+    0%, 100% { margin-left: 0; }
+    25% { margin-left: var(--sw1); }
+    75% { margin-left: var(--sw2); }
+}
+@keyframes floatUp {
+    0%   { opacity: 0; transform: translateY(0); }
+    20%  { opacity: 1; }
+    80%  { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(-80vh); }
+}
+@keyframes bFly {
+    0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+
+/* ===== PORTADA / FONDO ===== */
+.fondo {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+    background:
+        /* resplandores de color */
+        radial-gradient(ellipse 70% 50% at 20% 15%, rgba(255, 63, 164, 0.20) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 45% at 82% 22%, rgba(180, 60, 220, 0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 75% 55% at 50% 95%, rgba(255, 143, 216, 0.16) 0%, transparent 62%),
+        radial-gradient(ellipse 45% 35% at 88% 78%, rgba(255, 100, 180, 0.12) 0%, transparent 55%),
+        /* base oscura */
+        linear-gradient(165deg, #1a0118 0%, #2a0426 40%, #16000f 100%);
+}
+
+/* halo central detrás de la caja */
+.fondo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(circle at 50% 45%, rgba(255, 63, 164, 0.10) 0%, transparent 45%);
+    animation: latirHalo 8s ease-in-out infinite;
+}
+@keyframes latirHalo {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50%      { opacity: 1;   transform: scale(1.08); }
+}
+
+/* rejilla sutil + viñeta */
+.fondo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255, 143, 216, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 143, 216, 0.035) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, black 25%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, black 25%, transparent 78%);
+}
+
+/* viñeta oscura en los bordes, capa aparte */
+.vineta {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 45%, rgba(8, 0, 10, 0.75) 100%);
+}
+
+/* estrellas / destellos fijos del fondo */
+.estrellas {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background-image:
+        radial-gradient(1.6px 1.6px at 10% 14%, rgba(255, 209, 240, 0.9), transparent),
+        radial-gradient(1.2px 1.2px at 22% 32%, rgba(255, 154, 213, 0.7), transparent),
+        radial-gradient(1.8px 1.8px at 34% 9%,  rgba(255, 255, 255, 0.8), transparent),
+        radial-gradient(1.2px 1.2px at 47% 26%, rgba(255, 209, 240, 0.6), transparent),
+        radial-gradient(1.6px 1.6px at 58% 12%, rgba(255, 255, 255, 0.75), transparent),
+        radial-gradient(1.2px 1.2px at 69% 30%, rgba(255, 154, 213, 0.65), transparent),
+        radial-gradient(1.8px 1.8px at 80% 8%,  rgba(255, 209, 240, 0.85), transparent),
+        radial-gradient(1.2px 1.2px at 91% 22%, rgba(255, 255, 255, 0.6), transparent),
+        radial-gradient(1.4px 1.4px at 6%  58%, rgba(255, 154, 213, 0.5), transparent),
+        radial-gradient(1.4px 1.4px at 28% 72%, rgba(255, 209, 240, 0.45), transparent),
+        radial-gradient(1.4px 1.4px at 63% 66%, rgba(255, 255, 255, 0.5), transparent),
+        radial-gradient(1.4px 1.4px at 87% 80%, rgba(255, 154, 213, 0.5), transparent);
+    background-repeat: no-repeat;
+    animation: centellear 5s ease-in-out infinite alternate;
+}
+@keyframes centellear {
+    from { opacity: 0.55; }
+    to   { opacity: 1; }
+}
+
+/* ===== CAJA / TARJETA ===== */
+.caja {
+    position: relative;
+    z-index: 10;
+    max-width: 640px;
+    width: 100%;
+    background: rgba(25, 4, 20, 0.42);
+    border: 1px solid rgba(255, 202, 232, 0.22);
+    border-radius: 4px;
+    padding: 46px 52px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: 0 0 45px rgba(0, 0, 0, 0.35), inset 0 0 60px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeUp 1s 0.2s both;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.caja > * + * {
+    margin-top: 18px;
+}
+
+/* esquinas decorativas estilo videojuego */
+.esquina {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border: 0 solid #ff8fd8;
+    opacity: 0.8;
+}
+.esquina::before {
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #ff3fa4;
+    box-shadow: 0 0 8px #ff3fa4;
+}
+.esquina-tl { top: 14px; left: 14px; border-width: 1.5px 0 0 1.5px; }
+.esquina-tl::before { top: -2.5px; left: -2.5px; }
+.esquina-tr { top: 14px; right: 14px; border-width: 1.5px 1.5px 0 0; }
+.esquina-tr::before { top: -2.5px; right: -2.5px; }
+.esquina-bl { bottom: 14px; left: 14px; border-width: 0 0 1.5px 1.5px; }
+.esquina-bl::before { bottom: -2.5px; left: -2.5px; }
+.esquina-br { bottom: 14px; right: 14px; border-width: 0 1.5px 1.5px 0; }
+.esquina-br::before { bottom: -2.5px; right: -2.5px; }
+
+/* separadores con líneas + iconos */
+.separador {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+.separador .linea {
+    flex: 1;
+    max-width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #ff8fd8, transparent);
+}
+.separador .icono {
+    color: #ffb3e6;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(255, 143, 216, 0.6);
+}
+
+.pre-titulo {
+    font-family: 'Cinzel Decorative', cursive;
+    letter-spacing: 8px;
+    font-size: 0.85rem;
+    color: rgba(255, 209, 240, 0.85);
+    text-transform: uppercase;
+    text-shadow: 0 0 12px rgba(255, 143, 216, 0.5);
+}
+
+.titulo {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    background: linear-gradient(160deg, #fff5fb 0%, #ff9ad5 35%, #ff3fa4 70%, #ffd1f0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: brillar 3s ease-in-out infinite alternate;
+}
+@keyframes brillar {
+    from { filter: drop-shadow(0 0 12px rgba(255, 63, 164, 0.55)); }
+    to   { filter: drop-shadow(0 0 30px rgba(255, 154, 213, 0.95)) drop-shadow(0 0 55px rgba(255, 63, 164, 0.5)); }
+}
+
+.descripcion {
+    font-size: 1.08rem;
+    font-style: italic;
+    color: #ffe4f6;
+    line-height: 1.75;
+    max-width: 540px;
+}
+.descripcion strong {
+    color: #ff9ad5;
+    font-weight: 600;
+    font-style: normal;
+    text-shadow: 0 0 14px rgba(255, 63, 164, 0.5);
+}
+
+.puntos {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+.punto {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #ff3fa4;
+    box-shadow: 0 0 6px #ff3fa4, 0 0 14px rgba(255, 63, 164, 0.6);
+    animation: pulso 1.5s ease-in-out infinite;
+}
+.punto:nth-child(2) { animation-delay: 0.3s; background: #ffb3e6; }
+.punto:nth-child(3) { animation-delay: 0.6s; }
+@keyframes pulso {
+    0%, 100% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.5); opacity: 1; }
+}
+
+/* ===== ACCESO / CONTRASEÑA ===== */
+.acceso {
+    width: 100%;
+    max-width: 460px;
+    margin-top: 8px;
+}
+
+.etiqueta {
+    display: block;
+    margin-bottom: 12px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255, 209, 240, 0.65);
+}
+
+.campo {
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+}
+
+.input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 16px;
+    border: 1px solid rgba(255, 143, 216, 0.28);
+    border-radius: 3px;
+    background: rgba(20, 0, 15, 0.5);
+    font-family: 'Crimson Text', serif;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: #fff0f6;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.input::placeholder { color: rgba(255, 209, 240, 0.32); }
+.input:focus {
+    outline: none;
+    border-color: #ff3fa4;
+    box-shadow: 0 0 0 3px rgba(255, 63, 164, 0.18), 0 0 20px rgba(255, 63, 164, 0.25);
+}
+
+.btn-clave {
+    position: relative;
+    overflow: hidden;
+    padding: 14px 34px;
+    border: none;
+    border-radius: 3px;
+    font-family: 'Cinzel Decorative', cursive;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #2a0021;
+    background: linear-gradient(135deg, #fff0f6 0%, #ff9ad5 45%, #ff3fa4 100%);
+    cursor: crosshair;
+    transition: transform 0.25s ease, filter 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 0 20px rgba(255, 63, 164, 0.35);
+}
+.btn-clave::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%);
+    transform: translateX(-100%);
+    animation: destello 2.5s 1s infinite;
+}
+@keyframes destello {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+}
+.btn-clave:hover {
+    transform: translateY(-2px) scale(1.03);
+    filter: brightness(1.08);
+    box-shadow: 0 0 32px rgba(255, 63, 164, 0.55);
+}
+.btn-clave:active { transform: translateY(1px); }
+.btn-clave:focus-visible {
+    outline: 2px solid #fff0f6;
+    outline-offset: 3px;
+}
+
+/* --- mensajes --- */
+.aviso {
+    margin-top: 14px;
+    min-height: 1.3em;
+    font-size: 0.9rem;
+    font-style: italic;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.aviso.visible { opacity: 1; transform: translateY(0); }
+.aviso.error   { color: #ff6b8a; text-shadow: 0 0 12px rgba(255, 107, 138, 0.4); }
+.aviso.ok      { color: #ffb3e6; text-shadow: 0 0 14px rgba(255, 179, 230, 0.6); }
+
+/* --- sacudida al fallar --- */
+.temblar { animation: temblar 0.42s ease; }
+@keyframes temblar {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-7px); }
+    40%, 80% { transform: translateX(7px); }
+}
+
+/* --- estado: contraseña correcta --- */
+body.abierto .caja {
+    border-color: rgba(255, 63, 164, 0.6);
+    box-shadow: 0 0 70px rgba(255, 63, 164, 0.35), inset 0 0 60px rgba(0, 0, 0, 0.25);
+}
+body.abierto .esquina { opacity: 1; }
+
+/* ===== responsive ===== */
+@media (max-width: 600px) {
+    .caja { padding: 36px 24px; }
+    .campo { flex-direction: column; }
+    .btn-clave { padding: 15px; }
+}
+
+/* ===== accesibilidad ===== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* ── Emojis dentro de textos con fuente pixel ── */
+.emo {
+  display: inline-block;
+  font-size: 1.7em;          /* relativo al texto que lo rodea */
+  line-height: 1;
+  vertical-align: -0.25em;   /* lo baja para alinearlo con las letras */
+  font-family: 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
+}

@@ -1,0 +1,100 @@
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+
+
+:root {
+  --zzz-yellow: #FFE034;
+  --zzz-red: #FF3B3B;
+  --zzz-cyan: #00F0FF;
+  --zzz-purple: #FF2EC4;
+  --bg-dark: #06080f;
+  --text-light: rgba(255,245,210,0.93);
+}
+
+html, body { height: 100%; }
+body {
+  min-height: 100vh;
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--bg-dark);
+  overflow-x: hidden;
+  cursor: crosshair;
+  color: var(--text-light);
+}
+
+/* ══════════════════════════════════════
+   APAGÓN (igual que style5)
+══════════════════════════════════════ */
+.blackout-wrap {
+  display: flex;
+  position: relative; z-index: 10;
+  min-height: 100vh;
+  background: url('/Oscuras.png') center/cover no-repeat;
+  flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 30px;
+}
+
+.blackout-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.4rem,4.5vw,2.6rem);
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #FF8AE2;
+  text-shadow: 0 0 16px rgba(255,138,226,0.5);
+  margin-bottom: 24px;
+  max-width: 800px;
+  line-height: 1.4;
+  animation: flicker 3s infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  3%  { opacity: .4; }
+  6%  { opacity: 1; }
+  8%  { opacity: .15; }
+  10% { opacity: .9; }
+  12% { opacity: .3; }
+  14% { opacity: 1; }
+  30% { opacity: 1; }
+  32% { opacity: .5; }
+  34% { opacity: 1; }
+  50% { opacity: .2; }
+  52% { opacity: 1; }
+  70% { opacity: 1; }
+  72% { opacity: .35; }
+  74% { opacity: .9; }
+  76% { opacity: .15; }
+  78% { opacity: 1; }
+  90% { opacity: .4; }
+  92% { opacity: 1; }
+}
+
+@keyframes shim { 0%{transform:translateX(-100%)} 100%{transform:translateX(200%)} }
+
+.reconnect-btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: 14px;
+  padding: 17px 56px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: .85rem; font-weight: 700; letter-spacing: .25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #1a0a2e;
+  background: linear-gradient(135deg,#ff6fe0 0%,#FF2EC4 50%,#d600a3 100%);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 0 22px rgba(255,46,196,0.4), 0 8px 20px rgba(0,0,0,0.5);
+  transition: transform .25s, filter .25s;
+  animation: flicker 3s infinite;
+}
+.reconnect-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg,transparent 30%, rgba(255,255,255,.4) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: shim 2.5s 1s infinite;
+}
+.reconnect-btn:hover { transform: translateY(-3px) scale(1.03); filter: brightness(1.1); }

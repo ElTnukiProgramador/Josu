@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensaje especial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/Styles/style9.css">
+</head>
+<body>
+
+
+
+    <div class="estrellas"></div>
+    <div id="petals"></div>
+    <div id="personajes"></div>
+    <div id="sparks"></div>
+    <div class="vineta"></div>
+
+    <section class="fondo">
+        <div class="caja">
+
+            <!-- esquinas decorativas -->
+            <span class="esquina esquina-tl"></span>
+            <span class="esquina esquina-tr"></span>
+            <span class="esquina esquina-bl"></span>
+            <span class="esquina esquina-br"></span>
+
+            <!-- encabezado -->
+            <div class="separador">
+                <span class="linea"></span>
+                <span class="icono">✦ ✦ ✦</span>
+                <span class="linea"></span>
+            </div>
+
+            <p class="pre-titulo"><span class="emo">🦝</span>De parte del Tanuki<span class="emo">🦝</span></p>
+
+            <h1 class="titulo">Mensaje especial</h1>
+
+            <div class="puntos">
+                <span class="punto"></span>
+                <span class="punto"></span>
+                <span class="punto"></span>
+            </div>
+
+            <!-- texto -->
+            <p class="descripcion">
+                Este es un mensaje de parte del Tanuki.
+                Por favor, intenta verlo <strong>fuera de la transmisión en vivo</strong>
+                o no lo muestres en pantalla. Se trata de algo muy importante. La contraseña es <strong>sotano</strong>.
+            </p>
+
+            <div class="separador">
+                <span class="linea"></span>
+                <span class="icono">❖</span>
+                <span class="linea"></span>
+            </div>
+
+            <!-- contraseña -->
+            <div class="acceso">
+                <label class="etiqueta" for="clave"><span class="emo">🦝</span>Contraseña<span class="emo">🦝</span></label>
+
+                <div class="campo">
+                    <input
+                        type="text"
+                        id="clave"
+                        class="input"
+                        placeholder="escríbela aquí"
+                        autocomplete="off"
+                        spellcheck="false">
+                    <button type="button" class="btn-clave" id="entrar">Entrar</button>
+                </div>
+
+                <p class="aviso" id="aviso" role="alert"></p>
+            </div>
+
+        </div>
+    </section>
+
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   1. CONFIGURACIÓN
+═══════════════════════════════════════════════════════ */
+const CLAVE            = "sotano";
+const SIGUIENTE_VISTA  = "/web/Pagina10_cumple.html";   // ← ruta de tu siguiente vista
+
+const MSG_ERROR   = "Parce, sea serio y ponga la contraseña bien parce.";
+const MSG_CORRECT = "Correcta. Ahí vamos...";
+
+// personajes que caen — agrega o cambia rutas aquí
+const PERSONAJES = [
+    "/fotos de vrchat/furina.png",
+    "/fotos de vrchat/Yuzuha.png",
+    "/fotos de vrchat/nilou.png",
+    "/fotos de vrchat/raiden.png",
+];
+const CANTIDAD_PERSONAJES = 12;
+
+
+/* ═══════════════════════════════════════════════════════
+   2. ELEMENTOS
+═══════════════════════════════════════════════════════ */
+const input  = document.getElementById("clave");
+const boton  = document.getElementById("entrar");
+const aviso  = document.getElementById("aviso");
+const acceso = document.querySelector(".acceso");
+
+
+/* ═══════════════════════════════════════════════════════
+   3. VERIFICACIÓN DE CONTRASEÑA
+═══════════════════════════════════════════════════════ */
+function normalizar(texto) {
+    return texto.trim().toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");   // acepta "sótano" y "sotano"
+}
+
+function mostrarAviso(texto, tipo) {
+    aviso.textContent = texto;
+    aviso.className   = "aviso visible " + tipo;
+}
+
+function fallar() {
+    mostrarAviso(MSG_ERROR, "error");
+    acceso.classList.remove("temblar");
+    void acceso.offsetWidth;              // reinicia la animación
+    acceso.classList.add("temblar");
+    input.select();
+}
+
+function verificar() {
+    if (normalizar(input.value) === CLAVE) {
+        mostrarAviso(MSG_CORRECT, "ok");
+        boton.disabled = true;
+        input.disabled = true;
+        location.href  = SIGUIENTE_VISTA;   // redirección inmediata
+    } else {
+        fallar();
+    }
+}
+
+boton.addEventListener("click", verificar);
+input.addEventListener("keydown", e => {
+    if (e.key === "Enter") verificar();
+});
+
+// precarga la siguiente vista para que abra al instante
+const precarga  = document.createElement("link");
+precarga.rel    = "prefetch";
+precarga.href   = SIGUIENTE_VISTA;
+document.head.appendChild(precarga);
+
+
+/* ═══════════════════════════════════════════════════════
+   4. EFECTOS VISUALES
+═══════════════════════════════════════════════════════ */
+const COLORES = ["#ff9ad5", "#ff3fa4", "#ffd1f0", "#ffb3e6"];
+
+/* --- pétalos cayendo --- */
+
+
+/* --- personajes cayendo --- */
+const personajes = document.getElementById("personajes");
+
+for (let i = 0; i < CANTIDAD_PERSONAJES; i++) {
+    const wrap = document.createElement("div");
+    wrap.className = "personaje";
+
+    const img = document.createElement("img");
+    img.src = PERSONAJES[i % PERSONAJES.length];   // alterna entre los personajes
+    img.alt = "";
+
+    // los manda hacia los costados para no tapar la caja del centro
+    const lado = Math.random() < 0.5
+        ? Math.random() * 22
+        : 78 + Math.random() * 22;
+
+    wrap.style.left  = lado + "%";
+    wrap.style.width = (45 + Math.random() * 55) + "px";
+    wrap.style.animationDuration = (11 + Math.random() * 10) + "s";
+    wrap.style.animationDelay    = (-Math.random() * 22) + "s";
+
+    wrap.appendChild(img);
+    personajes.appendChild(wrap);
+}
+
+/* --- chispas subiendo --- */
+const sparks = document.getElementById("sparks");
+
+for (let i = 0; i < 18; i++) {
+    const s = document.createElement("span");
+    s.className = "chispa";
+    s.style.left   = Math.random() * 100 + "%";
+    s.style.bottom = "-10px";
+    s.style.animationDuration = (6 + Math.random() * 7) + "s";
+    s.style.animationDelay    = (-Math.random() * 10) + "s";
+    sparks.appendChild(s);
+}
+
+/* --- estallido al hacer click --- */
+document.addEventListener("click", e => {
+    const burst = document.createElement("div");
+    burst.className  = "burst";
+    burst.style.left = e.clientX + "px";
+    burst.style.top  = e.clientY + "px";
+
+    for (let i = 0; i < 10; i++) {
+        const bp   = document.createElement("span");
+        const ang  = (Math.PI * 2 * i) / 10;
+        const dist = 30 + Math.random() * 40;
+
+        bp.className        = "bp";
+        bp.style.background = COLORES[Math.floor(Math.random() * COLORES.length)];
+        bp.style.setProperty("--tx", Math.cos(ang) * dist + "px");
+        bp.style.setProperty("--ty", Math.sin(ang) * dist + "px");
+        burst.appendChild(bp);
+    }
+
+    document.body.appendChild(burst);
+    setTimeout(() => burst.remove(), 900);
+});
+</script>
+
+</body>
+</html>
