@@ -33,11 +33,14 @@
 
   <div class="video-container">
 
-    <!-- Video de YouTube incrustado (autoplay, silenciado y en loop, como el <video> original) -->
+    <!-- Video de YouTube incrustado. Arranca muteado (los navegadores exigen esto
+         para permitir el autoplay) y se desmutea solo apenas el usuario toca o
+         hace click en cualquier parte de la página -->
     <iframe
+      id="ytFrame"
       class="tiktok-video"
       style="width:100%;height:100%;border:0;"
-      src="https://www.youtube.com/embed/0zc3gZzcwkw?autoplay=1&mute=1&loop=1&playlist=0zc3gZzcwkw&controls=1&playsinline=1&rel=0&modestbranding=1"
+      src="https://www.youtube.com/embed/0zc3gZzcwkw?autoplay=1&mute=1&loop=1&playlist=0zc3gZzcwkw&controls=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1"
       allow="autoplay; encrypted-media; picture-in-picture"
       allowfullscreen>
     </iframe>
@@ -60,6 +63,46 @@
   </div>
 
 </div>
+
+<script>
+  /* ═══════════════════════════════════════════
+     Desmutear el video apenas el usuario interactúa.
+     Los navegadores no dejan que el sonido arranque solo,
+     así que en cuanto detectamos el primer click/tecla/toque
+     le quitamos el mute automáticamente.
+  ═══════════════════════════════════════════ */
+  var ytPlayer = null;
+  var yaDesmuteado = false;
+
+  window.onYouTubeIframeAPIReady = function () {
+    ytPlayer = new YT.Player('ytFrame', {
+      events: {
+        onReady: function () {
+          desmutearSiPosible();
+        }
+      }
+    });
+  };
+
+  function desmutearSiPosible() {
+    if (yaDesmuteado || !ytPlayer || typeof ytPlayer.unMute !== 'function') return;
+    try {
+      ytPlayer.unMute();
+      ytPlayer.setVolume(100);
+      if (typeof ytPlayer.playVideo === 'function') ytPlayer.playVideo();
+      yaDesmuteado = true;
+    } catch (err) {
+      // el player puede no estar listo todavía; se reintentará con la próxima interacción
+    }
+  }
+
+  ['click', 'touchstart', 'keydown'].forEach(function (evento) {
+    document.addEventListener(evento, desmutearSiPosible, { once: false });
+  });
+</script>
+
+<!-- API de YouTube: carga async y luego llama a window.onYouTubeIframeAPIReady -->
+<script src="https://www.youtube.com/iframe_api"></script>
 
 </body>
 </html>
