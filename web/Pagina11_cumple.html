@@ -365,8 +365,14 @@
 
     function alternarPlay() {
       if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
-      if (ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
-      else ytPlayer.playVideo();
+      if (ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+        ytPlayer.pauseVideo();
+      } else {
+        // por una particularidad de la API, forzamos desmutear cada vez que se le da play
+        ytPlayer.unMute();
+        if (ytPlayer.getVolume() === 0) ytPlayer.setVolume(100);
+        ytPlayer.playVideo();
+      }
     }
 
     capa.addEventListener('click', alternarPlay);
@@ -433,8 +439,14 @@
             frame.style.width = '100%';
             frame.style.height = '100%';
             frame.style.border = '0';
+
+            // aseguramos que arranque con sonido audible
+            ytPlayer.unMute();
+            ytPlayer.setVolume(100);
+
             tTotal.textContent = reloj(ytPlayer.getDuration());
             rangoVol.value = ytPlayer.getVolume() / 100;
+            icoVol.innerHTML = '<path d="' + D_VOL + '"/>';
           },
           onStateChange: function (e) {
             if (e.data === YT.PlayerState.PLAYING) {
